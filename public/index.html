@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SQLcade</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Эффекты фона -->
+    <div class="pixel-grid"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    
+    <!-- Главный контейнер (фиксирует ширину) -->
+    <div class="main-container">
+        <!-- Навигация -->
+        <nav class="pixel-nav">
+            <div class="nav-container">
+                <div class="logo glitch" data-text="SQLcade">SQLcade</div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" data-page="home">
+                        <i class="fas fa-home pixel-icon"></i> Главная
+                    </a>
+                    <a href="#" class="nav-link" data-page="courses">
+                        <i class="fas fa-book pixel-icon"></i> Курсы
+                    </a>
+                    <a href="#" class="nav-link" data-page="playground">
+                        <i class="fas fa-code pixel-icon"></i> Песочница
+                    </a>
+                    <a href="#" class="nav-link" data-page="forum">
+                    <i class="fas fa-comments pixel-icon"></i> Форум
+                    </a>
+                    <a href="#" class="nav-link" data-page="profile">
+                        <i class="fas fa-user pixel-icon"></i> Профиль
+                    </a>
+                </div>
+                <button class="pixel-btn login-btn">
+                    <i class="fas fa-key pixel-icon"></i> Войти
+                </button>
+				<!-- В навигации (nav-links) добавить -->
+<a href="#" class="nav-link" data-page="course" style="display: none;">
+    <i class="fas fa-graduation-cap pixel-icon"></i> Курс
+</a>
+            </div>
+        </nav>
+
+        <!-- Страницы -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <h1 class="pixel-text-outline">Изучайте SQL <span class="text-glitch">в стиле 8-bit</span></h1>
+                <p class="pixel-subtitle">От SELECT до JOIN — станьте мастером баз данных!</p>
+                <button class="pixel-btn hero-btn pulse">
+                    <i class="fas fa-play pixel-icon"></i> Начать обучение
+                </button>
+                <div class="pixel-crt-effect"></div>
+            </section>
+
+            <section class="features">
+                <div class="feature-card pixel-border">
+                    <div class="feature-icon">💾</div>
+                    <h3>Пиксельные уроки</h3>
+                    <p>Интерактивные задания в стиле ретро-игр</p>
+                </div>
+                <div class="feature-card pixel-border">
+                    <div class="feature-icon">🕹️</div>
+                    <h3>Игровая механика</h3>
+                    <p>Зарабатывайте очки и разблокируйте уровни</p>
+                </div>
+                <div class="feature-card pixel-border">
+                    <div class="feature-icon">👾</div>
+                    <h3>Практика</h3>
+                    <p>Реальная песочница с мгновенным результатом</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Страница курсов -->
+        <div id="courses" class="page">
+            <h2 class="section-title pixel-underline">Доступные курсы</h2>
+            <div class="course-cards">
+                
+                <!-- Добавьте больше карточек курсов -->
+            </div>
+        </div>
+		
+<div id="course" class="page">
+    <div class="course-header pixel-border">
+        <h2 class="course-title"></h2>
+       
+        <div class="course-progress">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <span class="progress-text">0% завершено</span>
+        </div>
+    </div>
+    
+    <div class="course-content">
+       <div class="lessons-sidebar pixel-border">
+    <h3>Уроки</h3>
+    <div class="lessons-accordion">
+        <!-- Уроки будут добавляться динамически -->
+    </div>
+</div>
+        
+       <div class="lesson-content pixel-border">
+    <h3 class="lesson-title"></h3>
+    <div class="lesson-text">
+        <!-- Контент урока будет добавляться динамически -->
+    </div>
+
+    <!-- Блок для теории -->
+    <div class="lesson-theory">
+        <!-- Теоретический материал -->
+    </div>
+
+    <!-- Блок для тестов -->
+    <div class="lesson-test" style="display: none;">
+        <div class="test-header">
+            <h4><i class="fas fa-brain"></i> Проверьте свои знания</h4>
+            <div class="test-progress">
+                <span class="test-current">1</span> из <span class="test-total">5</span>
+            </div>
+        </div>
+        <div class="test-questions">
+            <!-- Вопросы будут добавляться динамически -->
+        </div>
+        <div class="test-actions">
+            <button class="pixel-btn prev-question" style="display: none;">
+                <i class="fas fa-chevron-left"></i> Назад
+            </button>
+            <button class="pixel-btn next-question">
+                Далее <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="pixel-btn check-test" style="display: none;">
+                <i class="fas fa-check"></i> Завершить тест
+            </button>
+        </div>
+        <div class="test-result"></div>
+    </div>
+
+    <!-- Блок для практических заданий -->
+    <div class="lesson-practice" style="display: none;">
+        <div class="practice-header">
+            <h4><i class="fas fa-code"></i> Практическое задание</h4>
+        </div>
+        <div class="practice-task">
+            <!-- Описание задания -->
+        </div>
+        <div class="practice-editor">
+            <textarea class="practice-sql-editor" placeholder="Напишите SQL запрос..."></textarea>
+            <div class="practice-controls">
+                <button class="pixel-btn run-practice">
+                    <i class="fas fa-play"></i> Выполнить
+                </button>
+                <button class="pixel-btn hint-btn">
+                    <i class="fas fa-lightbulb"></i> Подсказка
+                </button>
+            </div>
+        </div>
+        <div class="practice-result">
+            <!-- Результат выполнения -->
+        </div>
+        <div class="practice-hint" style="display: none;">
+            <!-- Подсказка для задания -->
+        </div>
+    </div>
+    
+    <div class="lesson-actions">
+        <button class="pixel-btn clear-btn prev-lesson">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+        <button class="pixel-btn next-lesson">
+            Далее <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+    </div>
+</div>
+        <!-- SQL Песочница -->
+        <div id="playground" class="page">
+            <h2 class="section-title pixel-underline">SQL Песочница</h2>
+            <div class="sql-playground pixel-border-lg">
+                <div class="playground-container">
+                    <div class="editor-panel">
+                        <div class="toolbar">
+                            <button class="pixel-btn run-btn">
+                                <i class="fas fa-play pixel-icon"></i> Выполнить
+                            </button>
+                            <button class="pixel-btn clear-btn">
+                                <i class="fas fa-trash pixel-icon"></i> Очистить
+                            </button>
+                        </div>
+                        <textarea id="sqlEditor" class="pixel-textarea" placeholder="SELECT * FROM users;"></textarea>
+                    </div>
+                    <div class="result-panel pixel-border">
+                        <div class="result-header">Результат</div>
+                        <div id="queryResult" class="pixel-scroll">
+                            <!-- Результаты будут здесь -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Профиль -->
+ <div id="profile" class="page">
+    <h2 class="section-title pixel-underline">Профиль</h2>
+    <div class="profile-container pixel-border-lg">
+        <div class="profile-layout">
+            <div class="profile-sidebar">
+                <div class="avatar-container">
+                    <div class="user-avatar" id="user-avatar">
+                        <!-- Аватар будет добавлен через JavaScript -->
+                </div>
+                <div class="avatar-upload-controls">
+                    <label for="avatar-upload" class="pixel-btn small-btn">
+                        <i class="fas fa-upload pixel-icon"></i> Загрузить аватар
+                    </label>
+                    <input type="file" id="avatar-upload" accept="image/*" style="display:none">
+                    <button id="remove-avatar" class="pixel-btn small-btn clear-btn">
+                        <i class="fas fa-trash pixel-icon"></i> Удалить
+                    </button>
+                </div>
+                <h3 class="user-name" id="profile-username">Пользователь</h3>
+            </div>
+            
+            <!-- Остальной контент профиля -->
+        </div>
+        <div class="profile-content">
+            <!-- Правая часть профиля -->
+        </div>
+    </div>
+</div>
+    </div>
+
+    
+<div id="forum" class="page">
+    <h2 class="section-title pixel-underline">Форум сообщества</h2>
+    
+    <div class="forum-container">
+        <div class="forum-actions">
+            <div class="forum-search">
+                <input type="text" id="forum-search" class="pixel-input" placeholder="Поиск тем...">
+                <button id="search-btn" class="pixel-btn">
+                    <i class="fas fa-search"></i> Поиск
+                </button>
+            </div>
+            <button id="create-topic-btn" class="pixel-btn">
+                <i class="fas fa-plus pixel-icon"></i> Создать тему
+            </button>
+        </div>
+        
+        <div class="forum-topics">
+            <div class="loading-spinner">Загрузка...</div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для создания темы -->
+    <div id="create-topic-modal" class="modal">
+        <div class="modal-content pixel-border-lg">
+            <span class="close-modal">&times;</span>
+            <h3>Создать новую тему</h3>
+            <form id="create-topic-form">
+                <div class="form-group">
+                    <label for="topic-title">Заголовок</label>
+                    <input type="text" id="topic-title" class="pixel-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="topic-tags">Теги (через запятую)</label>
+                    <input type="text" id="topic-tags" class="pixel-input" placeholder="sql, базы данных, обучение">
+                </div>
+                <div class="form-group">
+                    <label for="topic-content">Содержание</label>
+                    <textarea id="topic-content" class="pixel-textarea" rows="8" required></textarea>
+                </div>
+                <button type="submit" class="pixel-btn">Создать</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Контейнер для просмотра отдельной темы -->
+    <div id="topic-view" class="forum-topic-view" style="display: none;">
+        <div class="topic-header">
+            <button class="pixel-btn clear-btn back-to-forum">
+                <i class="fas fa-arrow-left"></i> Назад к списку
+            </button>
+            <h3 class="topic-title"></h3>
+            <div class="topic-meta">
+                <span class="topic-author"></span>
+                <span class="topic-date"></span>
+                <span class="topic-views"></span>
+            </div>
+        </div>
+        
+        <div class="topic-content"></div>
+        
+        <div class="topic-comments">
+            <h4>Комментарии</h4>
+            <div class="comments-list">
+                <!-- Комментарии будут добавлены через JavaScript -->
+            </div>
+        </div>
+        
+        <div class="add-comment-form">
+            <textarea id="comment-content" class="pixel-textarea" placeholder="Напишите комментарий..." rows="4"></textarea>
+            <button id="add-comment-btn" class="pixel-btn">Отправить</button>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Подвал -->
+<footer class="pixel-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <h3>SQLcade</h3>
+            <p>Изучайте SQL с удовольствием и стильно!</p>
+        </div>
+        <div class="footer-social">
+            <h4>Мы в соцсетях</h4>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-vk"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+				
+            </div>
+			<div class="copyright pixel-border-top">
+        © 2025 SQLcade
+    </div>
+        </div>
+        <div class="footer-contact">
+            <h4>Контакты</h4>
+            <p><i class="fas fa-envelope"></i> cade@sqlpixel.com</p>
+            
+            <p><i class="fas fa-map-marker-alt"></i> Россия, Таганрог</p>
+        </div>
+		 
+    </div>
+   
+</footer>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

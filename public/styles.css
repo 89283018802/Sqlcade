@@ -1,0 +1,2824 @@
+/* ===== Обновленная цветовая схема ===== */
+:root {
+    /* Основные цвета */
+    --bg-primary: #f5f7fa;
+    --bg-secondary: #e8ebf0;
+    --text-primary: #2d3748;
+    --text-secondary: #4a5568;
+    
+    /* Акцентные цвета (пиксельные, но приглушенные) */
+    --pixel-blue: #4299e1;
+    --pixel-green: #48bb78;
+    --pixel-purple: #9f7aea;
+    --pixel-red: #f56565;
+    --pixel-yellow: #ecc94b;
+    
+    /* Размеры */
+    --pixel-size: 2px;
+    --border-size: 4px;
+    --max-width: 1200px;
+    --border-radius: 4px;
+}
+
+/* ===== Глобальные стили ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'VT323', monospace;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    font-size: 18px;
+}
+
+.main-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===== Навигация ===== */
+.pixel-nav {
+    background-color: white;
+    padding: 5px 0;
+    position: relative;
+    z-index: 100;
+    border-bottom: var(--border-size) solid var(--pixel-blue);
+    margin-bottom: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    font-family: 'Press Start 2P', cursive;
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    position: relative;
+}
+
+.glitch {
+    position: relative;
+}
+.glitch::before {
+    content: attr(data-text);
+    position: absolute;
+    left: -2px;
+    text-shadow: 2px 0 var(--pixel-red);
+    clip: rect(0, 900px, 0, 0);
+    animation: glitch-effect 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-effect {
+    0% { clip: rect(30px, 9999px, 50px, 0); }
+    20% { clip: rect(10px, 9999px, 30px, 0); }
+    40% { clip: rect(40px, 9999px, 60px, 0); }
+    60% { clip: rect(5px, 9999px, 25px, 0); }
+    80% { clip: rect(50px, 9999px, 70px, 0); }
+    100% { clip: rect(15px, 9999px, 35px, 0); }
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.nav-link:hover {
+    color: var(--pixel-blue);
+}
+.nav-link.active {
+    color: var(--pixel-blue);
+    background-color: rgba(66, 153, 225, 0.1);
+    border-radius: var(--border-radius);
+}
+
+.pixel-icon {
+    margin-right: 8px;
+    font-size: 0.9em;
+}
+
+/* ===== Кнопки ===== */
+.pixel-btn {
+    background-color: var(--pixel-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;  
+    position: relative;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    font-family: 'VT323', monospace;
+    text-transform: uppercase;
+    border: var(--pixel-size) solid transparent;
+}
+.pixel-btn:hover {
+    background-color: #3182ce;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.pixel-btn:active {
+    transform: translateY(2px);
+}
+.pixel-btn.small-btn {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+}
+
+.login-btn {
+    background-color: var(--pixel-purple);
+    border-color: var(--pixel-purple);
+}
+.login-btn:hover {
+    background-color: var(--pixel-red);
+    border-color: var(--pixel-red);
+}
+
+.hero-btn {
+    background-color: var(--pixel-blue);
+    border-color: var(--pixel-blue);
+    font-size: 1.3rem;
+    padding: 15px 30px;
+    margin-top: 20px;
+}
+.hero-btn:hover {
+    background-color: var(--pixel-yellow);
+    color: var(--text-primary);
+    border-color: var(--pixel-yellow);
+}
+
+.run-btn {
+    background-color: var(--pixel-green);
+    border-color: var(--pixel-green);
+    color: var(--text-primary);
+}
+.run-btn:hover {
+    background-color: var(--pixel-blue);
+    border-color: var(--pixel-blue);
+}
+
+.clear-btn {
+    background-color: var(--pixel-red);  
+    border-color: var(--pixel-red);
+}
+.clear-btn:hover {
+    background-color: var(--pixel-purple);
+    border-color: var(--pixel-purple);
+}
+
+/* ===== Страницы ===== */
+.page {
+    display: none;
+    min-height: calc(100vh - 400px); /* Изменить с 200px на 400px */
+    padding: 20px 0 50px;
+}
+
+.page.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Главная страница ===== */
+.hero {
+    text-align: center;
+    padding: 50px 0;
+    position: relative;
+}
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-family: 'Press Start 2P', cursive;
+    line-height: 1.2;
+}
+.pixel-subtitle {
+    font-size: 1.5rem;
+    color: var(--pixel-blue);
+    margin-bottom: 30px;
+}
+.text-glitch {
+    position: relative;
+    color: var(--pixel-purple);
+    animation: text-glitch 2s infinite;
+}
+@keyframes text-glitch {
+    0% { opacity: 1; transform: skew(0deg); }
+    20% { opacity: 0.8; transform: skew(5deg); }
+    40% { opacity: 0.9; transform: skew(-5deg);}
+    60% { opacity: 0.8; transform: skew(5deg); }
+    80% { opacity: 0.9; transform: skew(-5deg);}
+    100% { opacity: 1; transform: skew(0deg); }
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+.feature-card {
+    text-align: center;  
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+.feature-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+.feature-card p {
+    color: var(--text-secondary);
+}
+
+/* ===== Страница курсов ===== */
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.pixel-underline {
+    position: relative;
+}
+.pixel-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: var(--pixel-size);
+    background-color: var(--pixel-blue);
+    box-shadow: 0 0 10px var(--pixel-blue);
+}
+
+.course-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.course-card {
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+.course-badge {
+    position: absolute;
+    top: -10px;
+    right: -40px;
+    background-color: var(--pixel-yellow);
+    color: var(--text-primary);
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px 40px;
+    transform: rotate(45deg);
+}
+.course-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+ .course-header .course-description {
+        display: none;
+    }
+.course-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    color: var(--text-secondary);
+}
+.progress-bar {
+    background-color: var(--bg-secondary);
+    height: 8px; /* Уменьшаем высоту с 10px до 8px */
+    position: relative;
+    margin: 12px 0 3px; /* Уменьшаем отступы с 20px 0 5px */
+    border-radius: 4px;
+    overflow: hidden;
+}
+.progress {
+    position: absolute;
+    height: 100%;
+    background-color: var(--pixel-green);
+    left: 0;
+    top: 0;
+    transition: width 0.5s ease;
+}
+
+/* ===== SQL Песочница ===== */
+.sql-playground {
+    margin-top: 50px;
+    position: relative;
+}
+.pixel-border-lg {
+    border: var(--border-size) solid var(--pixel-blue);
+}
+.playground-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.editor-panel {
+    position: relative;
+}
+.toolbar {
+    background-color: var(--bg-secondary);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.pixel-textarea {
+    display: block;
+    width: 100%;
+    height: 400px;
+    padding: 20px;
+    font-family: monospace;  
+    font-size: 1rem;
+    resize: none;
+    border: none;
+    outline: none;
+}
+.result-panel {
+    background-color: white;  
+}
+.result-header {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+.query-result {
+    padding: 10px;
+    max-height: 350px;
+    overflow-y: auto;
+    position: relative;
+    background-color: white;
+    border: var(--pixel-size) solid var(--pixel-blue);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.pixel-table {
+    width: 100%;
+    border-spacing: 0;
+}
+.pixel-table th, .pixel-table td {
+    border: var(--pixel-size) solid var(--pixel-blue);
+    padding: 5px 10px;
+    text-align: left;
+}  
+.pixel-table th {
+    background-color: var(--bg-secondary);
+}
+.pixel-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.pixel-scroll::-webkit-scrollbar {
+    width: 12px;
+}
+.pixel-scroll::-webkit-scrollbar-track {
+    background-color: #f2f2f2;
+    border: var(--pixel-size) solid #ccc;
+}
+.pixel-scroll::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border: var(--pixel-size) solid black;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);   
+}
+
+/* ===== Профиль ===== */
+.profile-container {
+    margin-top: 50px;
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--pixel-blue);
+    font-size: 2rem;  
+    color: white;
+    text-transform: uppercase;
+    margin-right: 20px;
+}
+.profile-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+.xp-bar {
+    background-color: var(--bg-secondary); 
+    height: 20px;
+border-radius: 10px;}
+	
+	/* ===== Модальное окно авторизации ===== */
+.auth-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-modal-content {
+    background-color: white;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    border-radius: var(--border-radius);
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+}
+.close-modal:hover {
+    color: var(--pixel-red);
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--bg-secondary);
+}
+
+.auth-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
+.auth-tab:hover {
+    color: var(--pixel-blue);
+}
+.auth-tab.active {
+    color: var(--pixel-blue);
+    border-bottom: 2px solid var(--pixel-blue);
+    margin-bottom: -2px;
+}
+
+.auth-form {
+    display: none;
+}
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+.pixel-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1rem;
+    border: 2px solid var(--bg-secondary);
+    border-radius: var(--border-radius);
+    transition: border-color 0.3s;
+    font-family: 'VT323', monospace;
+}
+.pixel-input:focus {
+    outline: none;
+    border-color: var(--pixel-blue);
+}
+
+.auth-message {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+.error-message {
+    background-color: rgba(245, 101, 101, 0.2);
+    border-left: 4px solid var(--pixel-red);
+    color: var(--pixel-red);
+}
+.success-message {
+    background-color: rgba(72, 187, 120, 0.2);
+    border-left: 4px solid var(--pixel-green);
+    color: var(--pixel-green);
+}
+
+/* Страница курса */
+#course {
+    display: none;
+    padding: 20px;
+}
+
+.course-header {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #FFFFFF;
+}
+
+.course-content {
+    display: flex;
+    gap: 20px;
+}
+
+.lessons-sidebar {
+    width: 300px;
+    padding: 15px;
+    background-color: #FFFFFF;
+}
+
+.lesson-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #FFFFFF;
+}
+
+.lessons-list {
+    margin-top: 15px;
+}
+
+.lesson-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+}
+
+.lesson-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.lesson-item.active {
+    border-left-color: #00ff00;
+    background-color: rgb(120, 120, 120, 0.1);
+}
+
+.lesson-item.completed {
+    opacity: 0.7;
+}
+
+.lesson-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+/* Стили для страницы курса */
+#course {
+    display: none;
+    padding: 20px;
+}
+
+#course.active {
+    display: block;
+}
+
+.course-content {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.lessons-sidebar {
+    padding: 15px;
+    background: #FFFFFF;
+}
+
+.lesson-item {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.lesson-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.lesson-item.active {
+    background: rgb(210, 210, 210);
+    color: #000;
+}
+
+.back-to-courses {
+    margin-top: 15px;
+}
+/* Добавьте это в styles.css */
+.lessons-accordion {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.lesson-accordion-item {
+    border-bottom: 1px solid var(--bg-secondary);
+    margin-bottom: 5px;
+}
+
+.accordion-header {
+    padding: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    font-weight: bold;
+}
+
+.accordion-header:hover {
+    background-color: rgba(66, 153, 225, 0.1);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.accordion-expanded .accordion-content {
+    max-height: 500px;
+    padding: 10px 0;
+}
+
+.lesson-item {
+    padding: 8px 12px;
+    margin: 3px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.lesson-item:hover {
+    background-color: rgba(66, 153, 225, 0.05);
+    border-left-color: var(--pixel-blue);
+}
+
+.lesson-item.active {
+    background-color: rgba(66, 153, 225, 0.1);
+    border-left-color: var(--pixel-blue);
+}
+
+.lesson-item.completed {
+    position: relative;
+}
+
+.lesson-item.completed::after {
+    content: '✓';
+    position: absolute;
+    right: 10px;
+    color: var(--pixel-green);
+}
+
+.module-progress {
+    height: 4px;
+    background-color: var(--bg-secondary);
+    margin-top: 5px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.module-progress-bar {
+    height: 100%;
+    background-color: var(--pixel-green);
+    width: 0%;
+}
+/* Для мобильных устройств дополнительно уменьшаем отступы */
+@media screen and (max-width: 767px) {
+    .course-header .progress-bar {
+        height: 6px;
+        margin: 8px 0 3px;
+    }
+    
+    /* Навигация */
+    .nav-container {
+        position: relative;
+        padding: 10px;
+        flex-direction: column;
+    }
+    
+    .logo {
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* Мобильное меню */
+    .hamburger-menu {
+        display: block;
+        cursor: pointer;
+        font-size: 1.5rem;
+    }
+    
+     .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.95);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-link {
+        width: 100%;
+        padding: 10px;
+        margin: 2px 0;
+        text-align: center;
+    }
+    
+    .login-btn {
+        margin-top: 10px;
+        width: 100%;
+    }
+    
+    /* Главная страница */
+    .hero {
+        padding: 30px 0;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+        line-height: 1.4;
+    }
+    
+    .pixel-subtitle {
+        font-size: 1.2rem;
+    }
+    .hamburger-menu {
+        display: block;
+        cursor: pointer;
+        z-index: 1001;
+        position: relative;
+    }
+    .hero-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+    
+    /* Блоки с фичами */
+    .features {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin: 30px 0;
+    }
+    
+    /* Карточки курсов */
+    .course-cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    /* Страница курса */
+    .course-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .lessons-sidebar {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .lessons-accordion {
+        max-height: none;
+    }
+    
+    /* SQL песочница */
+    .playground-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .editor-panel, .result-panel, .info-panel {
+        margin-bottom: 15px;
+    }
+    
+    /* Профиль */
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .avatar {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .stat-card {
+        width: 100%;
+    }
+    
+    /* Модальное окно */
+    .auth-modal-content {
+        width: 90%;
+        padding: 20px;
+    }
+}
+@media screen and (min-width: 768px) {
+    .hamburger-menu {
+        display: none !important;
+    }
+    
+    .nav-links {
+        display: flex !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    /* Улучшения для страницы курса */
+    .lesson-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .lesson-actions button {
+        width: 100%;
+    }
+    
+    .back-to-courses {
+        width: 100%;
+        margin-top: 15px;
+    }
+    
+    .lesson-item {
+        padding: 12px;
+    }
+    
+    .lesson-number {
+        display: inline-block;
+        width: 25px;
+    }
+    
+    .lesson-title {
+        display: inline-block;
+        width: calc(100% - 30px);
+    }
+    
+    /* Аккордеон в мобильной версии */
+    .accordion-header {
+        padding: 15px 10px;
+    }
+    
+    .accordion-content {
+        padding: 0 5px;
+    }
+    
+    /* Улучшаем читаемость текста уроков */
+    .lesson-text {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    
+    .lesson-text pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        padding: 10px;
+        background: #f5f5f5;
+        border-radius: 5px;
+        margin: 15px 0;
+        overflow-x: auto;
+    }
+    
+    .lesson-text code {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 767px) {
+    /* SQL Песочница */
+    .CodeMirror {
+        height: 250px !important;
+    }
+    
+    .run-btn, .clear-btn {
+        padding: 12px;
+    }
+    
+    .toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toolbar button {
+        width: 100%;
+    }
+    
+    .query-result {
+        max-height: 300px;
+    }
+    
+    /* Таблицы результатов */
+    .query-result table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+/* Стили для иконки профиля в мобильной версии */
+@media screen and (max-width: 767px) {
+    .login-btn {
+        position: absolute;
+        top: 10px;
+        right: 50px;
+        width: auto;
+        padding: 8px;
+        margin: 0;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+    }
+    
+    .login-btn .pixel-icon {
+        margin-right: 0;
+        font-size: 1.5rem;
+    }
+    
+    .login-btn span {
+        display: none;
+    }
+}
+/* Современная визуализация карточек курсов */
+.course-card {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(145deg, #ffffff, #f5f7fa);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    border: none;
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.12);
+}
+
+.course-card-header {
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    height: 140px;
+    background: linear-gradient(45deg, var(--pixel-blue), var(--pixel-purple));
+}
+
+.course-card-body {
+    padding: 20px;
+}
+
+.course-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.course-card-meta {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    margin-top: 15px;
+    font-size: 0.9rem;
+    padding-top: 15px;
+    border-top: 1px solid var(--bg-secondary);
+}
+
+.course-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--pixel-yellow);
+    color: var(--text-primary);
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Медиа-запрос для адаптации на мобильных устройствах */
+@media screen and (max-width: 767px) {
+    .course-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .course-card {
+        margin-bottom: 0;
+    }
+    
+    .course-card-header {
+        height: 100px;
+    }
+}
+/* Уменьшенная шкала прогресса */
+@media screen and (max-width: 767px) {
+    .course-header .course-progress {
+        margin: 5px 0;
+    }
+    
+    .course-header .progress-bar {
+        height: 3px;
+        margin: 5px 0 5px;
+    }
+    
+    /* Варианты отображения содержания курса */
+    
+    /* Вариант 1: Полностью скрыть в мобильной версии */
+    .lessons-sidebar {
+        display: none;
+    }
+    
+    /* Вариант 2: Переместить ниже контента (раскомментируйте, если предпочитаете этот вариант) */
+    /*
+    .course-content {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    
+    .lessons-sidebar {
+        margin-top: 30px;
+    }
+    */
+    
+    /* Вариант 3: Показывать как выпадающее меню */
+    .course-content {
+        display: block;
+    }
+    
+    .lessons-sidebar {
+        width: 100%;
+        margin-top: 30px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+    }
+    
+    .lessons-sidebar.active {
+        max-height: 600px;
+    }
+    
+    .toggle-lessons-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 15px 0;
+        padding: 10px;
+        background-color: var(--bg-secondary);
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+    }
+}
+.nav-link[data-page="course"] {
+    display: none !important;
+}
+/* Стилизация футера */
+.pixel-footer {
+    background-color: var(--bg-secondary);
+    padding: 25px 0 15px;
+    margin-top: 0px;
+    border-top: var(--border-size) solid var(--pixel-blue);
+}
+
+.footer-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+.footer-brand {
+    flex: 1;
+    max-width: 300px;
+}
+.footer-brand h3 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--pixel-blue);
+}
+.footer-social {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.social-icons a {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: var(--pixel-blue);
+}
+
+.footer-contact {
+    flex: 1;
+    max-width: 300px;
+}
+
+.footer-contact p {
+    margin-bottom: 5px;
+}
+
+.footer-contact i {
+    width: 20px;
+    margin-right: 8px;
+    color: var(--pixel-blue);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 0px;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* Адаптация для мобильных устройств */
+@media screen and (max-width: 767px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-brand, .footer-social, .footer-contact {
+        max-width: 100%;
+		flex-direction: column;
+        text-align: center;
+    }
+    
+    .social-icons {
+        justify-content: center;
+		
+    }
+    
+    .footer-contact p {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .footer-contact i {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+}
+/* Фиксированная высота для контента урока с отдельной прокруткой */
+.lesson-content {
+    display: flex;
+    flex-direction: column;
+    height: 75vh; /* Высота 75% от высоты окна */
+    max-height: 700px; /* Ограничение максимальной высоты */
+}
+
+.lesson-text {
+    flex: 1;
+    overflow-y: auto; /* Добавляем вертикальную прокрутку */
+    padding: 0 15px 15px 0; /* Добавляем отступ справа для скроллбара */
+    margin-bottom: 20px;
+}
+
+/* Стили для скроллбара */
+.lesson-text::-webkit-scrollbar {
+    width: 10px;
+}
+
+.lesson-text::-webkit-scrollbar-track {
+    background-color: #f2f2f2;
+    border-radius: 5px;
+}
+
+.lesson-text::-webkit-scrollbar-thumb {
+    background-color: var(--pixel-blue);
+    border-radius: 5px;
+}
+
+/* Фиксированное положение кнопок навигации внизу блока */
+.lesson-actions {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid var(--bg-secondary);
+}
+
+/* Отступы и высота заголовка урока */
+.lesson-title {
+    padding: 10px 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--bg-secondary);
+}
+
+/* Адаптация для мобильных устройств */
+@media screen and (max-width: 767px) {
+    .lesson-content {
+        height: 70vh;
+        max-height: none;
+    }
+    
+    .lesson-text {
+        padding-right: 10px;
+    }
+}
+/* Стиль для кнопки прокрутки вверх */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--pixel-blue);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-top-btn:hover {
+    background-color: #3182ce;
+}
+/* Основной контейнер профиля */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+}
+
+/* Левая часть профиля */
+.profile-sidebar {
+    background-color: white;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.user-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.user-name {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.level-progress {
+    width: 85%;
+    margin-bottom: 15px;
+}
+
+.level-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.level-label {
+    font-weight: bold;
+    color: var(--pixel-blue);
+}
+
+.xp-text {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.xp-bar {
+    height: 10px;
+    background-color: var(--bg-secondary);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.xp-progress {
+    height: 95%;
+    background: linear-gradient(90deg, var(--pixel-blue), var(--pixel-purple));
+    border-radius: 10px;
+}
+
+.course-stats {
+    width: 95%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-secondary);
+    padding: 10px;
+    border-radius: var(--border-radius);
+}
+
+.stat-item i {
+    font-size: 1.5rem;
+    color: var(--pixel-blue);
+    margin-right: 5px;
+}
+
+.stat-content {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.logout-btn {
+    margin-top: auto;
+    width: 100%;
+}
+
+/* Правая часть профиля с сотами */
+.profile-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.profile-content .section-title {
+    margin-top: 0;
+    margin-bottom: 0px;
+    text-align: left;
+    transform: none;
+    left: 0;
+}
+
+
+
+
+.course-title {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.hexagon-progress {
+    width: 80%;
+}
+
+.hex-progress-bar {
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.hex-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pixel-green), var(--pixel-blue));
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.completed-badge {
+    position: absolute;
+    top: 10px;
+    right: 30%;
+    background-color: var(--pixel-green);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+/* Адаптивность для мобильных устройств */
+@media screen and (max-width: 992px) {
+    .profile-layout {
+        grid-template-columns: 0.5fr;
+    }
+    
+    .honeycomb-grid {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .honeycomb-cell {
+        width: 150px;
+        height: 130px;
+    }
+    
+    .course-title {
+        font-size: 0.9rem;
+    }
+    
+    .user-avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 2.5rem;
+    }
+}
+/* Контейнер для пиксельных карточек курсов */
+.pixel-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+/* Карточка курса в пиксельном стиле */
+.pixel-course-card {
+    position: relative;
+    background-color: #ffffff;
+    height: 200px;
+    border: 4px solid var(--bg-secondary);
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: var(--border-radius);
+}
+
+/* Эффект пикселизации для краев */
+.pixel-course-card::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent 0,
+        transparent 5px,
+        rgba(232, 235, 240, 0.3) 5px,
+        rgba(232, 235, 240, 0.3) 10px
+    );
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Стили для индикатора состояния курса */
+.pixel-course-card.started {
+    border-color: var(--pixel-yellow);
+}
+
+.pixel-course-card.in-progress {
+    border-color: var(--pixel-blue);
+}
+
+.pixel-course-card.completed {
+    border-color: var(--pixel-green);
+}
+
+/* Анимация свечения при наведении */
+.pixel-course-card:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.1),
+        0 0 10px rgba(66, 153, 225, 0.3),
+        inset 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Пиксельная рамка для карточки */
+.pixel-course-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.3) 20%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.05) 80%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+    pointer-events: none;
+}
+
+/* Название курса */
+.pixel-course-title {
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* Пиксельный индикатор прогресса */
+.pixel-progress-container {
+    position: relative;
+    width: 100%;
+    margin-top: auto;
+}
+
+.pixel-progress-bar {
+    width: 100%;
+    height: 15px;
+    background: repeating-linear-gradient(
+        to right,
+        var(--bg-secondary) 0,
+        var(--bg-secondary) 5px,
+        var(--bg-primary) 5px,
+        var(--bg-primary) 10px
+    );
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.pixel-progress-fill {
+    height: 100%;
+    background-color: var(--pixel-blue);
+    box-shadow: 0 0 5px var(--pixel-blue);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.3s;
+}
+
+/* Для завершенных курсов - зеленая заливка */
+.pixel-course-card.completed .pixel-progress-fill {
+    background-color: var(--pixel-green);
+    box-shadow: 0 0 5px var(--pixel-green);
+}
+
+/* Для начатых курсов - желтая заливка */
+.pixel-course-card.started .pixel-progress-fill {
+    background-color: var(--pixel-yellow);
+    box-shadow: 0 0 5px var(--pixel-yellow);
+}
+
+/* Текст прогресса */
+.pixel-progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-family: 'VT323', monospace;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+    z-index: 1;
+}
+
+/* Пиксельный значок завершения */
+.pixel-completion-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background-color: var(--pixel-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: white;
+    box-shadow: 0 0 5px var(--pixel-green);
+    border-radius: 4px;
+}
+
+/* Пиксельные декоративные элементы */
+.pixel-course-card .pixel-icon {
+    margin-bottom: 10px;
+    font-size: 2rem;
+    color: var(--pixel-blue);
+    opacity: 0.8;
+}
+
+.pixel-course-card.completed .pixel-icon {
+    color: var(--pixel-green);
+}
+
+.pixel-course-card.started .pixel-icon {
+    color: var(--pixel-yellow);
+}
+
+/* Анимация пульсации для завершенных курсов */
+@keyframes gentle-pulse {
+    0% { box-shadow: 0 0 5px rgba(72, 187, 120, 0.3); }
+    50% { box-shadow: 0 0 10px rgba(72, 187, 120, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(72, 187, 120, 0.3); }
+}
+
+.pixel-course-card.completed {
+    animation: gentle-pulse 3s infinite;
+}
+
+/* Адаптивность для мобильных устройств */
+@media screen and (max-width: 767px) {
+    .pixel-courses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .pixel-course-card {
+        height: 180px;
+        padding: 10px;
+    }
+    
+    .pixel-course-title {
+        font-size: 1rem;
+    }
+}
+/* Более компактные таблицы для песочницы SQL */
+.schema-table, .result-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.schema-table th, .schema-table td, 
+.result-table th, .result-table td {
+    padding: 4px 8px;
+    border: 1px solid var(--bg-secondary);
+    text-align: left;
+}
+
+.schema-table th, .result-table th {
+    background-color: var(--bg-secondary);
+    font-weight: bold;
+}
+
+.schema-table tr:nth-child(even), 
+.result-table tr:nth-child(even) {
+    background-color: rgba(232, 235, 240, 0.4);
+}
+
+/* Компактные стили для таблиц в информационной панели */
+.table-info {
+    margin-bottom: 10px;
+    max-width: 100%;
+}
+
+.table-info h4 {
+    margin: 8px 0 4px;
+    font-size: 1rem;
+}
+
+.table-info p {
+    margin: 2px 0 5px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Улучшенный скроллинг для результатов */
+.query-result {
+    max-height: 300px;
+    overflow: auto;
+    padding: 5px;
+}
+
+/* Адаптивные таблицы для маленьких экранов */
+@media screen and (max-width: 767px) {
+    .schema-table, .result-table {
+        font-size: 0.8rem;
+    }
+    
+    .schema-table th, .schema-table td, 
+    .result-table th, .result-table td {
+        padding: 3px 5px;
+    }
+}
+
+/* Стили для сетки таблиц */
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.table-card {
+    background-color: #f5f7fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.table-card h4 {
+    color: var(--pixel-blue);
+    margin-top: 0;
+    margin-bottom: 5px;
+    border-bottom: 2px solid var(--pixel-blue);
+    padding-bottom: 5px;
+}
+
+.table-columns {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.column-item {
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.column-item .type {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Мобильный вид */
+@media screen and (max-width: 767px) {
+    .grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Стили для загрузки аватара */
+.avatar-upload-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-upload-controls label {
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+}
+
+#remove-avatar {
+    width: 100%;
+}
+
+/* Стили для превью загруженного изображения */
+.avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 15px;
+    position: relative;
+    background-color: var(--bg-secondary);
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Анимация загрузки */
+.avatar-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2rem;
+    animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Стили для аватара */
+.user-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: white;
+    background-color: var(--pixel-blue);
+    margin-bottom: 15px;
+    overflow: hidden; /* Важно для обрезки изображения */
+    position: relative;
+}
+
+.user-avatar.has-avatar {
+    background-color: transparent;
+    padding: 0;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Важно для правильного масштабирования изображения */
+}
+
+/* Стили для всплывающих уведомлений */
+.message-popup {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-width: 320px;
+    transform: translateX(120%);
+    transition: transform 0.3s ease-in-out;
+    border-left: 4px solid var(--pixel-blue);
+}
+
+.message-popup.visible {
+    transform: translateX(0);
+}
+
+.message-content {
+    display: flex;
+    align-items: center;
+}
+
+.message-content i {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
+.success-message {
+    border-left-color: var(--pixel-green);
+}
+
+.success-message i {
+    color: var(--pixel-green);
+}
+
+.error-message {
+    border-left-color: var(--pixel-red);
+}
+
+.error-message i {
+    color: var(--pixel-red);
+}
+
+.info-message {
+    border-left-color: var(--pixel-blue);
+}
+
+.info-message i {
+    color: var(--pixel-blue);
+}
+
+/* Анимация пульсации для уведомлений */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(66, 153, 225, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0); }
+}
+
+.message-popup.visible {
+    animation: pulse 2s infinite;
+}
+
+.success-message.visible {
+    animation: pulse 2s infinite;
+    animation-name: success-pulse;
+}
+
+@keyframes success-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(72, 187, 120, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0); }
+}
+
+.error-message.visible {
+    animation: pulse 2s infinite;
+    animation-name: error-pulse;
+}
+
+@keyframes error-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(245, 101, 101, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0); }
+}
+
+/* Адаптация для мобильных устройств */
+@media screen and (max-width: 768px) {
+    .message-popup {
+        top: 70px;
+        right: 10px;
+        left: 10px;
+        max-width: calc(100% - 20px);
+    }
+}
+
+
+/* Стили для форума */
+.forum-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.forum-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.forum-topics {
+    width: 100%;
+}
+
+.topic-item {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid var(--bg-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.topic-item:hover {
+    background-color: rgba(66, 153, 225, 0.05);
+}
+
+.topic-item-content {
+    flex: 1;
+}
+
+.topic-item-title {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: var(--pixel-blue);
+}
+
+.topic-item.pinned .topic-item-title::before {
+    content: "📌 ";
+}
+
+.topic-item-meta {
+    display: flex;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.topic-item-author {
+    margin-right: 15px;
+}
+
+.topic-item-stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-secondary);
+}
+
+.topic-comments-count, .topic-views-count {
+    display: flex;
+    align-items: center;
+}
+
+.topic-comments-count i, .topic-views-count i {
+    margin-right: 5px;
+}
+
+/* Стили для просмотра темы */
+.forum-topic-view {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.topic-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--bg-secondary);
+}
+
+.topic-title {
+    font-size: 1.5rem;
+    margin: 15px 0;
+}
+
+.topic-meta {
+    display: flex;
+    color: var(--text-secondary);
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+.topic-content {
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.topic-comments h4 {
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--bg-secondary);
+}
+
+.comment-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: var(--pixel-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.comment-author-name {
+    font-weight: bold;
+}
+
+.comment-date {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.comment-content {
+    line-height: 1.5;
+}
+
+.add-comment-form {
+    margin-top: 30px;
+}
+
+.add-comment-form .pixel-textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    width: 90%;
+    max-width: 600px;
+    padding: 25px;
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+/* Добавьте в styles.css */
+.comment-avatar {
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: var(--pixel-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+.comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/* Добавьте в styles.css */
+.forum-container h3, 
+.topic-item-title,
+.topic-title,
+.comments-list h4 {
+    font-family: 'VT323', monospace;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.forum-container .pixel-btn {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+}
+
+.topic-tag {
+    font-family: 'VT323', monospace;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+}
+
+/* Пиксельная анимация для новых тем */
+.topic-item.new-topic {
+    position: relative;
+    overflow: hidden;
+}
+
+.topic-item.new-topic::after {
+    content: "NEW";
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    background-color: var(--pixel-green);
+    color: white;
+    padding: 5px 30px;
+    transform: rotate(45deg);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    animation: pulse-new 2s infinite;
+}
+
+@keyframes pulse-new {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+/* Добавьте в styles.css */
+.forum-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.forum-search {
+    display: flex;
+    gap: 10px;
+}
+
+.forum-search .pixel-input {
+    width: 250px;
+}
+
+@media (max-width: 768px) {
+    .forum-actions {
+        flex-direction: column;
+    }
+    
+    .forum-search {
+        width: 100%;
+    }
+    
+    .forum-search .pixel-input {
+        flex: 1;
+    }
+}
+
+/* Стили для форума в пиксельной стилистике */
+.forum-container {
+  background-color: white;
+  border: var(--pixel-size) solid var(--pixel-blue);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.forum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: var(--pixel-size) solid var(--bg-secondary);
+  padding-bottom: 15px;
+}
+
+.forum-title {
+  font-family: 'Press Start 2P', cursive;
+  color: var(--pixel-blue);
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.topic-item {
+  background-color: var(--bg-primary);
+  border: var(--pixel-size) solid var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.topic-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--pixel-blue);
+}
+
+.topic-item-title {
+  font-family: 'VT323', monospace;
+  color: var(--pixel-blue);
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.topic-item.pinned {
+  border-left: 4px solid var(--pixel-yellow);
+  background-color: rgba(255, 255, 200, 0.1);
+}
+
+.topic-item.new {
+  border-left: 4px solid var(--pixel-green);
+}
+
+.topic-item.closed {
+  opacity: 0.8;
+}
+
+/* Стили для одной темы форума */
+.topic-view {
+  background-color: white;
+  border: var(--pixel-size) solid var(--pixel-blue);
+  border-radius: var(--border-radius);
+  padding: 20px;
+}
+
+.comment-item {
+  background-color: var(--bg-primary);
+  border: var(--pixel-size) solid var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--bg-secondary);
+}
+
+.comment-author {
+  display: flex;
+  align-items: center;
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: var(--pixel-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 10px;
+  font-weight: bold;
+  border: var(--pixel-size) solid var(--bg-secondary);
+}
+
+/* Кнопки в пиксельном стиле */
+.forum-container .pixel-btn {
+  text-transform: uppercase;
+  font-family: 'VT323', monospace;
+  letter-spacing: 1px;
+}
+
+/* Анимация для новых тем */
+@keyframes pixel-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(72, 187, 120, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0); }
+}
+
+.topic-item.new {
+  animation: pixel-pulse 2s infinite;
+}
+
+.topic-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.topic-tag {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  border: 1px solid var(--pixel-blue);
+  font-family: 'VT323', monospace;
+}
+
+.topic-tag:hover {
+  background-color: var(--pixel-blue);
+  color: white;
+}
+
+/* Стили для вложенных комментариев */
+.comment-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--pixel-blue);
+}
+
+.comment-item.reply {
+    margin-left: 40px;
+    border-left-color: var(--pixel-green);
+    background-color: rgba(72, 187, 120, 0.05);
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--bg-secondary);
+}
+
+.comment-actions button {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+}
+
+.reply-form {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(66, 153, 225, 0.05);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--pixel-blue);
+    display: none; /* Изменяем с max-height на display */
+    animation: fadeIn 0.3s ease;
+}
+
+.reply-form.active {
+    display: block; /* Показываем форму */
+}
+
+.reply-form .reply-content {
+    width: 100%;
+    margin-bottom: 10px;
+    resize: vertical;
+    min-height: 60px;
+    border: 2px solid var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    font-family: 'VT323', monospace;
+}
+
+.reply-form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+
+.reply-form-actions button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Улучшение кнопки ответа */
+.reply-btn {
+    background-color: transparent;
+    border: 1px solid var(--pixel-blue);
+    color: var(--pixel-blue);
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+.reply-btn:hover {
+    background-color: var(--pixel-blue);
+    color: white;
+}
+
+.reply-form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.comment-rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rating-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid var(--bg-secondary);
+    color: var(--text-secondary);
+    padding: 5px 10px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.rating-btn:hover {
+    background-color: var(--bg-secondary);
+}
+
+.rating-btn.liked {
+    background-color: var(--pixel-green);
+    color: white;
+    border-color: var(--pixel-green);
+}
+
+.rating-btn.disliked {
+    background-color: var(--pixel-red);
+    color: white;
+    border-color: var(--pixel-red);
+}
+
+
+
+/* Стили для формы ответа */
+.reply-form {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(66, 153, 225, 0.05);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--pixel-blue);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.reply-form.active {
+    max-height: 200px;
+}
+
+.reply-form .reply-content {
+    width: 100%;
+    margin-bottom: 10px;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.reply-form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.reply-form-actions button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+}
+
+/* Улучшение кнопок ответа */
+.reply-btn {
+    background-color: transparent;
+    border: 1px solid var(--pixel-blue);
+    color: var(--pixel-blue);
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+.reply-btn:hover {
+    background-color: var(--pixel-blue);
+    color: white;
+}
+
+/* Адаптивность для мобильных устройств */
+@media screen and (max-width: 767px) {
+    .reply-form-actions {
+        flex-direction: column;
+    }
+    
+    .reply-form-actions button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+/* Адаптивность для форм ответов на мобильных устройствах */
+@media screen and (max-width: 767px) {
+    .reply-form-actions {
+        flex-direction: column;
+    }
+    
+    .reply-form-actions button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .reply-form {
+        padding: 10px;
+    }
+    
+    .reply-form .reply-content {
+        min-height: 80px;
+    }
+}
+
+
+.replies {
+  margin-left: 20px;
+  border-left: 2px dashed var(--pixel-blue);
+  padding-left: 10px;
+}
+.reply {
+  margin-top: 10px;
+  padding: 5px 0;
+}
+.reply-form {
+  margin-top: 10px;
+}
+.pagination-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    justify-content: center;
+}
+
+.pagination-container button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-container span {
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: var(--background-light);
+    border-radius: var(--border-radius);
+}
+
+.page-info {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Стили для тестов */
+.lesson-test {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+}
+
+.test-question {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+}
+
+.test-question.correct {
+    background-color: rgba(0, 255, 0, 0.1);
+    border-left: 4px solid green;
+}
+
+.test-question.incorrect {
+    background-color: rgba(255, 0, 0, 0.1);
+    border-left: 4px solid red;
+}
+
+.test-options {
+    margin-top: 10px;
+}
+
+.test-option {
+    margin: 8px 0;
+}
+
+.test-option input {
+    margin-right: 10px;
+}
+
+.test-actions {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.test-result {
+    flex-grow: 1;
+}
+
+.result-message {
+    padding: 10px;
+    border-radius: var(--border-radius);
+}
+
+.test-question.correct .result-message {
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+.test-question.incorrect .result-message {
+    background-color: rgba(255, 0, 0, 0.2);
+}
