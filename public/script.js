@@ -24,8 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initHeroButton();
 	
 	 initMobileMenu();
-	  initPages();
-    initAuthModal();
+
 	updateLoginButton();
 
 // Добавление новой структуры для карточек курсов
@@ -318,9 +317,6 @@ function initAuthModal() {
         } else {
             // Если пользователь не вошел, показываем модальное окно
             showAuthModal();
-            
-            // ВАЖНО: добавляем обработчики после показа модального окна
-            setupAuthFormHandlers();
         }
     });
 }
@@ -520,7 +516,7 @@ function createAuthModal() {
     const modalHTML = `
         <div class="auth-modal" id="authModal" style="display: none;">
             <div class="auth-modal-content pixel-border-lg">
-                <span class="close-modal">&times;</span>
+                <span class="close-modal"></span>
                 
                 <div class="auth-tabs">
                     <div class="auth-tab active" id="registerTab" data-tab="register">Регистрация</div>
@@ -563,11 +559,9 @@ function createAuthModal() {
     // Добавляем модальное окно в body
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     
-    // Находим кнопку закрытия модального окна
-    const closeModalBtn = document.querySelector('.close-modal');
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', hideAuthModal);
-    }
+    // ВАЖНО: настраиваем обработчики ПОСЛЕ добавления в DOM
+    setupAuthFormHandlers();
+    setupModalCloseHandlers();
     
     // Переключение между вкладками
     document.querySelectorAll('.auth-tab').forEach(tab => {
@@ -580,9 +574,57 @@ function createAuthModal() {
             document.querySelector(`.auth-form[data-form="${formId}"]`).classList.add('active');
         });
     });
-    setTimeout(() => {
-        setupAuthFormHandlers(); // Используем setTimeout для гарантии, что DOM обновился
-    }, 0);
+}
+
+// Новая функция для настройки обработчиков закрытия модального окна
+function setupModalCloseHandlers() {
+    console.log("Setting up modal close handlers");
+    
+    // Кнопка закрытия (крестик)
+    const closeModalBtn = document.querySelector('.close-modal');
+    if (closeModalBtn) {
+        console.log("Close button found, adding handler");
+        
+        // Удаляем все старые обработчики
+        const newCloseBtn = closeModalBtn.cloneNode(true);
+        closeModalBtn.parentNode.replaceChild(newCloseBtn, closeModalBtn);
+        
+        // Добавляем новый обработчик
+        newCloseBtn.addEventListener('click', function(e) {
+            console.log('Close button clicked!');
+            e.preventDefault();
+            e.stopPropagation();
+            hideAuthModal();
+        });
+    } else {
+        console.error("Close button not found!");
+    }
+    
+    // Закрытие при клике вне модального окна
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.addEventListener('click', handleModalBackdropClick);
+    }
+    
+    // Закрытие по клавише Escape
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+// Обработчик клика по фону модального окна
+function handleModalBackdropClick(e) {
+    if (e.target === e.currentTarget) { // Клик именно по фону, а не по содержимому
+        hideAuthModal();
+    }
+}
+
+// Обработчик клавиши Escape
+function handleEscapeKey(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('authModal');
+        if (modal && modal.style.display === 'flex') {
+            hideAuthModal();
+        }
+    }
 }
 
 function showMessage(message, type = 'info') {
@@ -619,16 +661,27 @@ function showAuthModal() {
     if (modal) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        
+        // Убеждаемся, что обработчики установлены
+        if (!modal.dataset.handlersSet) {
+            setupAuthFormHandlers();
+            setupModalCloseHandlers();
+            modal.dataset.handlersSet = 'true';
+        }
     } else {
         console.error('Модальное окно не найдено');
     }
 }
 
 function hideAuthModal() {
+    console.log('Hiding auth modal');
     const modal = document.getElementById('authModal');
     if (modal) {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
+        console.log('Modal hidden successfully');
+    } else {
+        console.error('Modal not found when trying to hide');
     }
 }
 
@@ -7305,207 +7358,199 @@ function initSQLPlayground() {
             
             <div class="info-panel pixel-border">
                 <h3>Доступные таблицы</h3>
-                <div class="tables-info">
-                    <div class="table-info">
-                        <h4>demo_categories</h4>
-                        <p>Категории товаров</p>
-                        <table class="schema-table">
-                            <tr>
-                                <th>Столбец</th>
-                                <th>Тип</th>
-                                <th>Описание</th>
-                            </tr>
-                            <tr>
-                                <td>category_id</td>
-                                <td>SERIAL</td>
-                                <td>Первичный ключ</td>
-                            </tr>
-                            <tr>
-                                <td>name</td>
-                                <td>VARCHAR(100)</td>
-                                <td>Название категории</td>
-                            </tr>
-                            <tr>
-                                <td>description</td>
-                                <td>TEXT</td>
-                                <td>Описание категории</td>
-                            </tr>
-                        </table>
-                    </div>
-                    
-                    <div class="table-info">
-                        <h4>demo_products</h4>
-                        <p>Товары</p>
-                        <table class="schema-table">
-                            <tr>
-                                <th>Столбец</th>
-                                <th>Тип</th>
-                                <th>Описание</th>
-                            </tr>
-                            <tr>
-                                <td>product_id</td>
-                                <td>SERIAL</td>
-                                <td>Первичный ключ</td>
-                            </tr>
-                            <tr>
-                                <td>name</td>
-                                <td>VARCHAR(100)</td>
-                                <td>Название товара</td>
-                            </tr>
-                            <tr>
-                                <td>description</td>
-                                <td>TEXT</td>
-                                <td>Описание товара</td>
-                            </tr>
-                            <tr>
-                                <td>price</td>
-                                <td>DECIMAL(10, 2)</td>
-                                <td>Цена товара</td>
-                            </tr>
-                            <tr>
-                                <td>stock_quantity</td>
-                                <td>INT</td>
-                                <td>Количество на складе</td>
-                            </tr>
-                            <tr>
-                                <td>category_id</td>
-                                <td>INT</td>
-                                <td>Внешний ключ к категориям</td>
-                            </tr>
-                        </table>
-                    </div>
-                    
-                    <div class="table-info">
-                        <h4>demo_customers</h4>
-                        <p>Клиенты</p>
-                        <table class="schema-table">
-                            <tr>
-                                <th>Столбец</th>
-                                <th>Тип</th>
-                                <th>Описание</th>
-                            </tr>
-                            <tr>
-                                <td>customer_id</td>
-                                <td>SERIAL</td>
-                                <td>Первичный ключ</td>
-                            </tr>
-                            <tr>
-                                <td>first_name</td>
-                                <td>VARCHAR(50)</td>
-                                <td>Имя клиента</td>
-                            </tr>
-                            <tr>
-                                <td>last_name</td>
-                                <td>VARCHAR(50)</td>
-                                <td>Фамилия клиента</td>
-                            </tr>
-                            <tr>
-                                <td>email</td>
-                                <td>VARCHAR(100)</td>
-                                <td>Email клиента</td>
-                            </tr>
-                            <tr>
-                                <td>phone</td>
-                                <td>VARCHAR(20)</td>
-                                <td>Телефон клиента</td>
-                            </tr>
-                            <tr>
-                                <td>address</td>
-                                <td>TEXT</td>
-                                <td>Адрес клиента</td>
-                            </tr>
-                            <tr>
-                                <td>created_at</td>
-                                <td>TIMESTAMP</td>
-                                <td>Дата регистрации</td>
-                            </tr>
-                        </table>
-                    </div>
-                    
-                    <div class="table-info">
-                        <h4>demo_orders</h4>
-                        <p>Заказы</p>
-                        <table class="schema-table">
-                            <tr>
-                                <th>Столбец</th>
-                                <th>Тип</th>
-                                <th>Описание</th>
-                            </tr>
-                            <tr>
-                                <td>order_id</td>
-                                <td>SERIAL</td>
-                                <td>Первичный ключ</td>
-                            </tr>
-                            <tr>
-                                <td>customer_id</td>
-                                <td>INT</td>
-                                <td>ID клиента</td>
-                            </tr>
-                            <tr>
-                                <td>order_date</td>
-                                <td>TIMESTAMP</td>
-                                <td>Дата заказа</td>
-                            </tr>
-                            <tr>
-                                <td>status</td>
-                                <td>VARCHAR(20)</td>
-                                <td>Статус заказа</td>
-                            </tr>
-                            <tr>
-                                <td>total_amount</td>
-                                <td>DECIMAL(10, 2)</td>
-                                <td>Общая сумма</td>
-                            </tr>
-                        </table>
+                <div class="tables-container">
+                    <div class="tables-grid">
+                        <div class="table-info">
+                            <h4 class="table-title">demo_categories</h4>
+                            <p class="table-description">Категории товаров</p>
+                            <table class="schema-table">
+                                <tr>
+                                    <th>Столбец</th>
+                                    <th>Тип</th>
+                                    <th>Описание</th>
+                                </tr>
+                                <tr>
+                                    <td>category_id</td>
+                                    <td>SERIAL</td>
+                                    <td>Первичный ключ</td>
+                                </tr>
+                                <tr>
+                                    <td>name</td>
+                                    <td>VARCHAR(100)</td>
+                                    <td>Название категории</td>
+                                </tr>
+                                <tr>
+                                    <td>description</td>
+                                    <td>TEXT</td>
+                                    <td>Описание категории</td>
+                                </tr>
+                            </table>
+                        </div>
                         
-                        <p class="status-info">
-                            <strong>Возможные статусы заказов:</strong><br>
-                            - completed (завершен)<br>
-                            - shipped (отправлен)<br>
-                            - processing (в обработке)<br>
-                            - pending (ожидает)
-                        </p>
-                    </div>
-                    
-                    <div class="table-info">
-                        <h4>demo_order_items</h4>
-                        <p>Элементы заказов</p>
-                        <table class="schema-table">
-                            <tr>
-                                <th>Столбец</th>
-                                <th>Тип</th>
-                                <th>Описание</th>
-                            </tr>
-                            <tr>
-                                <td>item_id</td>
-                                <td>SERIAL</td>
-                                <td>Первичный ключ</td>
-                            </tr>
-                            <tr>
-                                <td>order_id</td>
-                                <td>INT</td>
-                                <td>ID заказа</td>
-                            </tr>
-                            <tr>
-                                <td>product_id</td>
-                                <td>INT</td>
-                                <td>ID товара</td>
-                            </tr>
-                            <tr>
-                                <td>quantity</td>
-                                <td>INT</td>
-                                <td>Количество</td>
-                            </tr>
-                            <tr>
-                                <td>price_per_unit</td>
-                                <td>DECIMAL(10, 2)</td>
-                                <td>Цена за единицу</td>
-                            </tr>
-                        </table>
+                        <div class="table-info">
+                            <h4 class="table-title">demo_products</h4>
+                            <p class="table-description">Товары</p>
+                            <table class="schema-table">
+                                <tr>
+                                    <th>Столбец</th>
+                                    <th>Тип</th>
+                                    <th>Описание</th>
+                                </tr>
+                                <tr>
+                                    <td>product_id</td>
+                                    <td>SERIAL</td>
+                                    <td>Первичный ключ</td>
+                                </tr>
+                                <tr>
+                                    <td>name</td>
+                                    <td>VARCHAR(100)</td>
+                                    <td>Название товара</td>
+                                </tr>
+                                <tr>
+                                    <td>description</td>
+                                    <td>TEXT</td>
+                                    <td>Описание товара</td>
+                                </tr>
+                                <tr>
+                                    <td>price</td>
+                                    <td>DECIMAL(10, 2)</td>
+                                    <td>Цена товара</td>
+                                </tr>
+                                <tr>
+                                    <td>stock_quantity</td>
+                                    <td>INT</td>
+                                    <td>Количество на складе</td>
+                                </tr>
+                                <tr>
+                                    <td>category_id</td>
+                                    <td>INT</td>
+                                    <td>Внешний ключ к категориям</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="table-info">
+                            <h4 class="table-title">demo_customers</h4>
+                            <p class="table-description">Клиенты</p>
+                            <table class="schema-table">
+                                <tr>
+                                    <th>Столбец</th>
+                                    <th>Тип</th>
+                                    <th>Описание</th>
+                                </tr>
+                                <tr>
+                                    <td>customer_id</td>
+                                    <td>SERIAL</td>
+                                    <td>Первичный ключ</td>
+                                </tr>
+                                <tr>
+                                    <td>first_name</td>
+                                    <td>VARCHAR(50)</td>
+                                    <td>Имя клиента</td>
+                                </tr>
+                                <tr>
+                                    <td>last_name</td>
+                                    <td>VARCHAR(50)</td>
+                                    <td>Фамилия клиента</td>
+                                </tr>
+                                <tr>
+                                    <td>email</td>
+                                    <td>VARCHAR(100)</td>
+                                    <td>Email клиента</td>
+                                </tr>
+                                <tr>
+                                    <td>phone</td>
+                                    <td>VARCHAR(20)</td>
+                                    <td>Телефон клиента</td>
+                                </tr>
+                                <tr>
+                                    <td>address</td>
+                                    <td>TEXT</td>
+                                    <td>Адрес клиента</td>
+                                </tr>
+                                <tr>
+                                    <td>created_at</td>
+                                    <td>TIMESTAMP</td>
+                                    <td>Дата регистрации</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="table-info">
+                            <h4 class="table-title">demo_orders</h4>
+                            <p class="table-description">Заказы</p>
+                            <table class="schema-table">
+                                <tr>
+                                    <th>Столбец</th>
+                                    <th>Тип</th>
+                                    <th>Описание</th>
+                                </tr>
+                                <tr>
+                                    <td>order_id</td>
+                                    <td>SERIAL</td>
+                                    <td>Первичный ключ</td>
+                                </tr>
+                                <tr>
+                                    <td>customer_id</td>
+                                    <td>INT</td>
+                                    <td>ID клиента</td>
+                                </tr>
+                                <tr>
+                                    <td>order_date</td>
+                                    <td>TIMESTAMP</td>
+                                    <td>Дата заказа</td>
+                                </tr>
+                                <tr>
+                                    <td>status</td>
+                                    <td>VARCHAR(20)</td>
+                                    <td>Статус заказа</td>
+                                </tr>
+                                <tr>
+                                    <td>total_amount</td>
+                                    <td>DECIMAL(10, 2)</td>
+                                    <td>Общая сумма</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="table-info">
+                            <h4 class="table-title">demo_order_items</h4>
+                            <p class="table-description">Элементы заказов</p>
+                            <table class="schema-table">
+                                <tr>
+                                    <th>Столбец</th>
+                                    <th>Тип</th>
+                                    <th>Описание</th>
+                                </tr>
+                                <tr>
+                                    <td>item_id</td>
+                                    <td>SERIAL</td>
+                                    <td>Первичный ключ</td>
+                                </tr>
+                                <tr>
+                                    <td>order_id</td>
+                                    <td>INT</td>
+                                    <td>ID заказа</td>
+                                </tr>
+                                <tr>
+                                    <td>product_id</td>
+                                    <td>INT</td>
+                                    <td>ID товара</td>
+                                </tr>
+                                <tr>
+                                    <td>quantity</td>
+                                    <td>INT</td>
+                                    <td>Количество</td>
+                                </tr>
+                                <tr>
+                                    <td>price_per_unit</td>
+                                    <td>DECIMAL(10, 2)</td>
+                                    <td>Цена за единицу</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                
-
             </div>
         </div>
     `;
