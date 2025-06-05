@@ -430,6 +430,264 @@ body {
     border: var(--pixel-size) solid black;
     box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);   
 }
+/* ===== SQL Песочница ===== */
+.sql-playground {
+    margin-top: 50px;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+
+.playground-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Панель редактора занимает первую колонку */
+.editor-panel {
+    grid-column: 1;
+    grid-row: 1;
+    position: relative;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Панель результатов занимает вторую колонку */
+.result-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Панель информации занимает обе колонки */
+.info-panel {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    box-sizing: border-box;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .playground-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .editor-panel,
+    .result-panel,
+    .info-panel {
+        grid-column: 1;
+    }
+
+    .editor-panel {
+        grid-row: 1;
+    }
+
+    .result-panel {
+        grid-row: 2;
+    }
+
+    .info-panel {
+        grid-row: 3;
+    }
+}
+
+.toolbar {
+    background-color: var(--bg-secondary);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-bottom: var(--pixel-size) solid var(--pixel-blue);
+}
+.error-message {
+    padding: 15px;
+    background-color: #ffebee;
+    color: #c62828;
+    border: var(--pixel-size) solid #ff6b6b;
+    font-family: monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.info-message {
+    padding: 15px;
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border: var(--pixel-size) solid #4caf50;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.query-stats {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-top: var(--pixel-size) solid var(--pixel-blue);
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hint {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+/* ===== Панель информации о таблицах ===== */
+.info-panel h3 {
+    margin: 0 0 20px 0;
+    padding: 15px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-bottom: var(--pixel-size) solid var(--pixel-blue);
+}
+
+.tables-container {
+    padding: 20px;
+}
+
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.table-info {
+    border: var(--pixel-size) solid var(--pixel-blue);
+    background-color: white;
+    padding: 15px;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.table-info:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.table-title {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    font-family: monospace;
+    padding: 8px 0;
+    border-bottom: var(--pixel-size) solid #e0e0e0;
+}
+
+.table-description {
+    margin: 0 0 15px 0;
+    color: #666;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.schema-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.8rem;
+    font-family: monospace;
+}
+
+.schema-table th {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: var(--pixel-size) solid var(--pixel-blue);
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.schema-table td {
+    border: var(--pixel-size) solid var(--pixel-blue);
+    padding: 6px 8px;
+    background-color: white;
+}
+
+.schema-table tr:nth-child(even) td {
+    background-color: #f8f9fa;
+}
+
+.schema-table tr:hover td {
+    background-color: #e3f2fd;
+}
+
+/* Дополнительная адаптивность для очень маленьких экранов */
+@media (max-width: 480px) {
+    .sql-playground {
+        margin-top: 30px;
+    }
+
+    .playground-container {
+        gap: 10px;
+    }
+
+    .pixel-textarea {
+        height: 300px;
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+
+    .query-result {
+        max-height: 250px;
+    }
+
+    .pixel-table th,
+    .pixel-table td {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
+
+    .toolbar {
+        padding: 8px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pixel-btn {
+        width: 100%;
+        margin-bottom: 5px;
+        justify-content: center;
+    }
+
+    .tables-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .table-title {
+        font-size: 1rem;
+    }
+
+    .schema-table {
+        font-size: 0.7rem;
+    }
+
+    .schema-table th,
+    .schema-table td {
+        padding: 4px 6px;
+    }
+}
 
 /* ===== Профиль ===== */
 .profile-container {
@@ -438,11 +696,15 @@ body {
     padding: 30px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .profile-header {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
 }
+
+
+
 .avatar {
     width: 80px;
     height: 80px;
@@ -522,6 +784,7 @@ border-radius: 10px;}
     border-bottom: 2px solid var(--pixel-blue);
     margin-bottom: -2px;
 }
+
 
 .auth-form {
     display: none;
@@ -1168,25 +1431,33 @@ border-radius: 10px;}
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    align-items: start;
+    gap: 25px;
 }
+
 .footer-brand {
-    flex: 1;
     max-width: 300px;
 }
+
 .footer-brand h3 {
     font-family: 'Press Start 2P', cursive;
     font-size: 1.5rem;
     margin-bottom: 10px;
     color: var(--pixel-blue);
 }
+
 .footer-social {
-    flex: 1;
     max-width: 200px;
     text-align: center;
+}
+
+.footer-social h4, .footer-contact h4 {
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 0 0 10px 0;
 }
 
 .social-icons {
@@ -1194,25 +1465,40 @@ border-radius: 10px;}
     justify-content: center;
     gap: 15px;
     margin-top: 10px;
+    align-items: center;
 }
 
 .social-icons a {
     font-size: 1.5rem;
     color: var(--text-secondary);
-    transition: color 0.3s;
+    transition: all 0.3s ease;
+    padding: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
 }
 
 .social-icons a:hover {
     color: var(--pixel-blue);
+    transform: translateY(-3px) scale(1.1);
+}
+
+.social-icons a:active {
+    transform: translateY(-1px) scale(1.05);
 }
 
 .footer-contact {
-    flex: 1;
     max-width: 300px;
 }
 
 .footer-contact p {
     margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .footer-contact i {
@@ -1229,22 +1515,42 @@ border-radius: 10px;}
     font-size: 1rem;
 }
 
-/* Адаптация для мобильных устройств */
-@media screen and (max-width: 767px) {
+/* Планшеты */
+@media screen and (max-width: 768px) {
     .footer-content {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         text-align: center;
+        gap: 20px;
     }
     
     .footer-brand, .footer-social, .footer-contact {
         max-width: 100%;
-		flex-direction: column;
         text-align: center;
+    }
+    
+    .footer-brand h3 {
+        font-size: 1.3rem;
     }
     
     .social-icons {
         justify-content: center;
-		
+        gap: 25px;
+    }
+}
+
+/* Мобильные устройства */
+@media screen and (max-width: 480px) {
+    .pixel-footer {
+        padding: 20px 0;
+    }
+    
+    .footer-content {
+        padding: 0 10px;
+        gap: 18px;
+    }
+    
+    .footer-brand h3 {
+        font-size: 1.2rem;
     }
     
     .footer-contact p {
@@ -1256,6 +1562,16 @@ border-radius: 10px;}
     .footer-contact i {
         margin-right: 0;
         margin-bottom: 5px;
+    }
+    
+    .social-icons a {
+        font-size: 1.6rem;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .social-icons {
+        gap: 20px;
     }
 }
 /* Фиксированная высота для контента урока с отдельной прокруткой */
