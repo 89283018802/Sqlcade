@@ -737,15 +737,15 @@ async function updateProfile() {
     
     if (!token) {
         // Код для неавторизованного пользователя остаётся без изменений
-        profileContainer.innerHTML = `
-            <div class="not-logged-in">
-                <h3>Профиль</h3>
-                <p>Войдите или зарегистрируйтесь, чтобы просмотреть свой профиль</p>
-                <button class="pixel-btn login-btn">
-                    <i class="fas fa-key pixel-icon"></i> Войти
-                </button>
-            </div>
-        `;
+      profileContainer.innerHTML = `
+    <div class="not-logged-in">
+        <h3>Профиль</h3>
+        <p>Войдите или зарегистрируйтесь, чтобы просмотреть свой профиль</p>
+        <button class="pixel-btn login-btn profile-login-btn">
+            <i class="fas fa-key pixel-icon"></i> Войти
+        </button>
+    </div>
+`;
 
         const loginBtn = profileContainer.querySelector('.login-btn');
         if (loginBtn) {
@@ -1084,19 +1084,24 @@ lessons: [
             isNew: true
         },
         {
-            id: 5,
-            title: "NoSQL и SQL",
-            description: "Гибридные подходы в работе с данными",
-            lessons: [
-                {id: 1, title: "Архитектура гибридных систем", duration: "30 мин"},
-                {id: 2, title: "Работа с JSON в SQL", duration: "35 мин"},
-                {id: 3, title: "Интеграция с MongoDB", duration: "40 мин"},
-                {id: 4, title: "Графовые базы данных", duration: "45 мин"},
-                {id: 5, title: "Временные базы данных", duration: "30 мин"},
-                {id: 6, title: "Практика: Гибридное решение", duration: "75 мин"}
-            ],
-            isNew: true
-        },
+    id: 5,
+    title: "NoSQL и SQL",
+    description: "Гибридные подходы в работе с данными",
+    lessons: [
+        {id: 1, title: "Архитектура гибридных систем", duration: "30 мин"},
+        {id: 2, title: "Работа с JSON в SQL", duration: "35 мин"},
+        {id: 3, title: "Интеграция с MongoDB", duration: "40 мин"},
+        {id: 4, title: "Графовые базы данных", duration: "45 мин"},
+        {id: 5, title: "Временные базы данных", duration: "30 мин"},
+        {id: 6, title: "Практика: Гибридное решение", duration: "75 мин"},
+        {id: 7, title: "Кеширование с Redis и Memcached", duration: "40 мин"},
+        {id: 8, title: "Полнотекстовый поиск с Elasticsearch", duration: "50 мин"},
+        {id: 9, title: "Миграция данных между SQL и NoSQL", duration: "45 мин"},
+        {id: 10, title: "Репликация и синхронизация данных", duration: "40 мин"},
+        {id: 11, title: "Оптимизация производительности гибридных систем", duration: "55 мин"}
+    ],
+    isNew: true
+},
 		{
         id: 6,
         title: "SQL для аналитики",
@@ -1106,7 +1111,9 @@ lessons: [
             {id: 2, title: "Оконные функции", duration: "35 мин"},
             {id: 3, title: "Pivot-таблицы", duration: "30 мин"},
             {id: 4, title: "Геоаналитика", duration: "40 мин"},
-            {id: 5, title: "Временные ряды", duration: "45 мин"}
+            {id: 5, title: "Временные ряды", duration: "45 мин"},
+            {id: 6, title: "CTE и рекурсивные запросы", duration: "38 мин"},
+            {id: 7, title: "Статистические функции и корреляции", duration: "42 мин"}
         ],
         isNew: true
     },
@@ -1347,209 +1354,9 @@ document.addEventListener('click', function(e) {
         }
     }
 });
-// Функции для интерактивных тестов в уроках
-function startLessonQuiz(testData) {
-    currentTest = testData;
-    currentQuestionIndex = 0;
-    userAnswers = [];
-    testStartTime = Date.now();
-    
-    // Показываем контейнер теста
-    const testContainer = document.getElementById('lesson-test-container');
-    testContainer.style.display = 'block';
-    testContainer.scrollIntoView({ behavior: 'smooth' });
-    
-    displayCurrentQuestion();
-}
 
-function displayCurrentQuestion() {
-    const question = currentTest.questions[currentQuestionIndex];
-    const testContent = document.getElementById('lesson-test-content');
-    
-    let optionsHTML = '';
-    question.options.forEach((option, index) => {
-        optionsHTML += `
-            <div class="quiz-option" onclick="selectQuizOption(${index})">
-                <span class="option-letter">${String.fromCharCode(65 + index)}</span>
-                <span class="option-text">${option}</span>
-            </div>
-        `;
-    });
-    
-    testContent.innerHTML = `
-        <div class="lesson-quiz-header">
-            <h4><i class="fas fa-brain"></i> ${currentTest.title}</h4>
-            <div class="quiz-progress">
-                <span>Вопрос ${currentQuestionIndex + 1} из ${currentTest.questions.length}</span>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${((currentQuestionIndex + 1) / currentTest.questions.length) * 100}%"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="quiz-question">
-            <h5>${question.question}</h5>
-            <div class="quiz-options">
-                ${optionsHTML}
-            </div>
-        </div>
-        
-        <div class="quiz-navigation">
-            <button class="pixel-btn" onclick="prevQuizQuestion()" ${currentQuestionIndex === 0 ? 'disabled' : ''}>
-                <i class="fas fa-arrow-left"></i> Назад
-            </button>
-            <button class="pixel-btn" onclick="nextQuizQuestion()" id="next-question-btn" disabled>
-                ${currentQuestionIndex === currentTest.questions.length - 1 ? 'Завершить' : 'Далее'}
-                <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
-    `;
-}
 
-function selectQuizOption(optionIndex) {
-    // Убираем выделение с других опций
-    document.querySelectorAll('.quiz-option').forEach(option => {
-        option.classList.remove('selected');
-    });
-    
-    // Выделяем выбранную опцию
-    document.querySelectorAll('.quiz-option')[optionIndex].classList.add('selected');
-    
-    // Сохраняем ответ
-    userAnswers[currentQuestionIndex] = optionIndex;
-    
-    // Активируем кнопку "Далее"
-    document.getElementById('next-question-btn').disabled = false;
-}
 
-function nextQuizQuestion() {
-    if (userAnswers[currentQuestionIndex] === undefined) {
-        showNotification('Пожалуйста, выберите ответ!', 'warning');
-        return;
-    }
-    
-    if (currentQuestionIndex < currentTest.questions.length - 1) {
-        currentQuestionIndex++;
-        displayCurrentQuestion();
-    } else {
-        finishLessonQuiz();
-    }
-}
-
-function prevQuizQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        displayCurrentQuestion();
-    }
-}
-
-function finishLessonQuiz() {
-    const timeTaken = Math.round((Date.now() - testStartTime) / 1000);
-    let correctAnswers = 0;
-    
-    const results = currentTest.questions.map((question, index) => {
-        const isCorrect = userAnswers[index] === question.correct;
-        if (isCorrect) correctAnswers++;
-        
-        return {
-            question: question.question,
-            userAnswer: question.options[userAnswers[index]],
-            correctAnswer: question.options[question.correct],
-            isCorrect: isCorrect,
-            explanation: question.explanation
-        };
-    });
-    
-    const percentage = (correctAnswers / currentTest.questions.length) * 100;
-    const xpReward = Math.round(percentage * 2); // 2 XP за процент
-    
-    // Добавляем XP игроку
-    addXP(xpReward);
-    
-    showQuizResults(results, correctAnswers, currentTest.questions.length, percentage, timeTaken, xpReward);
-}
-
-function showQuizResults(results, correct, total, percentage, timeTaken, xpReward) {
-    const resultContainer = document.getElementById('lesson-test-content');
-    
-    let resultClass = '';
-    let resultMessage = '';
-    
-    if (percentage >= 80) {
-        resultClass = 'excellent';
-        resultMessage = `Отлично! Вы правильно ответили на ${correct} из ${total} вопросов (${Math.round(percentage)}%)`;
-    } else if (percentage >= 60) {
-        resultClass = 'good';
-        resultMessage = `Хорошо! Вы правильно ответили на ${correct} из ${total} вопросов (${Math.round(percentage)}%)`;
-    } else {
-        resultClass = 'needs-improvement';
-        resultMessage = `Нужно подтянуть знания. Вы правильно ответили на ${correct} из ${total} вопросов (${Math.round(percentage)}%)`;
-    }
-    
-    const detailedHTML = results.map((result, index) => {
-        const resultClass = result.isCorrect ? 'correct' : 'incorrect';
-        return `
-            <div class="quiz-result-item ${resultClass}">
-                <div class="result-header">
-                    <span class="question-number">Вопрос ${index + 1}</span>
-                    <span class="result-icon">
-                        <i class="fas fa-${result.isCorrect ? 'check' : 'times'}"></i>
-                    </span>
-                </div>
-                <div class="result-question">${result.question}</div>
-                <div class="result-answers">
-                    <div class="user-answer">
-                        <strong>Ваш ответ:</strong> ${result.userAnswer}
-                    </div>
-                    ${!result.isCorrect ? `
-                        <div class="correct-answer">
-                            <strong>Правильный ответ:</strong> ${result.correctAnswer}
-                        </div>
-                    ` : ''}
-                </div>
-                ${result.explanation ? `
-                    <div class="result-explanation">
-                        <strong>Объяснение:</strong> ${result.explanation}
-                    </div>
-                ` : ''}
-            </div>
-        `;
-    }).join('');
-    
-    resultContainer.innerHTML = `
-        <div class="quiz-result-summary ${resultClass}">
-            <h4><i class="fas fa-chart-bar"></i> Результат теста</h4>
-            <p>${resultMessage}</p>
-            <div class="quiz-stats">
-                <div class="stat">
-                    <i class="fas fa-clock"></i>
-                    <span>Время: ${timeTaken} сек</span>
-                </div>
-                <div class="stat">
-                    <i class="fas fa-star"></i>
-                    <span>+${xpReward} XP</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="detailed-quiz-results">
-            <h5>Подробные результаты:</h5>
-            ${detailedHTML}
-        </div>
-        
-        <div class="quiz-actions">
-            <button class="pixel-btn" onclick="resetLessonQuiz()">
-                <i class="fas fa-redo"></i> Пройти еще раз
-            </button>
-            <button class="pixel-btn" onclick="hideLessonQuiz()">
-                <i class="fas fa-arrow-right"></i> Продолжить урок
-            </button>
-        </div>
-    `;
-    
-    // Скрываем навигацию теста
-    document.querySelector('.quiz-navigation').style.display = 'none';
-}
 
 function resetLessonQuiz() {
     currentQuestionIndex = 0;
@@ -1561,12 +1368,14 @@ function resetLessonQuiz() {
 function hideLessonQuiz() {
     document.getElementById('lesson-test-container').style.display = 'none';
 }
+
 function loadCourse(courseId) {
-        const coursePage = document.getElementById('course');
+    const coursePage = document.getElementById('course');
     if (!coursePage) {
         console.error('Страница курса не найдена');
         return;
     }
+    
     const courses = JSON.parse(localStorage.getItem('courses'));
     const course = courses.find(c => c.id === courseId);
     
@@ -1575,8 +1384,8 @@ function loadCourse(courseId) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const userCourse = currentUser?.courses?.find(c => c.id === courseId);
     const currentLesson = userCourse?.currentLesson || 1;
-    const backButton = document.createElement('button');
-	 const modules = [];
+    
+    const modules = [];
     let currentModule = [];
     
     course.lessons.forEach((lesson, index) => {
@@ -1587,36 +1396,35 @@ function loadCourse(courseId) {
             currentModule = [];
         }
     });
-    backButton.className = 'pixel-btn clear-btn back-to-courses';
-    backButton.innerHTML = '<i class="fas fa-arrow-left"></i> К списку курсов';
-    backButton.addEventListener('click', () => {
-        document.querySelector('.nav-link[data-page="courses"]').click();
-        courseNavLink.style.display = 'none';
-    });
 
-     setTimeout(() => {
-        const lessonText = document.querySelector('.lesson-text');
-        if (lessonText) {
-            const hasTest = showTest(lessonText);
-            
-            // Если есть тест, меняем текст кнопки "Далее"
-            if (hasTest) {
-                const nextButton = document.querySelector('.next-lesson');
-                if (nextButton) {
-                    nextButton.textContent = 'Пропустить тест';
-                    nextButton.classList.add('skip-test');
-                }
-            }
+    function calculateModuleProgress(moduleItems, currentLessonId) {
+        const completedCount = moduleItems.filter(item => item.id < currentLessonId).length;
+        const isCurrentInModule = moduleItems.some(item => item.id === currentLessonId);
+        
+        if (isCurrentInModule) {
+            return (completedCount * 100) / moduleItems.length;
+        } else if (completedCount === moduleItems.length) {
+            return 100;
+        } else {
+            return (completedCount * 100) / moduleItems.length;
         }
-    }, 100);
+    }
     
-    coursePage.querySelector('.course-header').appendChild(backButton);
-    // Генерация страницы курса
+    // ИСПРАВЛЯЕМ ЛОГИКУ: показываем итоговый тест когда все уроки пройдены
+    const allLessonsCompleted = currentLesson > course.lessons.length;
+    const showFinalTestLink = currentLesson >= course.lessons.length; // Показываем ссылку когда достигли последнего урока
+    
+    console.log('Debug info:', {
+        courseId,
+        currentLesson,
+        totalLessons: course.lessons.length,
+        allLessonsCompleted,
+        showFinalTestLink
+    });
+    
     coursePage.innerHTML = `
         <div class="course-header pixel-border">
             <h2>${course.title}</h2>
-            
-            
             <div class="course-progress">
                 <div class="progress-bar">
                     <div class="progress" style="width: ${userCourse?.progress || 0}%"></div>
@@ -1653,52 +1461,64 @@ function loadCourse(courseId) {
                             </div>
                         </div>
                     `).join('')}
+                    
+                    <!-- Добавляем итоговый тест как отдельный пункт -->
+                    ${showFinalTestLink ? `
+                        <div class="final-test-item ${allLessonsCompleted ? 'active' : 'available'}">
+                            <div class="final-test-header" onclick="showFinalTest(${courseId})">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Итоговый тест</span>
+                                <span class="test-status ${userCourse?.finalTestCompleted ? 'completed' : 'pending'}">
+                                    <i class="fas fa-${userCourse?.finalTestCompleted ? 'check' : 'clock'}"></i>
+                                </span>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             </div>
             
             <div class="lesson-content pixel-border">
-                <h3>${course.lessons.find(l => l.id === currentLesson)?.title || ''}</h3>
-                <div class="lesson-text">
-                    ${generateLessonContent(courseId, currentLesson)}
-                </div>
+                ${allLessonsCompleted ? 
+                    generateFinalTestContent(courseId) : 
+                    showFinalTestLink && currentLesson > course.lessons.length ?
+                    generateFinalTestContent(courseId) :
+                    `
+                    <h3>${course.lessons.find(l => l.id === currentLesson)?.title || ''}</h3>
+                    <div class="lesson-text">
+                        ${generateLessonContent(courseId, currentLesson)}
+                    </div>
+                    `
+                }
                 
                 <div class="lesson-actions">
-                    ${currentLesson > 1 ? `
-                        <button class="pixel-btn clear-btn prev-lesson" data-course-id="${courseId}">
-                            <i class="fas fa-arrow-left"></i> Назад
-                        </button>
+                    ${!allLessonsCompleted ? `
+                        ${currentLesson > 1 ? `
+                            <button class="pixel-btn clear-btn prev-lesson" data-course-id="${courseId}">
+                                <i class="fas fa-arrow-left"></i> Назад
+                            </button>
+                        ` : ''}
+                        
+                        ${currentLesson < course.lessons.length ? `
+                            <button class="pixel-btn next-lesson" data-course-id="${courseId}">
+                                Далее <i class="fas fa-arrow-right"></i>
+                            </button>
+                        ` : `
+                            <button class="pixel-btn start-final-test" data-course-id="${courseId}">
+                                Перейти к итоговому тесту <i class="fas fa-graduation-cap"></i>
+                            </button>
+                        `}
                     ` : ''}
-                    
-                    ${currentLesson < course.lessons.length ? `
-                        <button class="pixel-btn next-lesson" data-course-id="${courseId}">
-                            Далее <i class="fas fa-arrow-right"></i>
-                        </button>
-                    ` : `
-                        <button class="pixel-btn complete-course" data-course-id="${courseId}">
-                            Завершить курс <i class="fas fa-check"></i>
-                        </button>
-                    `}
                 </div>
             </div>
         </div>
     `;
+
+    // Добавляем обработчик для кнопки "Перейти к итоговому тесту"
+    document.querySelector('.start-final-test')?.addEventListener('click', function() {
+        const courseId = parseInt(this.getAttribute('data-course-id'));
+        showFinalTest(courseId);
+    });
     
-	
-
-
-	 // Функция для расчета прогресса модуля
-    function calculateModuleProgress(moduleItems, currentLessonId) {
-        const completedCount = moduleItems.filter(item => item.id < currentLessonId).length;
-        const isCurrentInModule = moduleItems.some(item => item.id === currentLessonId);
-        
-        if (isCurrentInModule) {
-            return (completedCount * 100) / moduleItems.length;
-        } else if (completedCount === moduleItems.length) {
-            return 100;
-        } else {
-            return (completedCount * 100) / moduleItems.length;
-        }
-    }
     // Инициализация аккордеона
     const accordionItems = document.querySelectorAll('.lesson-accordion-item');
     
@@ -1728,7 +1548,8 @@ function loadCourse(courseId) {
             }
         });
     });
-     // Обработка кликов по урокам
+    
+    // Обработка кликов по урокам
     document.querySelectorAll('.lesson-item').forEach(item => {
         item.addEventListener('click', function() {
             const lessonId = parseInt(this.getAttribute('data-lesson-id'));
@@ -1756,328 +1577,30 @@ function loadCourse(courseId) {
         document.querySelector('.nav-link[data-page="courses"]').click();
         document.querySelector('.nav-link[data-page="course"]').style.display = 'none';
     });
-	enhanceLessonContent();
-}
-// Показ конкретного вопроса
-function showQuestion(questionIndex) {
-    if (!currentTestData || questionIndex >= currentTestData.length) return;
     
-    const question = currentTestData[questionIndex];
-    const questionsContainer = document.querySelector('.test-questions');
-    const testCurrent = document.querySelector('.test-current');
-    const prevButton = document.querySelector('.prev-question');
-    const nextButton = document.querySelector('.next-question');
-    const checkButton = document.querySelector('.check-test');
-    
-    // Обновляем номер текущего вопроса
-    testCurrent.textContent = questionIndex + 1;
-    
-    // Очищаем контейнер
-    questionsContainer.innerHTML = '';
-    
-    // Создаем элемент вопроса
-    const questionElement = document.createElement('div');
-    questionElement.className = 'test-question active';
-    
-    let questionHTML = `<h5>${question.question}</h5>`;
-    
-    if (question.type === 'single') {
-        questionHTML += '<div class="test-options">';
-        question.options.forEach((option, optIndex) => {
-            const optionId = `q${questionIndex}_opt${optIndex}`;
-            const isChecked = testAnswers[questionIndex] === optIndex ? 'checked' : '';
-            
-            questionHTML += `
-                <div class="test-option">
-                    <input type="radio" id="${optionId}" name="q${questionIndex}" 
-                           value="${optIndex}" ${isChecked}>
-                    <label for="${optionId}">${option.text}</label>
-                </div>
-            `;
-        });
-        questionHTML += '</div>';
-        
-    } else if (question.type === 'multiple') {
-        questionHTML += '<div class="test-options">';
-        question.options.forEach((option, optIndex) => {
-            const optionId = `q${questionIndex}_opt${optIndex}`;
-            const isChecked = testAnswers[questionIndex] && 
-                            testAnswers[questionIndex].includes(optIndex) ? 'checked' : '';
-            
-            questionHTML += `
-                <div class="test-option">
-                    <input type="checkbox" id="${optionId}" name="q${questionIndex}" 
-                           value="${optIndex}" ${isChecked}>
-                    <label for="${optionId}">${option.text}</label>
-                </div>
-            `;
-        });
-        questionHTML += '</div>';
-        
-    } else if (question.type === 'boolean') {
-        const trueChecked = testAnswers[questionIndex] === 'true' ? 'checked' : '';
-        const falseChecked = testAnswers[questionIndex] === 'false' ? 'checked' : '';
-        
-        questionHTML += `
-            <div class="test-options">
-                <div class="test-option">
-                    <input type="radio" id="q${questionIndex}_true" name="q${questionIndex}" 
-                           value="true" ${trueChecked}>
-                    <label for="q${questionIndex}_true">Верно</label>
-                </div>
-                <div class="test-option">
-                    <input type="radio" id="q${questionIndex}_false" name="q${questionIndex}" 
-                           value="false" ${falseChecked}>
-                    <label for="q${questionIndex}_false">Неверно</label>
-                </div>
-            </div>
-        `;
-    }
-    
-    questionElement.innerHTML = questionHTML;
-    questionsContainer.appendChild(questionElement);
-    
-    // Добавляем обработчики для изменений
-    questionElement.addEventListener('change', saveCurrentAnswer);
-    
-    // Управление кнопками навигации
-    prevButton.style.display = questionIndex > 0 ? 'inline-block' : 'none';
-    
-    if (questionIndex === currentTestData.length - 1) {
-        nextButton.style.display = 'none';
-        checkButton.style.display = 'inline-block';
-    } else {
-        nextButton.style.display = 'inline-block';
-        checkButton.style.display = 'none';
-    }
+   document.querySelector('.start-final-test')?.addEventListener('click', function() {
+    const courseId = parseInt(this.getAttribute('data-course-id'));
+    startFinalTest(courseId);
+});
 }
 
-// Сохранение ответа на текущий вопрос
-function saveCurrentAnswer() {
-    const question = currentTestData[currentQuestionIndex];
-    let answer = null;
+function getCurrentCourseId() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const coursePage = document.getElementById('course');
+    const backButton = coursePage.querySelector('.back-to-courses');
     
-    if (question.type === 'single') {
-        const selected = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
-        answer = selected ? parseInt(selected.value) : null;
-        
-    } else if (question.type === 'multiple') {
-        const selected = document.querySelectorAll(`input[name="q${currentQuestionIndex}"]:checked`);
-        answer = Array.from(selected).map(input => parseInt(input.value));
-        
-    } else if (question.type === 'boolean') {
-        const selected = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
-        answer = selected ? selected.value : null;
-    }
-    
-    testAnswers[currentQuestionIndex] = answer;
+    // Извлекаем ID курса из данных или URL
+    const courseId = parseInt(coursePage.dataset.courseId) || 1;
+    return courseId;
 }
 
-
-// Настройка навигации по тесту
-function setupTestNavigation() {
-    const prevButton = document.querySelector('.prev-question');
-    const nextButton = document.querySelector('.next-question');
-    const checkButton = document.querySelector('.check-test');
-    
-    prevButton.onclick = () => {
-        if (currentQuestionIndex > 0) {
-            saveCurrentAnswer();
-            currentQuestionIndex--;
-            showQuestion(currentQuestionIndex);
-        }
-    };
-    
-    nextButton.onclick = () => {
-        if (currentQuestionIndex < currentTestData.length - 1) {
-            saveCurrentAnswer();
-            currentQuestionIndex++;
-            showQuestion(currentQuestionIndex);
-        }
-    };
-    
-    checkButton.onclick = () => {
-        saveCurrentAnswer();
-        checkTest();
-    };
+function getCurrentLessonId() {
+    const activeLesson = document.querySelector('.lesson-item.active');
+    if (activeLesson) {
+        return parseInt(activeLesson.dataset.lessonId);
+    }
+    return 1;
 }
-
-// Проверка SQL запроса в тесте
-async function testSqlQuery(questionIndex) {
-    const question = currentTestData[questionIndex];
-    const textarea = document.querySelector(`#q${questionIndex}_sql`);
-    const resultContainer = document.querySelector('.sql-test-result');
-    
-    if (!textarea || !question.expectedResult) return;
-    
-    const sqlQuery = textarea.value.trim();
-    if (!sqlQuery) {
-        resultContainer.innerHTML = '<p class="error">Введите SQL запрос</p>';
-        return;
-    }
-    
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            resultContainer.innerHTML = '<p class="error">Требуется авторизация</p>';
-            return;
-        }
-        
-        resultContainer.innerHTML = '<p>Проверяем запрос...</p>';
-        
-        const response = await fetch('/api/queries/execute', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ sqlText: sqlQuery })
-        });
-        
-        const data = await response.json();
-        
-        if (data.error) {
-            resultContainer.innerHTML = `<p class="error">Ошибка: ${data.error}</p>`;
-            return;
-        }
-        
-        // Проверяем правильность результата
-        const isCorrect = validateSqlResult(data.result, question.expectedResult);
-        
-        if (isCorrect) {
-            resultContainer.innerHTML = '<p class="success"><i class="fas fa-check"></i> Запрос выполнен правильно!</p>';
-        } else {
-            resultContainer.innerHTML = '<p class="warning"><i class="fas fa-exclamation-triangle"></i> Результат не соответствует ожидаемому</p>';
-        }
-        
-    } catch (error) {
-        resultContainer.innerHTML = `<p class="error">Ошибка: ${error.message}</p>`;
-    }
-}
-
-// Валидация результата SQL запроса
-function validateSqlResult(actualResult, expectedResult) {
-    try {
-        const actual = JSON.parse(actualResult);
-        const expected = JSON.parse(expectedResult);
-        
-        // Простое сравнение массивов
-        return JSON.stringify(actual) === JSON.stringify(expected);
-    } catch (e) {
-        return false;
-    }
-}
-
-
-// Глобальные переменры для тестирования
-let currentTestData = null;
-let currentQuestionIndex = 0;
-let testAnswers = [];
-let testStartTime = null;
-
-
-// Добавим функцию для отображения теста
-function showTest() {
-    if (!currentTestData || !currentTestData.questions) {
-        console.error('Нет данных теста');
-        return;
-    }
-    
-    const testContainer = document.querySelector('.lesson-test');
-    if (!testContainer) {
-        console.error('Контейнер теста не найден');
-        return;
-    }
-    
-    let questionsHtml = '<div class="test-questions">';
-    
-    currentTestData.questions.forEach((question, index) => {
-        questionsHtml += `<div class="test-question" data-question="${index}">`;
-        questionsHtml += `<h4>Вопрос ${index + 1}</h4>`;
-        questionsHtml += `<p>${question.question}</p>`;
-        
-        switch (question.type) {
-            case 'multiple-choice':
-                questionsHtml += '<div class="options">';
-                question.options.forEach((option, optIndex) => {
-                    questionsHtml += `
-                        <label>
-                            <input type="radio" name="question_${index}" value="${optIndex}">
-                            ${option}
-                        </label>
-                    `;
-                });
-                questionsHtml += '</div>';
-                break;
-                
-            case 'sql':
-                questionsHtml += `
-                    <div class="sql-task">
-                        <p><strong>Задание:</strong> ${question.task}</p>
-                        <div class="sql-editor">
-                            <textarea 
-                                id="sql_${index}" 
-                                placeholder="Введите ваш SQL запрос здесь..."
-                                rows="5"
-                            ></textarea>
-                        </div>
-                        <button type="button" onclick="executeSql(${index})" class="btn-execute">
-                            Выполнить запрос
-                        </button>
-                        <div id="sql_result_${index}" class="sql-result"></div>
-                    </div>
-                `;
-                break;
-                
-            case 'text':
-                questionsHtml += `
-                    <textarea 
-                        id="text_${index}" 
-                        placeholder="Введите ваш ответ..."
-                        rows="4"
-                    ></textarea>
-                `;
-                break;
-                
-            case 'code':
-                questionsHtml += `
-                    <div class="code-task">
-                        <p><strong>Задание:</strong> ${question.task}</p>
-                        <textarea 
-                            id="code_${index}" 
-                            placeholder="Введите ваш код здесь..."
-                            rows="8"
-                            class="code-editor"
-                        ></textarea>
-                        ${question.language ? `<p class="code-language">Язык: ${question.language}</p>` : ''}
-                    </div>
-                `;
-                break;
-        }
-        
-        questionsHtml += '</div>';
-    });
-    
-    questionsHtml += '</div>';
-    
-    // Блок с действиями
-    questionsHtml += `
-        <div class="test-actions">
-            <button onclick="checkTest()" class="btn-primary">Проверить ответы</button>
-            <button onclick="resetTest()" class="btn-secondary">Сбросить</button>
-        </div>
-    `;
-    
-    // Блок для результатов
-    questionsHtml += '<div class="test-result"></div>';
-    
-    testContainer.innerHTML = questionsHtml;
-    testContainer.style.display = 'block';
-    
-    // Прокрутка к тесту
-    testContainer.scrollIntoView({ behavior: 'smooth' });
-}
-
 
 // Функция для проверки теста
 function checkTest() {
@@ -2146,29 +1669,6 @@ function checkTest() {
     }
 }
 
-// Сброс теста
-function resetTest() {
-    currentQuestionIndex = 0;
-    testAnswers = new Array(currentTestData.length);
-    testStartTime = Date.now();
-    
-    const actionsContainer = document.querySelector('.test-navigation');
-    const resultContainer = document.querySelector('.test-result');
-    
-    if (actionsContainer) actionsContainer.style.display = 'block';
-    if (resultContainer) resultContainer.innerHTML = '';
-    
-    showQuestion(0);
-}
-
-// Функция скрытия теста
-function hideTest() {
-    const testContainer = document.querySelector('.lesson-test');
-    if (testContainer) {
-        testContainer.style.display = 'none';
-    }
-}
-
 // Функция для добавления XP пользователю
 function addXP(amount) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -2188,7 +1688,2447 @@ function addXP(amount) {
     updateProfile();
 }
 
+// Функция для инициализации навигации курса
+function initializeCourseNavigation(courseId, currentLesson, modules, totalLessons) {
+    // Обновляем навигацию по урокам
+    document.querySelectorAll('.lesson-item').forEach(item => {
+        const lessonId = parseInt(item.getAttribute('data-lesson-id'));
+        
+        // Разрешаем переход только к пройденным урокам и текущему
+        if (lessonId <= currentLesson) {
+            item.style.cursor = 'pointer';
+            item.style.opacity = '1';
+        } else {
+            item.style.cursor = 'not-allowed';
+            item.style.opacity = '0.5';
+        }
+        
+        item.addEventListener('click', function() {
+            if (lessonId <= currentLesson) {
+                updateCurrentLesson(courseId, lessonId);
+            }
+        });
+    });
+}
 
+// Функция для улучшения контента урока
+function enhanceLessonContent() {
+    // Добавляем подсветку синтаксиса для SQL кода
+    const codeBlocks = document.querySelectorAll('pre code, .sql-code');
+    codeBlocks.forEach(block => {
+        if (!block.classList.contains('highlighted')) {
+            highlightSQLCode(block);
+            block.classList.add('highlighted');
+        }
+    });
+    
+    // Добавляем интерактивные элементы
+    const interactiveElements = document.querySelectorAll('.interactive-element');
+    interactiveElements.forEach(element => {
+        element.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
+}
+
+// Функция для подсветки SQL кода
+function highlightSQLCode(element) {
+    let code = element.textContent;
+    
+    // SQL ключевые слова
+    const keywords = ['SELECT', 'FROM', 'WHERE', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'TABLE', 'DROP', 'ALTER', 'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'ON', 'GROUP BY', 'ORDER BY', 'HAVING', 'DISTINCT', 'UNION', 'AND', 'OR', 'NOT', 'NULL', 'PRIMARY', 'KEY', 'FOREIGN', 'REFERENCES', 'INDEX', 'DATABASE', 'SCHEMA'];
+    
+    keywords.forEach(keyword => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+        code = code.replace(regex, `<span class="sql-keyword">${keyword}</span>`);
+    });
+    
+    element.innerHTML = code;
+}
+// Глобальные переменные только для итогового теста
+let currentFinalTest = null;
+let currentFinalTestAnswers = [];
+let currentFinalTestQuestion = 0;
+
+
+const finalTestsData = {
+    1: { // courseId: 1 (Основы SQL)
+        title: "Итоговый тест: Основы SQL",
+        description: "Проверьте свои знания по всему курсу",
+        timeLimit: 45,
+        questions: [
+            {
+                id: 1,
+                question: "Что такое реляционная база данных?",
+                options: [
+                    "База данных, использующая таблицы для хранения данных",
+                    "База данных только для текстовых данных",
+                    "База данных без структуры",
+                    "База данных только для чисел"
+                ],
+                correct: 0,
+                explanation: "Реляционная БД организует данные в виде таблиц, связанных между собой"
+            },
+            {
+                id: 2,
+                question: "Какой принцип лежит в основе реляционной модели данных?",
+                options: [
+                    "Принцип иерархии",
+                    "Принцип связей между таблицами через ключи",
+                    "Принцип случайного доступа",
+                    "Принцип последовательного хранения"
+                ],
+                correct: 1,
+                explanation: "Реляционная модель основана на связях между таблицами через первичные и внешние ключи"
+            },
+            {
+                id: 3,
+                question: "Какая команда используется для создания таблицы?",
+                options: [
+                    "MAKE TABLE",
+                    "NEW TABLE",
+                    "CREATE TABLE",
+                    "ADD TABLE"
+                ],
+                correct: 2,
+                explanation: "CREATE TABLE - стандартная SQL команда для создания новой таблицы"
+            },
+            {
+                id: 4,
+                question: "Что обязательно указывается при создании столбца таблицы?",
+                options: [
+                    "Только имя столбца",
+                    "Имя столбца и тип данных",
+                    "Только тип данных",
+                    "Имя столбца и значение по умолчанию"
+                ],
+                correct: 1,
+                explanation: "При создании столбца обязательно указывается его имя и тип данных"
+            },
+            {
+                id: 5,
+                question: "Какой тип данных используется для хранения целых чисел?",
+                options: [
+                    "VARCHAR",
+                    "DECIMAL",
+                    "INTEGER",
+                    "TEXT"
+                ],
+                correct: 2,
+                explanation: "INTEGER (или INT) используется для хранения целых чисел"
+            },
+            {
+                id: 6,
+                question: "Какой тип данных подходит для хранения строк переменной длины?",
+                options: [
+                    "CHAR",
+                    "VARCHAR",
+                    "INTEGER",
+                    "BOOLEAN"
+                ],
+                correct: 1,
+                explanation: "VARCHAR позволяет хранить строки переменной длины с указанием максимального размера"
+            },
+            {
+                id: 7,
+                question: "Чем отличается CHAR от VARCHAR?",
+                options: [
+                    "CHAR хранит только числа",
+                    "VARCHAR хранит только числа", 
+                    "CHAR имеет фиксированную длину, VARCHAR - переменную",
+                    "Никакой разницы нет"
+                ],
+                correct: 2,
+                explanation: "CHAR всегда занимает указанное количество символов, VARCHAR - только необходимое"
+            },
+            {
+                id: 8,
+                question: "Что означает CRUD?",
+                options: [
+                    "Create, Read, Update, Delete",
+                    "Create, Replace, Update, Delete",
+                    "Copy, Read, Update, Delete",
+                    "Create, Read, Upgrade, Delete"
+                ],
+                correct: 0,
+                explanation: "CRUD - это Create (создание), Read (чтение), Update (обновление), Delete (удаление)"
+            },
+            {
+                id: 9,
+                question: "Какая операция CRUD отвечает за извлечение данных?",
+                options: [
+                    "Create",
+                    "Read",
+                    "Update",
+                    "Delete"
+                ],
+                correct: 1,
+                explanation: "Read (чтение) отвечает за извлечение данных из базы данных"
+            },
+            {
+                id: 10,
+                question: "Какая команда используется для извлечения данных из таблицы?",
+                options: [
+                    "GET",
+                    "FETCH",
+                    "SELECT",
+                    "RETRIEVE"
+                ],
+                correct: 2,
+                explanation: "SELECT - основная команда для извлечения данных из таблиц"
+            },
+            {
+                id: 11,
+                question: "Что означает SELECT * FROM table_name?",
+                options: [
+                    "Выбрать все строки из таблицы",
+                    "Выбрать все столбцы всех строк из таблицы",
+                    "Удалить все данные из таблицы",
+                    "Создать копию таблицы"
+                ],
+                correct: 1,
+                explanation: "SELECT * выбирает все столбцы всех строк из указанной таблицы"
+            },
+            {
+                id: 12,
+                question: "Какое ключевое слово используется для фильтрации результатов в SELECT?",
+                options: [
+                    "FILTER",
+                    "WHERE",
+                    "HAVING",
+                    "CONDITION"
+                ],
+                correct: 1,
+                explanation: "WHERE используется для указания условий фильтрации в SELECT запросах"
+            },
+            {
+                id: 13,
+                question: "Какая команда используется для добавления новых записей в таблицу?",
+                options: [
+                    "ADD",
+                    "INSERT",
+                    "CREATE",
+                    "APPEND"
+                ],
+                correct: 1,
+                explanation: "INSERT используется для добавления новых записей в таблицу"
+            },
+            {
+                id: 14,
+                question: "Какой синтаксис правильный для INSERT?",
+                options: [
+                    "INSERT table_name VALUES (values)",
+                    "INSERT INTO table_name VALUES (values)",
+                    "INSERT INTO table_name SET values",
+                    "INSERT table_name SET values"
+                ],
+                correct: 1,
+                explanation: "Правильный синтаксис: INSERT INTO table_name VALUES (values)"
+            },
+            {
+                id: 15,
+                question: "Какая команда используется для изменения существующих записей?",
+                options: [
+                    "MODIFY",
+                    "CHANGE",
+                    "UPDATE",
+                    "ALTER"
+                ],
+                correct: 2,
+                explanation: "UPDATE используется для изменения данных в существующих записях"
+            },
+            {
+                id: 16,
+                question: "Что обязательно должно быть в команде UPDATE для безопасности?",
+                options: [
+                    "ORDER BY",
+                    "GROUP BY",
+                    "WHERE",
+                    "HAVING"
+                ],
+                correct: 2,
+                explanation: "WHERE условие обязательно в UPDATE для предотвращения изменения всех записей"
+            },
+            {
+                id: 17,
+                question: "Какая команда используется для удаления записей из таблицы?",
+                options: [
+                    "REMOVE",
+                    "DELETE",
+                    "DROP",
+                    "CLEAR"
+                ],
+                correct: 1,
+                explanation: "DELETE используется для удаления записей из таблицы"
+            },
+            {
+                id: 18,
+                question: "В чем разница между DELETE и DROP?",
+                options: [
+                    "Нет разницы",
+                    "DELETE удаляет записи, DROP удаляет таблицу целиком",
+                    "DELETE удаляет таблицу, DROP удаляет записи",
+                    "DROP работает быстрее"
+                ],
+                correct: 1,
+                explanation: "DELETE удаляет записи из таблицы, DROP удаляет саму таблицу или другие объекты БД"
+            },
+            {
+                id: 19,
+                question: "Что такое CONSTRAINT в SQL?",
+                options: [
+                    "Команда для создания таблицы",
+                    "Ограничение, применяемое к данным в таблице",
+                    "Тип данных",
+                    "Способ индексации"
+                ],
+                correct: 1,
+                explanation: "CONSTRAINT - это ограничение, которое определяет правила для данных в таблице"
+            },
+            {
+                id: 20,
+                question: "Какое ограничение запрещает NULL значения в столбце?",
+                options: [
+                    "UNIQUE",
+                    "CHECK",
+                    "NOT NULL",
+                    "PRIMARY KEY"
+                ],
+                correct: 2,
+                explanation: "NOT NULL ограничение запрещает пустые (NULL) значения в столбце"
+            },
+            {
+                id: 21,
+                question: "Что такое первичный ключ?",
+                options: [
+                    "Любое поле в таблице",
+                    "Поле, которое можно изменять",
+                    "Уникальный идентификатор записи в таблице",
+                    "Поле с текстовыми данными"
+                ],
+                correct: 2,
+                explanation: "Первичный ключ однозначно идентифицирует каждую запись в таблице"
+            },
+            {
+                id: 22,
+                question: "Сколько первичных ключей может быть в одной таблице?",
+                options: [
+                    "Неограниченное количество",
+                    "Максимум 5",
+                    "Только один",
+                    "Минимум 2"
+                ],
+                correct: 2,
+                explanation: "В таблице может быть только один первичный ключ (но он может состоять из нескольких столбцов)"
+            },
+            {
+                id: 23,
+                question: "Какие свойства имеет первичный ключ?",
+                options: [
+                    "Только уникальность",
+                    "Только NOT NULL",
+                    "Уникальность и NOT NULL",
+                    "Никаких особых свойств"
+                ],
+                correct: 2,
+                explanation: "Первичный ключ автоматически имеет ограничения UNIQUE и NOT NULL"
+            },
+            {
+                id: 24,
+                question: "Что такое внешний ключ?",
+                options: [
+                    "Ключ от другой базы данных",
+                    "Ссылка на первичный ключ другой таблицы",
+                    "Дублированный первичный ключ",
+                    "Временный ключ"
+                ],
+                correct: 1,
+                explanation: "Внешний ключ создает связь между таблицами, ссылаясь на первичный ключ другой таблицы"
+            },
+            {
+                id: 25,
+                question: "Для чего нужны внешние ключи?",
+                options: [
+                    "Для ускорения запросов",
+                    "Для обеспечения целостности данных между таблицами",
+                    "Для сжатия данных",
+                    "Для шифрования данных"
+                ],
+                correct: 1,
+                explanation: "Внешние ключи обеспечивают ссылочную целостность между связанными таблицами"
+            },
+            {
+                id: 26,
+                question: "Что такое индекс в базе данных?",
+                options: [
+                    "Номер записи в таблице",
+                    "Структура данных для ускорения поиска",
+                    "Тип данных",
+                    "Команда SQL"
+                ],
+                correct: 1,
+                explanation: "Индекс - это структура данных, которая ускоряет поиск и сортировку записей"
+            },
+            {
+                id: 27,
+                question: "Какая команда создает индекс?",
+                options: [
+                    "MAKE INDEX",
+                    "NEW INDEX",
+                    "CREATE INDEX",
+                    "ADD INDEX"
+                ],
+                correct: 2,
+                explanation: "CREATE INDEX - команда для создания индекса на столбце или столбцах таблицы"
+            },
+            {
+                id: 28,
+                question: "Каков основной недостаток индексов?",
+                options: [
+                    "Ускоряют SELECT запросы",
+                    "Замедляют INSERT, UPDATE, DELETE операции",
+                    "Уменьшают размер таблицы",
+                    "Улучшают безопасность"
+                ],
+                correct: 1,
+                explanation: "Индексы ускоряют чтение, но замедляют операции записи, так как нужно обновлять индекс"
+            },
+            {
+                id: 29,
+                question: "Какой формат обычно используется для экспорта данных SQL?",
+                options: [
+                    "PDF",
+                    "CSV",
+                    "DOC",
+                    "MP3"
+                ],
+                correct: 1,
+                explanation: "CSV (Comma-Separated Values) - популярный формат для импорта/экспорта табличных данных"
+            },
+            {
+                id: 30,
+                question: "Что такое дамп базы данных?",
+                options: [
+                    "Ошибка в базе данных",
+                    "Полная копия структуры и данных БД в виде SQL команд",
+                    "Временная таблица",
+                    "Сжатый файл"
+                ],
+                correct: 1,
+                explanation: "Дамп - это полная копия БД в виде SQL команд для восстановления"
+            }
+        ]},
+    2: { // courseId: 2 (Продвинутые техники)
+        title: "Итоговый тест: Продвинутые техники SQL",
+        description: "Проверьте свои знания по продвинутым возможностям SQL",
+        timeLimit: 45,
+        questions: [
+            {
+                id: 1,
+                question: "Что делает INNER JOIN?",
+                options: [
+                    "Возвращает все записи из левой таблицы",
+                    "Возвращает только записи, которые есть в обеих таблицах",
+                    "Возвращает все записи из обеих таблиц",
+                    "Удаляет дублированные записи"
+                ],
+                correct: 1,
+                explanation: "INNER JOIN возвращает только те записи, для которых найдено соответствие в обеих таблицах"
+            },
+            {
+                id: 2,
+                question: "В чем разница между LEFT JOIN и RIGHT JOIN?",
+                options: [
+                    "LEFT JOIN быстрее RIGHT JOIN",
+                    "LEFT JOIN возвращает все записи из левой таблицы, RIGHT JOIN - из правой",
+                    "Нет разницы, это синонимы",
+                    "RIGHT JOIN не поддерживается в SQL"
+                ],
+                correct: 1,
+                explanation: "LEFT JOIN сохраняет все записи левой таблицы, RIGHT JOIN - правой таблицы"
+            },
+            {
+                id: 3,
+                question: "Что делает FULL OUTER JOIN?",
+                options: [
+                    "Возвращает только совпадающие записи",
+                    "Возвращает все записи из обеих таблиц",
+                    "Возвращает только записи из левой таблицы",
+                    "Создает новую таблицу"
+                ],
+                correct: 1,
+                explanation: "FULL OUTER JOIN возвращает все записи из обеих таблиц, заполняя NULL там, где нет соответствий"
+            },
+            {
+                id: 4,
+                question: "Что такое CROSS JOIN?",
+                options: [
+                    "Соединение по условию",
+                    "Декартово произведение таблиц",
+                    "Соединение только уникальных записей",
+                    "Быстрое соединение таблиц"
+                ],
+                correct: 1,
+                explanation: "CROSS JOIN создает декартово произведение - каждая строка первой таблицы соединяется с каждой строкой второй"
+            },
+            {
+                id: 5,
+                question: "Можно ли использовать несколько JOIN в одном запросе?",
+                options: [
+                    "Нет, только один JOIN на запрос",
+                    "Да, можно соединять несколько таблиц",
+                    "Только в подзапросах",
+                    "Только с INNER JOIN"
+                ],
+                correct: 1,
+                explanation: "В одном запросе можно использовать множественные JOIN для соединения нескольких таблиц"
+            },
+            {
+                id: 6,
+                question: "Что такое подзапрос (subquery)?",
+                options: [
+                    "Ошибка в запросе",
+                    "Запрос внутри другого запроса",
+                    "Быстрый запрос",
+                    "Запрос без WHERE"
+                ],
+                correct: 1,
+                explanation: "Подзапрос - это SELECT запрос, вложенный внутри другого SQL оператора"
+            },
+            {
+                id: 7,
+                question: "Где можно использовать подзапросы?",
+                options: [
+                    "Только в SELECT",
+                    "Только в WHERE",
+                    "В SELECT, WHERE, FROM, HAVING",
+                    "Только в FROM"
+                ],
+                correct: 2,
+                explanation: "Подзапросы можно использовать в различных частях SQL запроса: SELECT, WHERE, FROM, HAVING"
+            },
+            {
+                id: 8,
+                question: "Что такое коррелированный подзапрос?",
+                options: [
+                    "Подзапрос с ошибкой",
+                    "Подзапрос, который ссылается на внешний запрос",
+                    "Очень быстрый подзапрос",
+                    "Подзапрос без условий"
+                ],
+                correct: 1,
+                explanation: "Коррелированный подзапрос использует значения из внешнего запроса и выполняется для каждой строки"
+            },
+            {
+                id: 9,
+                question: "Что такое оконные функции (Window Functions)?",
+                options: [
+                    "Функции для создания окон в приложении",
+                    "Функции, которые работают с набором строк, связанных с текущей строкой",
+                    "Функции для работы с датами",
+                    "Функции для математических вычислений"
+                ],
+                correct: 1,
+                explanation: "Оконные функции выполняют вычисления над набором строк, связанных с текущей строкой"
+            },
+            {
+                id: 10,
+                question: "Какой ключевой элемент используется в оконных функциях?",
+                options: [
+                    "WINDOW",
+                    "OVER",
+                    "FRAME",
+                    "RANGE"
+                ],
+                correct: 1,
+                explanation: "Ключевое слово OVER используется для определения окна в оконных функциях"
+            },
+            {
+                id: 11,
+                question: "Что делает функция ROW_NUMBER()?",
+                options: [
+                    "Считает количество строк",
+                    "Присваивает уникальный номер каждой строке в окне",
+                    "Находит номер строки в таблице",
+                    "Возвращает случайное число"
+                ],
+                correct: 1,
+                explanation: "ROW_NUMBER() присваивает уникальный последовательный номер каждой строке в определенном окне"
+            },
+            {
+                id: 12,
+                question: "В чем разница между ROW_NUMBER() и RANK()?",
+                options: [
+                    "Нет разницы",
+                    "RANK() может присваивать одинаковые ранги при равных значениях",
+                    "ROW_NUMBER() работает быстрее",
+                    "RANK() работает только с числами"
+                ],
+                correct: 1,
+                explanation: "RANK() присваивает одинаковые ранги строкам с равными значениями, ROW_NUMBER() всегда уникален"
+            },
+            {
+                id: 13,
+                question: "Что такое PARTITION BY в оконных функциях?",
+                options: [
+                    "Удаление данных",
+                    "Разделение результата на группы для применения функции",
+                    "Сортировка данных",
+                    "Фильтрация данных"
+                ],
+                correct: 1,
+                explanation: "PARTITION BY разделяет результирующий набор на группы, к каждой из которых применяется оконная функция"
+            },
+            {
+                id: 14,
+                question: "Что такое CTE (Common Table Expression)?",
+                options: [
+                    "Тип данных в SQL",
+                    "Временный именованный результирующий набор",
+                    "Команда для создания таблицы",
+                    "Функция для вычислений"
+                ],
+                correct: 1,
+                explanation: "CTE - это временный именованный результирующий набор, существующий в рамках выполнения одного оператора"
+            },
+            {
+                id: 15,
+                question: "Как начинается CTE?",
+                options: [
+                    "CREATE",
+                    "WITH",
+                    "SELECT",
+                    "DECLARE"
+                ],
+                correct: 1,
+                explanation: "CTE начинается с ключевого слова WITH, за которым следует имя и определение"
+            },
+            {
+                id: 16,
+                question: "Что такое рекурсивный CTE?",
+                options: [
+                    "CTE с ошибкой",
+                    "CTE, который ссылается сам на себя",
+                    "Очень сложный CTE",
+                    "CTE для работы с датами"
+                ],
+                correct: 1,
+                explanation: "Рекурсивный CTE - это CTE, который ссылается сам на себя для обработки иерархических данных"
+            },
+            {
+                id: 17,
+                question: "Что такое динамический SQL?",
+                options: [
+                    "SQL, который изменяется автоматически",
+                    "SQL код, построенный и выполненный во время выполнения",
+                    "Быстрый SQL",
+                    "SQL с переменными"
+                ],
+                correct: 1,
+                explanation: "Динамический SQL - это SQL код, который строится как строка и выполняется во время выполнения программы"
+            },
+            {
+                id: 18,
+                question: "Какая команда используется для выполнения динамического SQL?",
+                options: [
+                    "RUN",
+                    "EXEC или EXECUTE",
+                    "PERFORM",
+                    "DO"
+                ],
+                correct: 1,
+                explanation: "Команды EXEC или EXECUTE используются для выполнения динамически построенных SQL команд"
+            },
+            {
+                id: 19,
+                question: "Что такое хранимая процедура?",
+                options: [
+                    "Временная таблица",
+                    "Предварительно скомпилированный блок SQL кода",
+                    "Резервная копия данных",
+                    "Индекс таблицы"
+                ],
+                correct: 1,
+                explanation: "Хранимая процедура - это предварительно скомпилированный блок SQL кода, сохраненный в базе данных"
+            },
+            {
+                id: 20,
+                question: "Какие преимущества дают хранимые процедуры?",
+                options: [
+                    "Только безопасность",
+                    "Производительность, безопасность, повторное использование кода",
+                    "Только производительность",
+                    "Простота написания"
+                ],
+                correct: 1,
+                explanation: "Хранимые процедуры обеспечивают лучшую производительность, безопасность и возможность повторного использования"
+            },
+            {
+                id: 21,
+                question: "Что такое триггер в SQL?",
+                options: [
+                    "Команда для запуска запроса",
+                    "Специальная процедура, выполняемая автоматически при определенных событиях",
+                    "Тип данных",
+                    "Индекс таблицы"
+                ],
+                correct: 1,
+                explanation: "Триггер - это специальная хранимая процедура, которая автоматически выполняется при определенных событиях"
+            },
+            {
+                id: 22,
+                question: "На какие события могут реагировать триггеры?",
+                options: [
+                    "Только INSERT",
+                    "INSERT, UPDATE, DELETE",
+                    "Только SELECT",
+                    "Только CREATE"
+                ],
+                correct: 1,
+                explanation: "Триггеры могут реагировать на события INSERT, UPDATE и DELETE в таблицах"
+            },
+            {
+                id: 23,
+                question: "Что такое пользовательская функция в SQL?",
+                options: [
+                    "Функция, написанная пользователем",
+                    "Встроенная функция SQL",
+                    "Ошибка в коде",
+                    "Тип данных"
+                ],
+                correct: 0,
+                explanation: "Пользовательская функция - это функция, созданная пользователем для выполнения специфических вычислений"
+            },
+            {
+                id: 24,
+                question: "Что такое транзакция?",
+                options: [
+                    "Одна SQL команда",
+                    "Логическая единица работы, состоящая из одной или нескольких операций",
+                    "Таблица в базе данных",
+                    "Тип соединения"
+                ],
+                correct: 1,
+                explanation: "Транзакция - это последовательность операций, которая выполняется как единое целое"
+            },
+            {
+                id: 25,
+                question: "Какие свойства должна иметь транзакция (ACID)?",
+                options: [
+                    "Atomicity, Consistency, Isolation, Durability",
+                    "Accuracy, Completeness, Integration, Database",
+                    "Access, Control, Identity, Data",
+                    "All, Correct, Important, Details"
+                ],
+                correct: 0,
+                explanation: "ACID: Atomicity (атомарность), Consistency (согласованность), Isolation (изолированность), Durability (долговечность)"
+            },
+            {
+                id: 26,
+                question: "Что делает команда COMMIT?",
+                options: [
+                    "Отменяет транзакцию",
+                    "Подтверждает и сохраняет изменения транзакции",
+                    "Начинает новую транзакцию",
+                    "Проверяет транзакцию"
+                ],
+                correct: 1,
+                explanation: "COMMIT подтверждает все изменения, сделанные в текущей транзакции, и делает их постоянными"
+            }]},
+    3: { // courseId: 3 (Python для анализа данных)
+        title: "Итоговый тест: Python для анализа данных",
+        description: "Проверьте свои знания по всему курсу анализа данных с Python",
+        timeLimit: 45,
+        questions: [
+            {
+                id: 1,
+                question: "Какая библиотека является основой для численных вычислений в Python?",
+                options: [
+                    "pandas",
+                    "matplotlib",
+                    "NumPy",
+                    "scipy"
+                ],
+                correct: 2,
+                explanation: "NumPy - фундаментальная библиотека для научных вычислений в Python, предоставляющая многомерные массивы"
+            },
+            {
+                id: 2,
+                question: "Что такое DataFrame в pandas?",
+                options: [
+                    "Одномерная структура данных",
+                    "Двумерная структура данных, похожая на таблицу",
+                    "Трехмерная структура данных",
+                    "Функция для создания графиков"
+                ],
+                correct: 1,
+                explanation: "DataFrame - это двумерная структура данных с метками строк и столбцов, похожая на таблицу или электронную таблицу"
+            },
+            {
+                id: 3,
+                question: "Какой метод используется для загрузки CSV файла в pandas?",
+                options: [
+                    "pd.load_csv()",
+                    "pd.read_csv()",
+                    "pd.import_csv()",
+                    "pd.open_csv()"
+                ],
+                correct: 1,
+                explanation: "pd.read_csv() - стандартный метод pandas для чтения CSV файлов в DataFrame"
+            },
+            {
+                id: 4,
+                question: "Что делает метод .head() в pandas?",
+                options: [
+                    "Удаляет первые строки",
+                    "Показывает первые 5 строк DataFrame",
+                    "Сортирует данные",
+                    "Создает новый столбец"
+                ],
+                correct: 1,
+                explanation: ".head() возвращает первые n строк DataFrame (по умолчанию 5)"
+            },
+            {
+                id: 5,
+                question: "Как выбрать столбец 'name' из DataFrame df?",
+                options: [
+                    "df.select('name')",
+                    "df.get('name')",
+                    "df['name']",
+                    "df.column('name')"
+                ],
+                correct: 2,
+                explanation: "df['name'] - стандартный способ доступа к столбцу в pandas DataFrame"
+            },
+            {
+                id: 6,
+                question: "Какой метод используется для обнаружения пропущенных значений?",
+                options: [
+                    "isnull()",
+                    "ismissing()",
+                    "isempty()",
+                    "isblank()"
+                ],
+                correct: 0,
+                explanation: "isnull() возвращает булевы значения, указывающие на пропущенные данные (NaN)"
+            },
+            {
+                id: 7,
+                question: "Что делает метод .fillna()?",
+                options: [
+                    "Удаляет пропущенные значения",
+                    "Находит пропущенные значения",
+                    "Заполняет пропущенные значения",
+                    "Подсчитывает пропущенные значения"
+                ],
+                correct: 2,
+                explanation: ".fillna() заменяет пропущенные значения (NaN) на указанное значение"
+            },
+            {
+                id: 8,
+                question: "Какой метод используется для группировки данных в pandas?",
+                options: [
+                    "group()",
+                    "groupby()",
+                    "group_data()",
+                    "aggregate()"
+                ],
+                correct: 1,
+                explanation: ".groupby() создает группы на основе значений в одном или нескольких столбцах"
+            },
+            {
+                id: 9,
+                question: "Что делает функция np.array()?",
+                options: [
+                    "Создает список Python",
+                    "Создает NumPy массив",
+                    "Создает DataFrame",
+                    "Создает строку"
+                ],
+                correct: 1,
+                explanation: "np.array() создает многомерный массив NumPy из последовательности данных"
+            },
+            {
+                id: 10,
+                question: "Какой метод используется для объединения DataFrame по столбцам?",
+                options: [
+                    "join()",
+                    "merge()",
+                    "concat()",
+                    "combine()"
+                ],
+                correct: 1,
+                explanation: "merge() выполняет операции объединения DataFrame, аналогичные SQL JOIN"
+            },
+            {
+                id: 11,
+                question: "Что такое Series в pandas?",
+                options: [
+                    "Двумерная структура данных",
+                    "Одномерная структура данных с индексом",
+                    "Функция для построения графиков",
+                    "Тип данных для дат"
+                ],
+                correct: 1,
+                explanation: "Series - одномерная структура данных pandas с осью меток (индексом)"
+            },
+            {
+                id: 12,
+                question: "Какая библиотека используется для базовой визуализации в Python?",
+                options: [
+                    "seaborn",
+                    "plotly",
+                    "matplotlib",
+                    "bokeh"
+                ],
+                correct: 2,
+                explanation: "matplotlib - базовая библиотека для создания статических, анимированных и интерактивных визуализаций в Python"
+            },
+            {
+                id: 13,
+                question: "Что делает функция plt.show()?",
+                options: [
+                    "Сохраняет график",
+                    "Отображает график на экране",
+                    "Создает новый график",
+                    "Очищает график"
+                ],
+                correct: 1,
+                explanation: "plt.show() отображает текущий график в окне или блокноте Jupyter"
+            },
+            {
+                id: 14,
+                question: "Какая библиотека построена поверх matplotlib и предоставляет красивые статистические графики?",
+                options: [
+                    "plotly",
+                    "seaborn",
+                    "bokeh",
+                    "altair"
+                ],
+                correct: 1,
+                explanation: "seaborn - библиотека статистической визуализации, построенная на matplotlib с более простым интерфейсом"
+            },
+            {
+                id: 15,
+                question: "Какой метод pandas используется для создания сводной таблицы?",
+                options: [
+                    "pivot()",
+                    "pivot_table()",
+                    "crosstab()",
+                    "summary()"
+                ],
+                correct: 1,
+                explanation: "pivot_table() создает сводную таблицу с агрегированными данными"
+            },
+            {
+                id: 16,
+                question: "Что такое iloc в pandas?",
+                options: [
+                    "Индексация по меткам",
+                    "Индексация по позиции (целочисленная)",
+                    "Метод сортировки",
+                    "Функция агрегации"
+                ],
+                correct: 1,
+                explanation: "iloc обеспечивает целочисленную позиционную индексацию для выбора данных"
+            },
+            {
+                id: 17,
+                question: "Какая функция scipy используется для проверки нормальности распределения?",
+                options: [
+                    "normaltest()",
+                    "shapiro()",
+                    "anderson()",
+                    "ttest_1samp()"
+                ],
+                correct: 1,
+                explanation: "shapiro() выполняет тест Шапиро-Уилка для проверки нормальности распределения"
+            },
+            {
+                id: 18,
+                question: "Что делает pd.to_datetime()?",
+                options: [
+                    "Создает случайные даты",
+                    "Преобразует строки в объект datetime",
+                    "Форматирует даты",
+                    "Сортирует по датам"
+                ],
+                correct: 1,
+                explanation: "pd.to_datetime() преобразует строки или другие форматы в pandas datetime объекты"
+            },
+            {
+                id: 19,
+                question: "Какой модуль используется для веб-скрейпинга в Python?",
+                options: [
+                    "requests",
+                    "beautifulsoup4",
+                    "scrapy",
+                    "Все перечисленные"
+                ],
+                correct: 3,
+                explanation: "Все перечисленные библиотеки используются для веб-скрейпинга: requests для HTTP запросов, BeautifulSoup для парсинга HTML, Scrapy как фреймворк"
+            },
+            {
+                id: 20,
+                question: "Что такое машинное обучение с учителем?",
+                options: [
+                    "Обучение без примеров",
+                    "Обучение на размеченных данных",
+                    "Обучение методом проб и ошибок",
+                    "Автоматическое обучение"
+                ],
+                correct: 1,
+                explanation: "Обучение с учителем использует размеченные данные (входы и соответствующие выходы) для обучения модели"
+            },
+            {
+                id: 21,
+                question: "Какая функция sklearn используется для разделения данных на обучающую и тестовую выборки?",
+                options: [
+                    "split_data()",
+                    "train_test_split()",
+                    "divide_data()",
+                    "separate_data()"
+                ],
+                correct: 1,
+                explanation: "train_test_split() случайным образом разделяет данные на обучающую и тестовую выборки"
+            },
+            {
+                id: 22,
+                question: "Что означает NaN в pandas?",
+                options: [
+                    "Not a Name",
+                    "Not a Number",
+                    "Null and None",
+                    "New and Nice"
+                ],
+                correct: 1,
+                explanation: "NaN означает 'Not a Number' и представляет пропущенные или недоступные данные"
+            },
+            {
+                id: 23,
+                question: "Какой метод используется для сохранения DataFrame в CSV файл?",
+                options: [
+                    "save_csv()",
+                    "to_csv()",
+                    "export_csv()",
+                    "write_csv()"
+                ],
+                correct: 1,
+                explanation: "to_csv() записывает DataFrame в файл формата CSV"
+            },
+            {
+                id: 24,
+                question: "Что такое broadcasting в NumPy?",
+                options: [
+                    "Отправка данных по сети",
+                    "Правила выполнения операций над массивами разных размеров",
+                    "Создание копий массива",
+                    "Сортировка массива"
+                ],
+                correct: 1,
+                explanation: "Broadcasting позволяет NumPy выполнять операции над массивами разных форм без явного изменения их размеров"
+            },
+            {
+                id: 25,
+                question: "Какая библиотека используется для создания интерактивных графиков?",
+                options: [
+                    "matplotlib",
+                    "seaborn",
+                    "plotly",
+                    "pandas"
+                ],
+                correct: 2,
+                explanation: "Plotly создает интерактивные веб-графики, которые можно масштабировать, панорамировать и исследовать"
+            },
+            {
+                id: 26,
+                question: "Что делает функция df.describe()?",
+                options: [
+                    "Описывает структуру DataFrame",
+                    "Показывает статистическую сводку числовых столбцов",
+                    "Создает описание данных",
+                    "Выводит информацию о типах данных"
+                ],
+                correct: 1,
+                explanation: "describe() генерирует описательную статистику (среднее, стандартное отклонение, минимум, максимум и т.д.)"
+            },
+            {
+                id: 27,
+                question: "Какой тип данных pandas лучше всего подходит для работы с категориальными данными?",
+                options: [
+                    "object",
+                    "string",
+                    "category",
+                    "int64"
+                ],
+                correct: 2,
+                explanation: "Тип 'category' оптимизирован для категориальных данных и использует меньше памяти"
+            },
+            {
+                id: 28,
+                question: "Что такое Dask?",
+                options: [
+                    "Библиотека для машинного обучения",
+                    "Библиотека для параллельных вычислений и работы с большими данными",
+                    "Библиотека для визуализации",
+                    "Библиотека для веб-разработки"
+                ],
+                correct: 1,
+                explanation: "Dask обеспечивает параллельные вычисления для аналитики, позволяя работать с данными, не помещающимися в память"
+            }]},
+    4: { // courseId: 4 (SQL для анализа данных)
+        title: "Итоговый тест: SQL для анализа данных",
+        description: "Проверьте свои знания аналитических функций и техник работы с данными",
+        timeLimit: 45,
+        questions: [
+            {
+                id: 1,
+                question: "Какая функция используется для подсчета количества записей?",
+                options: [
+                    "SUM()",
+                    "COUNT()",
+                    "AVG()",
+                    "MAX()"
+                ],
+                correct: 1,
+                explanation: "COUNT() подсчитывает количество записей в группе или всей таблице"
+            },
+            {
+                id: 2,
+                question: "Что делает оператор GROUP BY?",
+                options: [
+                    "Сортирует данные",
+                    "Группирует строки с одинаковыми значениями",
+                    "Удаляет дубликаты",
+                    "Создает новую таблицу"
+                ],
+                correct: 1,
+                explanation: "GROUP BY группирует строки с одинаковыми значениями для применения агрегатных функций"
+            },
+            {
+                id: 3,
+                question: "Какая функция вычисляет медиану в SQL?",
+                options: [
+                    "MEDIAN()",
+                    "PERCENTILE_CONT(0.5)",
+                    "MIDDLE()",
+                    "AVG()"
+                ],
+                correct: 1,
+                explanation: "PERCENTILE_CONT(0.5) вычисляет 50-й процентиль, что является медианой"
+            },
+            {
+                id: 4,
+                question: "Что такое оконная функция (Window Function)?",
+                options: [
+                    "Функция для создания окон в интерфейсе",
+                    "Функция, выполняющая вычисления над набором строк, связанных с текущей строкой",
+                    "Функция для работы с временными интервалами",
+                    "Функция для группировки данных"
+                ],
+                correct: 1,
+                explanation: "Оконные функции выполняют вычисления над набором строк без группировки результата"
+            },
+            {
+                id: 5,
+                question: "Какая функция используется для присвоения ранга записям?",
+                options: [
+                    "ORDER()",
+                    "SORT()",
+                    "RANK()",
+                    "INDEX()"
+                ],
+                correct: 2,
+                explanation: "RANK() присваивает ранг каждой строке в рамках результирующего набора"
+            },
+            {
+                id: 6,
+                question: "Что делает функция LAG()?",
+                options: [
+                    "Возвращает значение из предыдущей строки",
+                    "Создает задержку в выполнении запроса",
+                    "Вычисляет отставание по времени",
+                    "Группирует данные с задержкой"
+                ],
+                correct: 0,
+                explanation: "LAG() возвращает значение из строки, расположенной на заданное количество позиций раньше текущей"
+            },
+            {
+                id: 7,
+                question: "Как извлечь год из даты в SQL?",
+                options: [
+                    "YEAR(date)",
+                    "EXTRACT(YEAR FROM date)",
+                    "GET_YEAR(date)",
+                    "DATE_YEAR(date)"
+                ],
+                correct: 1,
+                explanation: "EXTRACT(YEAR FROM date) - стандартный способ извлечения года из даты"
+            },
+            {
+                id: 8,
+                question: "Что такое временной ряд в контексте анализа данных?",
+                options: [
+                    "Последовательность данных, упорядоченная по времени",
+                    "Таблица с временными метками",
+                    "График изменения данных",
+                    "Расписание выполнения запросов"
+                ],
+                correct: 0,
+                explanation: "Временной ряд - это последовательность точек данных, проиндексированных во времени"
+            },
+            {
+                id: 9,
+                question: "Какая функция используется для вычисления скользящего среднего?",
+                options: [
+                    "MOVING_AVG()",
+                    "AVG() OVER (ROWS BETWEEN n PRECEDING AND CURRENT ROW)",
+                    "SLIDING_AVG()",
+                    "WINDOW_AVG()"
+                ],
+                correct: 1,
+                explanation: "Скользящее среднее вычисляется с помощью AVG() с оконной функцией OVER"
+            },
+            {
+                id: 10,
+                question: "Что такое сезонность во временных рядах?",
+                options: [
+                    "Данные только по временам года",
+                    "Регулярно повторяющиеся паттерны в данных",
+                    "Данные с временными интервалами",
+                    "Ошибки в временных данных"
+                ],
+                correct: 1,
+                explanation: "Сезонность - это регулярно повторяющиеся паттерны в данных через определенные интервалы"
+            },
+            {
+                id: 11,
+                question: "Какая функция используется для работы с геоданными?",
+                options: [
+                    "ST_Distance()",
+                    "GEO_CALC()",
+                    "MAP_FUNC()",
+                    "LOCATION()"
+                ],
+                correct: 0,
+                explanation: "ST_Distance() вычисляет расстояние между геометрическими объектами"
+            },
+            {
+                id: 12,
+                question: "Что такое геокодирование?",
+                options: [
+                    "Шифрование географических данных",
+                    "Преобразование адресов в координаты",
+                    "Создание географических карт",
+                    "Анализ геологических данных"
+                ],
+                correct: 1,
+                explanation: "Геокодирование - процесс преобразования адресов в географические координаты"
+            },
+            {
+                id: 13,
+                question: "Какой тип данных используется для хранения координат?",
+                options: [
+                    "TEXT",
+                    "GEOGRAPHY/GEOMETRY",
+                    "DECIMAL",
+                    "VARCHAR"
+                ],
+                correct: 1,
+                explanation: "GEOGRAPHY и GEOMETRY - специальные типы данных для пространственной информации"
+            },
+            {
+                id: 14,
+                question: "Что такое машинное обучение на SQL?",
+                options: [
+                    "Обучение написанию SQL запросов",
+                    "Использование ML алгоритмов внутри базы данных",
+                    "Автоматическое создание запросов",
+                    "Оптимизация производительности SQL"
+                ],
+                correct: 1,
+                explanation: "ML на SQL позволяет выполнять алгоритмы машинного обучения непосредственно в базе данных"
+            },
+            {
+                id: 15,
+                question: "Какая функция используется для линейной регрессии в SQL?",
+                options: [
+                    "LINEAR_REG()",
+                    "REGR_SLOPE() и REGR_INTERCEPT()",
+                    "ML_REGRESSION()",
+                    "PREDICT()"
+                ],
+                correct: 1,
+                explanation: "REGR_SLOPE() и REGR_INTERCEPT() вычисляют коэффициенты линейной регрессии"
+            },
+            {
+                id: 16,
+                question: "Что такое корреляция в анализе данных?",
+                options: [
+                    "Связь между двумя переменными",
+                    "Ошибка в данных",
+                    "Дублирование информации",
+                    "Сортировка данных"
+                ],
+                correct: 0,
+                explanation: "Корреляция измеряет силу и направление линейной связи между переменными"
+            },
+            {
+                id: 17,
+                question: "Какой инструмент лучше всего подходит для визуализации SQL результатов?",
+                options: [
+                    "Excel",
+                    "Tableau/Power BI",
+                    "Word",
+                    "Notepad"
+                ],
+                correct: 1,
+                explanation: "Tableau и Power BI специализированы для создания интерактивных визуализаций данных"
+            },
+            {
+                id: 18,
+                question: "Что такое дашборд?",
+                options: [
+                    "Интерфейс управления базой данных",
+                    "Интерактивная панель с визуализациями ключевых метрик",
+                    "Список всех таблиц в БД",
+                    "Инструмент для написания запросов"
+                ],
+                correct: 1,
+                explanation: "Дашборд - это интерактивная панель, отображающая ключевые показатели и метрики"
+            },
+            {
+                id: 19,
+                question: "Какой тип графика лучше всего показывает тренды во времени?",
+                options: [
+                    "Круговая диаграмма",
+                    "Линейный график",
+                    "Столбчатая диаграмма",
+                    "Точечная диаграмма"
+                ],
+                correct: 1,
+                explanation: "Линейный график идеально подходит для отображения изменений данных во времени"
+            },
+            {
+                id: 20,
+                question: "Что такое когортный анализ?",
+                options: [
+                    "Анализ групп пользователей во времени",
+                    "Анализ корреляций",
+                    "Анализ ошибок в данных",
+                    "Анализ производительности запросов"
+                ],
+                correct: 0,
+                explanation: "Когортный анализ изучает поведение групп пользователей (когорт) в динамике"
+            },
+            {
+                id: 21,
+                question: "Что такое когорта в аналитике?",
+                options: [
+                    "Ошибка в данных",
+                    "Группа пользователей с общими характеристиками",
+                    "Временной период",
+                    "Тип метрики"
+                ],
+                correct: 1,
+                explanation: "Когорта - группа пользователей, объединенных общим событием в определенный временной период"
+            },
+            {
+                id: 22,
+                question: "Какая метрика показывает долю пользователей, вернувшихся в продукт?",
+                options: [
+                    "Конверсия",
+                    "Retention Rate",
+                    "CTR",
+                    "ROI"
+                ],
+                correct: 1,
+                explanation: "Retention Rate (удержание) показывает долю пользователей, вернувшихся в продукт"
+            },
+            {
+                id: 23,
+                question: "Что такое DAU в продуктовой аналитике?",
+                options: [
+                    "Daily Active Users",
+                    "Data Analysis Unit",
+                    "Daily Average Usage",
+                    "Database Access Utility"
+                ],
+                correct: 0,
+                explanation: "DAU (Daily Active Users) - количество уникальных активных пользователей в день"
+            },
+            {
+                id: 24,
+                question: "Как рассчитывается конверсия?",
+                options: [
+                    "(Целевые действия / Общее количество пользователей) × 100%",
+                    "Доходы / Расходы",
+                    "Активные пользователи / Зарегистрированные",
+                    "Клики / Показы"
+                ],
+                correct: 0,
+                explanation: "Конверсия = (Количество выполненных целевых действий / Общее количество возможностей) × 100%"
+            },
+            {
+                id: 25,
+                question: "Что такое LTV (Lifetime Value)?",
+                options: [
+                    "Время жизни пользователя",
+                    "Общая ценность клиента за весь период взаимодействия",
+                    "Количество покупок клиента",
+                    "Средний чек клиента"
+                ],
+                correct: 1,
+                explanation: "LTV - общая прибыль, которую компания получает от клиента за весь период сотрудничества"
+            },
+            {
+                id: 26,
+                question: "Что такое A/B тестирование?",
+                options: [
+                    "Тестирование базы данных",
+                    "Сравнение двух версий продукта для определения лучшей",
+                    "Проверка качества данных",
+                    "Тестирование производительности"
+                ],
+                correct: 1,
+                explanation: "A/B тестирование сравнивает две версии продукта, чтобы определить какая работает лучше"
+            },
+            {
+                id: 27,
+                question: "Какая метрика используется для оценки статистической значимости в A/B тесте?",
+                options: [
+                    "Средняя арифметическая",
+                    "p-value",
+                    "Медиана",
+                    "Стандартное отклонение"
+                ],
+                correct: 1,
+                explanation: "p-value показывает вероятность получения наблюдаемых результатов случайно"
+            },]
+        },
+        5: { // courseId: 5 (NoSQL и SQL)
+    title: "Итоговый тест: NoSQL и SQL - Гибридные подходы",
+    description: "Проверьте свои знания гибридных систем баз данных и интеграции SQL с NoSQL решениями",
+    timeLimit: 60,
+    questions: [
+        {
+            id: 1,
+            question: "Какой тип данных JSON лучше всего подходит для хранения в SQL базах данных?",
+            options: [
+                "TEXT",
+                "VARCHAR",
+                "JSON",
+                "BLOB"
+            ],
+            correct: 2,
+            explanation: "Современные SQL базы данных поддерживают нативный тип JSON с индексацией и функциями для работы с JSON-данными"
+        },
+        {
+            id: 2,
+            question: "Что такое ACID в контексте гибридных систем?",
+            options: [
+                "Принцип работы только с NoSQL",
+                "Свойства транзакций: Atomicity, Consistency, Isolation, Durability",
+                "Алгоритм шифрования данных",
+                "Протокол репликации"
+            ],
+            correct: 1,
+            explanation: "ACID - это четыре ключевых свойства транзакций, которые важно учитывать при проектировании гибридных систем"
+        },
+        {
+            id: 3,
+            question: "Какая функция PostgreSQL позволяет извлекать значения из JSON полей?",
+            options: [
+                "JSON_VALUE()",
+                "json_extract()",
+                "->",
+                "Все вышеперечисленные"
+            ],
+            correct: 3,
+            explanation: "PostgreSQL поддерживает различные операторы и функции для работы с JSON: ->, ->>, json_extract_path() и другие"
+        },
+        {
+            id: 4,
+            question: "В чем основное преимущество документно-ориентированных баз данных как MongoDB?",
+            options: [
+                "Лучшая производительность для всех задач",
+                "Гибкая схема данных",
+                "Поддержка только JSON",
+                "Отсутствие индексов"
+            ],
+            correct: 1,
+            explanation: "Главное преимущество MongoDB и других документных БД - гибкая схема, позволяющая хранить различные структуры данных"
+        },
+        {
+            id: 5,
+            question: "Какой тип базы данных лучше всего подходит для хранения связей между объектами?",
+            options: [
+                "Реляционная",
+                "Документная",
+                "Графовая",
+                "Колоночная"
+            ],
+            correct: 2,
+            explanation: "Графовые базы данных (Neo4j, Amazon Neptune) оптимизированы для хранения и обхода связей между объектами"
+        },
+        {
+            id: 6,
+            question: "Что такое Time Series Database?",
+            options: [
+                "База данных для хранения времени",
+                "База данных, оптимизированная для временных рядов данных",
+                "База данных с временными таблицами",
+                "База данных для планирования задач"
+            ],
+            correct: 1,
+            explanation: "Time Series Database оптимизирована для работы с данными, изменяющимися во времени (метрики, логи, IoT данные)"
+        },
+        {
+            id: 7,
+            question: "Какую роль играет Redis в гибридной архитектуре?",
+            options: [
+                "Основная база данных",
+                "Кеш и хранилище сессий",
+                "Система аналитики",
+                "Файловая система"
+            ],
+            correct: 1,
+            explanation: "Redis используется как высокопроизводительный кеш в памяти и для хранения сессий в гибридных системах"
+        },
+        {
+            id: 8,
+            question: "Что такое sharding в контексте NoSQL систем?",
+            options: [
+                "Резервное копирование",
+                "Горизонтальное разделение данных",
+                "Сжатие данных",
+                "Шифрование"
+            ],
+            correct: 1,
+            explanation: "Sharding - это техника горизонтального разделения данных по нескольким серверам для масштабирования"
+        },
+        {
+            id: 9,
+            question: "Для чего используется Elasticsearch в гибридных системах?",
+            options: [
+                "Хранение основных данных",
+                "Полнотекстовый поиск и аналитика",
+                "Управление транзакциями",
+                "Кеширование"
+            ],
+            correct: 1,
+            explanation: "Elasticsearch специализируется на полнотекстовом поиске, аналитике и индексации больших объемов данных"
+        },
+        {
+            id: 10,
+            question: "Какой подход лучше всего подходит для миграции данных из SQL в NoSQL?",
+            options: [
+                "Единовременная миграция всех данных",
+                "Постепенная миграция с параллельной работой систем",
+                "Удаление старых данных",
+                "Создание новой системы с нуля"
+            ],
+            correct: 1,
+            explanation: "Постепенная миграция с параллельной работой систем минимизирует риски и позволяет тестировать новую систему"
+        },
+        {
+            id: 11,
+            question: "Что такое eventual consistency в NoSQL системах?",
+            options: [
+                "Немедленная консистентность данных",
+                "Консистентность достигается со временем",
+                "Отсутствие консистентности",
+                "Консистентность только для записи"
+            ],
+            correct: 1,
+            explanation: "Eventual consistency означает, что система достигнет консистентного состояния со временем, но не гарантирует немедленную синхронизацию"
+        },
+        {
+            id: 12,
+            question: "Какой паттерн используется для объединения данных из SQL и NoSQL систем?",
+            options: [
+                "CQRS (Command Query Responsibility Segregation)",
+                "MVC",
+                "Singleton",
+                "Observer"
+            ],
+            correct: 0,
+            explanation: "CQRS разделяет операции чтения и записи, что позволяет использовать разные системы хранения для разных типов операций"
+        },
+        {
+            id: 13,
+            question: "Что такое CAP теорема в контексте распределенных систем?",
+            options: [
+                "Consistency, Availability, Partition tolerance",
+                "Create, Alter, Partition",
+                "Cache, Application, Performance",
+                "Client, API, Protocol"
+            ],
+            correct: 0,
+            explanation: "CAP теорема утверждает, что распределенная система может гарантировать только два из трех свойств: консистентность, доступность, устойчивость к разделению"
+        },
+        {
+            id: 14,
+            question: "Какая стратегия репликации лучше всего подходит для чтения-интенсивных приложений?",
+            options: [
+                "Master-Master репликация",
+                "Master-Slave репликация",
+                "Circular репликация",
+                "Без репликации"
+            ],
+            correct: 1,
+            explanation: "Master-Slave репликация позволяет распределить нагрузку чтения между несколькими slave-серверами"
+        },
+        {
+            id: 15,
+            question: "Что такое polyglot persistence?",
+            options: [
+                "Использование одного языка программирования",
+                "Использование разных баз данных для разных задач",
+                "Многоязычная документация",
+                "Шифрование на разных языках"
+            ],
+            correct: 1,
+            explanation: "Polyglot persistence - это подход, при котором используются разные типы баз данных для решения различных задач в рамках одного приложения"
+        }
+    ]
+},
+        6:{ // courseId: 6 (SQL для аналитики)
+    title: "Итоговый тест: SQL для аналитики",
+    description: "Проверьте свои знания продвинутых аналитических запросов и техник работы с данными",
+    timeLimit: 50,
+    questions: [
+        {
+            id: 1,
+            question: "Какая функция позволяет вычислить медиану в SQL?",
+            options: [
+                "MEDIAN()",
+                "PERCENTILE_CONT(0.5)",
+                "AVG()",
+                "MODE()"
+            ],
+            correct: 1,
+            explanation: "PERCENTILE_CONT(0.5) вычисляет медиану как 50-й процентиль непрерывного распределения"
+        },
+        {
+            id: 2,
+            question: "Что делает оконная функция ROW_NUMBER()?",
+            options: [
+                "Подсчитывает общее количество строк",
+                "Присваивает уникальный номер каждой строке в окне",
+                "Ранжирует строки с пропусками",
+                "Вычисляет накопительную сумму"
+            ],
+            correct: 1,
+            explanation: "ROW_NUMBER() присваивает уникальный порядковый номер каждой строке в рамках определенного окна"
+        },
+        {
+            id: 3,
+            question: "Какая разница между RANK() и DENSE_RANK()?",
+            options: [
+                "Нет разницы",
+                "RANK() пропускает номера при одинаковых значениях, DENSE_RANK() не пропускает",
+                "DENSE_RANK() работает только с числами",
+                "RANK() быстрее работает"
+            ],
+            correct: 1,
+            explanation: "RANK() пропускает следующие позиции после одинаковых значений (1,2,2,4), DENSE_RANK() не пропускает (1,2,2,3)"
+        },
+        {
+            id: 4,
+            question: "Что такое CTE (Common Table Expression)?",
+            options: [
+                "Постоянная таблица в базе данных",
+                "Временный именованный результирующий набор",
+                "Тип индекса",
+                "Функция для работы с датами"
+            ],
+            correct: 1,
+            explanation: "CTE - это временный именованный результирующий набор, который существует только в рамках выполнения одного запроса"
+        },
+        {
+            id: 5,
+            question: "Как создать Pivot-таблицу в SQL?",
+            options: [
+                "Использовать оператор PIVOT",
+                "Использовать CASE WHEN с GROUP BY",
+                "Использовать CROSS JOIN",
+                "Все перечисленные способы"
+            ],
+            correct: 3,
+            explanation: "Pivot-таблицы можно создать используя оператор PIVOT (где поддерживается) или имитировать через CASE WHEN с GROUP BY"
+        },
+        {
+            id: 6,
+            question: "Что делает функция LAG() в оконных функциях?",
+            options: [
+                "Вычисляет задержку выполнения запроса",
+                "Возвращает значение из предыдущей строки",
+                "Подсчитывает количество пропущенных значений",
+                "Сортирует данные по убыванию"
+            ],
+            correct: 1,
+            explanation: "LAG() возвращает значение из предыдущей строки в упорядоченном наборе данных"
+        },
+        {
+            id: 7,
+            question: "Какая функция вычисляет накопительную сумму?",
+            options: [
+                "RUNNING_TOTAL()",
+                "SUM() OVER (ORDER BY column ROWS UNBOUNDED PRECEDING)",
+                "CUMSUM()",
+                "TOTAL_SUM()"
+            ],
+            correct: 1,
+            explanation: "Накопительная сумма вычисляется с помощью SUM() OVER с оконной рамкой от начала до текущей строки"
+        },
+        {
+            id: 8,
+            question: "Что означает ST_Distance() в геоаналитических функциях SQL?",
+            options: [
+                "Вычисляет расстояние между двумя географическими точками",
+                "Определяет статистическое отклонение",
+                "Сортирует по расстоянию",
+                "Стандартизирует данные"
+            ],
+            correct: 0,
+            explanation: "ST_Distance() вычисляет расстояние между двумя геометрическими объектами в пространственных данных"
+        },
+        {
+            id: 9,
+            question: "Как работает рекурсивный CTE?",
+            options: [
+                "Выполняется только один раз",
+                "Имеет базовый случай и рекурсивную часть",
+                "Работает только с числовыми данными",
+                "Не поддерживается в SQL"
+            ],
+            correct: 1,
+            explanation: "Рекурсивный CTE состоит из якорного запроса (базовый случай) и рекурсивной части, которая ссылается на себя"
+        },
+        {
+            id: 10,
+            question: "Что такое функция NTILE()?",
+            options: [
+                "Создает N-мерные таблицы",
+                "Делит результирующий набор на N равных групп",
+                "Вычисляет N-й элемент",
+                "Повторяет значение N раз"
+            ],
+            correct: 1,
+            explanation: "NTILE(n) делит упорядоченное множество строк на n примерно равных групп и присваивает каждой группе номер"
+        },
+        {
+            id: 11,
+            question: "Какая функция вычисляет корреляцию между двумя столбцами?",
+            options: [
+                "CORRELATION()",
+                "CORR()",
+                "PEARSON()",
+                "RELATE()"
+            ],
+            correct: 1,
+            explanation: "CORR() вычисляет коэффициент корреляции Пирсона между двумя числовыми выражениями"
+        },
+        {
+            id: 12,
+            question: "Что означает PARTITION BY в оконных функциях?",
+            options: [
+                "Разделяет таблицу физически",
+                "Определяет группы строк для применения оконной функции",
+                "Создает новые разделы диска",
+                "Удаляет дубликаты"
+            ],
+            correct: 1,
+            explanation: "PARTITION BY определяет, как разделить строки на группы для применения оконной функции к каждой группе отдельно"
+        },
+        {
+            id: 13,
+            question: "Как извлечь год из даты в SQL?",
+            options: [
+                "YEAR(date_column)",
+                "EXTRACT(YEAR FROM date_column)",
+                "DATE_PART('year', date_column)",
+                "Все перечисленные способы"
+            ],
+            correct: 3,
+            explanation: "Год можно извлечь разными способами в зависимости от СУБД: YEAR(), EXTRACT(), DATE_PART()"
+        },
+        {
+            id: 14,
+            question: "Что делает функция FIRST_VALUE() в оконных функциях?",
+            options: [
+                "Возвращает первое значение в таблице",
+                "Возвращает первое значение в текущем окне",
+                "Проверяет первичный ключ",
+                "Находит минимальное значение"
+            ],
+            correct: 1,
+            explanation: "FIRST_VALUE() возвращает первое значение в упорядоченном наборе значений текущего окна"
+        },
+        {
+            id: 15,
+            question: "Какая функция используется для создания скользящего среднего?",
+            options: [
+                "MOVING_AVG()",
+                "AVG() OVER (ORDER BY date ROWS BETWEEN n PRECEDING AND CURRENT ROW)",
+                "SLIDING_MEAN()",
+                "ROLL_AVG()"
+            ],
+            correct: 1,
+            explanation: "Скользящее среднее создается с помощью AVG() OVER с оконной рамкой, определяющей количество предыдущих строк"
+        }
+    ]
+}
+};
+
+// Исправленная функция запуска итогового теста
+function startFinalTest(courseId) {
+    console.log('Запуск итогового теста для курса:', courseId);
+    
+    try {
+        // Получаем данные теста
+        const testData = finalTestsData[parseInt(courseId)];
+        if (!testData) {
+            console.error('Итоговый тест для курса не найден:', courseId);
+            showMessage('Итоговый тест не найден', 'error');
+            return;
+        }
+
+        // Инициализируем тест
+        currentFinalTest = testData;
+        currentFinalTestAnswers = new Array(testData.questions.length).fill(undefined);
+        currentFinalTestQuestion = 0;
+
+        // Обновляем информацию о тесте
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const estimatedTimeEl = document.getElementById('estimated-time');
+        
+        if (totalQuestionsEl) totalQuestionsEl.textContent = testData.questions.length;
+        if (estimatedTimeEl) estimatedTimeEl.textContent = Math.ceil(testData.questions.length * 2);
+
+        // Скрываем интро и результаты, показываем тест
+        const introSection = document.querySelector('.test-intro');
+        const quizSection = document.getElementById('final-test-quiz');
+        const resultsSection = document.getElementById('final-test-results'); // Добавлено
+        
+        if (introSection) introSection.style.display = 'none';
+        if (resultsSection) resultsSection.style.display = 'none'; // Скрываем результаты
+        if (quizSection) {
+            quizSection.style.display = 'block';
+            displayFinalTestQuestion();
+        } else {
+            console.error('Контейнер final-test-quiz не найден');
+            showMessage('Ошибка инициализации теста', 'error');
+        }
+
+    } catch (error) {
+        console.error('Ошибка в startFinalTest:', error);
+        showMessage('Ошибка запуска теста', 'error');
+    }
+}
+
+
+// Исправленная функция отображения вопроса итогового теста
+function displayFinalTestQuestion() {
+    if (!currentFinalTest || currentFinalTestQuestion >= currentFinalTest.questions.length) {
+        console.error('Нет данных теста или неверный индекс вопроса');
+        return;
+    }
+    
+    const question = currentFinalTest.questions[currentFinalTestQuestion];
+    const container = document.getElementById('test-question-container');
+    
+    if (!container) {
+        console.error('Контейнер для вопроса не найден');
+        return;
+    }
+    
+    const optionsHTML = question.options.map((option, index) => `
+        <div class="test-option" onclick="selectFinalTestAnswer(${index})">
+            <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+            <span class="option-text">${option}</span>
+        </div>
+    `).join('');
+    
+    container.innerHTML = `
+        <div class="test-question-card">
+            <div class="question-text">
+                <p>${question.question}</p>
+            </div>
+            <div class="question-options">
+                ${optionsHTML}
+            </div>
+        </div>
+    `;
+    
+    // Обновляем прогресс и кнопки
+    updateFinalTestProgress();
+    updateFinalTestButtons();
+    
+    // Восстанавливаем выбранный ответ если есть
+    if (currentFinalTestAnswers[currentFinalTestQuestion] !== undefined) {
+        const selectedIndex = currentFinalTestAnswers[currentFinalTestQuestion];
+        const options = document.querySelectorAll('.test-option');
+        if (options[selectedIndex]) {
+            options[selectedIndex].classList.add('selected');
+        }
+    }
+}
+
+// Функция выбора ответа в итоговом тесте
+function selectFinalTestAnswer(answerIndex) {
+    // Убираем выделение с других вариантов
+    document.querySelectorAll('.test-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    
+    // Выделяем выбранный вариант
+    const options = document.querySelectorAll('.test-option');
+    if (options[answerIndex]) {
+        options[answerIndex].classList.add('selected');
+    }
+    
+    // Сохраняем ответ
+    currentFinalTestAnswers[currentFinalTestQuestion] = answerIndex;
+    
+    // Обновляем кнопки навигации
+    updateFinalTestButtons();
+}
+
+function showTestResults(score, correctAnswers, totalQuestions, passed) {
+    const container = document.getElementById('main-content');
+    if (!container) return;
+    
+    const course = courses.find(c => c.id === currentTest.courseId);
+    
+    const resultHTML = `
+        <div class="test-results">
+            <div class="result-header">
+                <h2>Результаты итогового теста</h2>
+                <h3>${course ? course.title : 'Курс'}</h3>
+            </div>
+            
+            <div class="result-content">
+                <div class="score-circle ${passed ? 'passed' : 'failed'}">
+                    <div class="score-number">${score}%</div>
+                    <div class="score-label">${passed ? 'Пройден' : 'Не пройден'}</div>
+                </div>
+                
+                <div class="result-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Правильных ответов:</span>
+                        <span class="detail-value">${correctAnswers} из ${totalQuestions}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Процент правильных ответов:</span>
+                        <span class="detail-value">${score}%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Минимальный балл для прохождения:</span>
+                        <span class="detail-value">70%</span>
+                    </div>
+                    ${passed ? `
+                    <div class="detail-item success">
+                        <span class="detail-label">Получено XP:</span>
+                        <span class="detail-value">+500 XP</span>
+                    </div>
+                    ` : ''}
+                </div>
+                
+                <div class="result-actions">
+                    <button class="btn btn-primary" onclick="showCourse(${currentTest.courseId})">
+                        Вернуться к курсу
+                    </button>
+                    ${!passed ? `
+                    <button class="btn btn-secondary" onclick="startFinalTest(${currentTest.courseId})">
+                        Пройти тест заново
+                    </button>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = resultHTML;
+    currentTest = null;
+}
+
+
+// Функция обновления прогресса итогового теста
+function updateFinalTestProgress() {
+    if (!currentFinalTest) return;
+    
+    const progress = ((currentFinalTestQuestion + 1) / currentFinalTest.questions.length) * 100;
+    const progressElement = document.getElementById('test-progress');
+    const progressTextElement = document.getElementById('progress-text');
+    
+    if (progressElement) progressElement.style.width = `${progress}%`;
+    if (progressTextElement) {
+        progressTextElement.textContent = `${currentFinalTestQuestion + 1} / ${currentFinalTest.questions.length}`;
+    }
+}
+// Функция обновления кнопок навигации итогового теста
+function updateFinalTestButtons() {
+    if (!currentFinalTest) return;
+    
+    const prevBtn = document.getElementById('prev-test-btn');
+    const nextBtn = document.getElementById('next-test-btn');
+    const finishBtn = document.getElementById('finish-test-btn');
+    
+    if (prevBtn) {
+        prevBtn.disabled = currentFinalTestQuestion === 0;
+    }
+    
+    const hasAnswer = currentFinalTestAnswers[currentFinalTestQuestion] !== undefined;
+    const isLastQuestion = currentFinalTestQuestion === currentFinalTest.questions.length - 1;
+    
+    if (nextBtn && finishBtn) {
+        if (isLastQuestion) {
+            nextBtn.style.display = 'none';
+            finishBtn.style.display = hasAnswer ? 'inline-block' : 'none';
+        } else {
+            nextBtn.style.display = 'inline-block';
+            nextBtn.disabled = !hasAnswer;
+            finishBtn.style.display = 'none';
+        }
+    }
+}
+
+function showFinalTest(courseId) {
+    console.log('Показываем итоговый тест для курса:', courseId);
+    
+    // Просто обновляем контент урока на тест, не меняя всю структуру
+    const lessonContent = document.querySelector('.lesson-content');
+    if (!lessonContent) return;
+    
+    lessonContent.innerHTML = generateFinalTestContent(courseId);
+}
+function generateFinalTestContent(courseId) {
+    const testData = finalTestsData[parseInt(courseId)];
+    if (!testData) {
+        return '<p>Итоговый тест для этого курса пока недоступен.</p>';
+    }
+    
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userCourse = currentUser?.courses?.find(c => c.id === parseInt(courseId));
+    const isCompleted = userCourse?.finalTestCompleted;
+    
+    return `
+        <div class="final-test-wrapper">
+            <div class="test-intro" id="test-intro">
+                <div class="test-header">
+                    <h3><i class="fas fa-graduation-cap"></i> ${testData.title}</h3>
+                    <p class="test-description">${testData.description}</p>
+                </div>
+                
+                <div class="test-info">
+                    <div class="test-stat">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Вопросов: <strong id="total-questions">${testData.questions.length}</strong></span>
+                    </div>
+                    <div class="test-stat">
+                        <i class="fas fa-clock"></i>
+                        <span>Примерное время: <strong id="estimated-time">${Math.ceil(testData.questions.length * 2)}</strong> мин</span>
+                    </div>
+                    <div class="test-stat">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Проходной балл: <strong>70%</strong></span>
+                    </div>
+                </div>
+                
+                ${isCompleted ? `
+                    <div class="test-completed-info">
+                        <div class="completion-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Тест пройден</span>
+                        </div>
+                        <p>Ваш результат: <strong>${userCourse.finalTestScore}%</strong></p>
+                        <p>Вы можете пройти тест заново для улучшения результата.</p>
+                    </div>
+                ` : `
+                    <div class="test-requirements">
+                        <h4>Требования для прохождения:</h4>
+                        <ul>
+                            <li>Ответьте на все вопросы</li>
+                            <li>Наберите минимум 70% правильных ответов</li>
+                            <li>У вас есть неограниченное количество попыток</li>
+                        </ul>
+                    </div>
+                `}
+                
+                <div class="test-actions">
+                    <button class="pixel-btn start-final-test-btn" onclick="startFinalTest(${courseId})">
+                        <i class="fas fa-play"></i> ${isCompleted ? 'Пройти заново' : 'Начать тест'}
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Контейнер для теста с фиксированной высотой -->
+            <div id="final-test-quiz" class="test-quiz-container" style="display: none;">
+                <div class="test-content-area">
+                    <div class="test-progress-container">
+                        <div class="progress-info">
+                            <span id="progress-text">1 / ${testData.questions.length}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" id="test-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="test-question-container" class="scrollable-content">
+                        <!-- Вопросы будут загружаться здесь -->
+                    </div>
+                </div>
+                
+                <!-- Фиксированная панель навигации внизу -->
+                <div class="test-navigation-panel">
+                    <div class="test-navigation">
+                        <button class="pixel-btn clear-btn" id="prev-test-btn" onclick="prevTestQuestion()" disabled>
+                            <i class="fas fa-arrow-left"></i> <span class="btn-text">Предыдущий</span>
+                        </button>
+                        <button class="pixel-btn" id="next-test-btn" onclick="nextTestQuestion()" disabled>
+                            <span class="btn-text">Следующий</span> <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="pixel-btn success-btn" id="finish-test-btn" onclick="finishFinalTest()" style="display: none;">
+                            <i class="fas fa-check"></i> <span class="btn-text">Завершить тест</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Контейнер для результатов -->
+            <div id="final-test-results" style="display: none;">
+                <!-- Результаты будут показаны здесь -->
+            </div>
+        </div>
+    `;
+}
+function displayFinalTestQuestion() {
+    if (!currentFinalTest || currentFinalTestQuestion >= currentFinalTest.questions.length) {
+        console.error('Нет данных теста или неверный индекс вопроса');
+        return;
+    }
+    
+    const question = currentFinalTest.questions[currentFinalTestQuestion];
+    const container = document.getElementById('test-question-container');
+    
+    if (!container) {
+        console.error('Контейнер для вопроса не найден');
+        return;
+    }
+    
+    // Создаем кнопки ответов
+    const optionsHTML = question.options.map((option, index) => `
+        <button class="pixel-btn answer-btn" onclick="selectFinalTestAnswer(${index})" data-answer="${index}">
+            <span class="option-letter">${String.fromCharCode(65 + index)}.</span>
+            <span class="option-text">${option}</span>
+        </button>
+    `).join('');
+    
+    container.innerHTML = `
+        <div class="test-question-card">
+            
+            <div class="question-text">
+                <h3>${question.question}</h3>
+            </div>
+            <div class="question-options">
+                ${optionsHTML}
+            </div>
+        </div>
+    `;
+    
+    // Обновляем прогресс и кнопки
+    updateFinalTestProgress();
+    updateFinalTestButtons();
+    
+    // Восстанавливаем выбранный ответ если есть
+    if (currentFinalTestAnswers[currentFinalTestQuestion] !== undefined) {
+        const selectedIndex = currentFinalTestAnswers[currentFinalTestQuestion];
+        const buttons = document.querySelectorAll('.answer-btn');
+        if (buttons[selectedIndex]) {
+            buttons[selectedIndex].classList.add('selected');
+        }
+    }
+}
+
+function selectFinalTestAnswer(answerIndex) {
+    // Убираем выделение с других вариантов
+    document.querySelectorAll('.answer-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Выделяем выбранный вариант
+    const buttons = document.querySelectorAll('.answer-btn');
+    if (buttons[answerIndex]) {
+        buttons[answerIndex].classList.add('selected');
+    }
+    
+    // Сохраняем ответ
+    currentFinalTestAnswers[currentFinalTestQuestion] = answerIndex;
+    
+    // Обновляем кнопки навигации
+    updateFinalTestButtons();
+}
+
+function showFinalTestResults(results, correctCount, percentage) {
+    const container = document.getElementById('final-test-results');
+    const quizSection = document.getElementById('final-test-quiz');
+    
+    if (!container) return;
+    
+    // Скрываем тест и показываем результаты
+    if (quizSection) quizSection.style.display = 'none';
+    
+    const passed = percentage >= 70;
+    
+    container.innerHTML = `
+        <div class="test-results" style="text-align: center;">
+            <div class="result-header" style="margin-bottom: 30px;">
+                <h2>Результаты итогового теста</h2>
+            </div>
+            
+            <div class="result-content">
+                <div class="score-circle ${passed ? 'passed' : 'failed'}" style="
+                    width: 150px; 
+                    height: 150px; 
+                    border-radius: 50%; 
+                    display: flex; 
+                    flex-direction: column; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin: 0 auto 30px;
+                    background: ${passed ? '#4CAF50' : '#f44336'};
+                    color: white;
+                    font-size: 24px;
+                    font-weight: bold;
+                ">
+                    <div class="score-number">${percentage}%</div>
+                    <div class="score-label" style="font-size: 14px;">${passed ? 'Пройден' : 'Не пройден'}</div>
+                </div>
+                
+                <div class="result-details" style="margin-bottom: 30px;">
+                    <p><strong>Правильных ответов:</strong> ${correctCount} из ${currentFinalTest.questions.length}</p>
+                    <p><strong>Процент правильных ответов:</strong> ${percentage}%</p>
+                    <p><strong>Минимальный балл для прохождения:</strong> 70%</p>
+                    ${passed ? '<p style="color: #4CAF50;"><strong>Получено XP:</strong> +500 XP</p>' : ''}
+                </div>
+                
+                <div class="result-actions">
+                    <button class="pixel-btn" onclick="loadCourse(${getCurrentCourseId()})">
+                        Вернуться к курсу
+                    </button>
+                    ${!passed ? `
+                    <button class="pixel-btn clear-btn" onclick="startFinalTest(${getCurrentCourseId()})">
+                        Пройти тест заново
+                    </button>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.style.display = 'block';
+}
+
+// Исправленные функции навигации
+function prevTestQuestion() {
+    if (currentFinalTestQuestion > 0) {
+        currentFinalTestQuestion--;
+        displayFinalTestQuestion();
+    }
+}
+
+function nextTestQuestion() {
+    if (currentFinalTestQuestion < currentFinalTest.questions.length - 1) {
+        currentFinalTestQuestion++;
+        displayFinalTestQuestion();
+    }
+}
+// Исправленная функция завершения итогового теста
+function finishFinalTest() {
+    if (!currentFinalTest) return;
+    
+    // Проверяем, что все вопросы отвечены
+    for (let i = 0; i < currentFinalTest.questions.length; i++) {
+        if (currentFinalTestAnswers[i] === undefined) {
+            showMessage(`Пожалуйста, ответьте на вопрос ${i + 1}`, 'warning');
+            currentFinalTestQuestion = i;
+            displayFinalTestQuestion();
+            return;
+        }
+    }
+    
+    // Подсчитываем результаты
+    let correctCount = 0;
+    const results = currentFinalTest.questions.map((question, index) => {
+        const isCorrect = currentFinalTestAnswers[index] === question.correct;
+        if (isCorrect) correctCount++;
+        
+        return {
+            question: question.question,
+            userAnswer: question.options[currentFinalTestAnswers[index]],
+            correctAnswer: question.options[question.correct],
+            isCorrect: isCorrect,
+            explanation: question.explanation
+        };
+    });
+    
+    const percentage = Math.round((correctCount / currentFinalTest.questions.length) * 100);
+    
+    // Показываем результаты
+    showFinalTestResults(results, correctCount, percentage);
+    
+    // Обновляем прогресс пользователя если тест пройден
+    if (percentage >= 70) {
+        updateUserCourseProgress(percentage);
+        addXP(500); // Бонус за прохождение итогового теста
+    }
+}
+
+function generateFinalTestContent(courseId) {
+    const testData = finalTestsData[parseInt(courseId)];
+    if (!testData) {
+        return '<p>Итоговый тест для этого курса пока недоступен.</p>';
+    }
+    
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userCourse = currentUser?.courses?.find(c => c.id === parseInt(courseId));
+    const isCompleted = userCourse?.finalTestCompleted;
+    
+    return `
+        <div class="final-test-container">
+            <div class="test-intro" id="test-intro">
+                <div class="test-header">
+                    <h3><i class="fas fa-graduation-cap"></i> ${testData.title}</h3>
+                    <p class="test-description">${testData.description}</p>
+                </div>
+                
+                <div class="test-info">
+                    <div class="test-stat">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Вопросов: <strong id="total-questions">${testData.questions.length}</strong></span>
+                    </div>
+                    <div class="test-stat">
+                        <i class="fas fa-clock"></i>
+                        <span>Примерное время: <strong id="estimated-time">${Math.ceil(testData.questions.length * 2)}</strong> мин</span>
+                    </div>
+                    <div class="test-stat">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Проходной балл: <strong>70%</strong></span>
+                    </div>
+                </div>
+                
+                ${isCompleted ? `
+                    <div class="test-completed-info">
+                        <div class="completion-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Тест пройден</span>
+                        </div>
+                        <p>Ваш результат: <strong>${userCourse.finalTestScore}%</strong></p>
+                        <p>Вы можете пройти тест заново для улучшения результата.</p>
+                    </div>
+                ` : `
+                    <div class="test-requirements">
+                        <h4>Требования для прохождения:</h4>
+                        <ul>
+                            <li>Ответьте на все вопросы</li>
+                            <li>Наберите минимум 70% правильных ответов</li>
+                            <li>У вас есть неограниченное количество попыток</li>
+                        </ul>
+                    </div>
+                `}
+                
+                <div class="test-actions">
+                    <button class="pixel-btn start-final-test-btn" onclick="startFinalTest(${courseId})">
+                        <i class="fas fa-play"></i> ${isCompleted ? 'Пройти заново' : 'Начать тест'}
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Контейнер для самого теста -->
+            <div id="final-test-quiz" style="display: none;">
+                <div class="test-progress-container">
+                    <div class="progress-info">
+                        <span id="progress-text">1 / ${testData.questions.length}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="test-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div id="test-question-container">
+                    <!-- Вопросы будут загружаться здесь -->
+                </div>
+                
+                <div class="test-navigation">
+                    <button class="pixel-btn clear-btn" id="prev-test-btn" onclick="prevTestQuestion()" disabled>
+                        <i class="fas fa-arrow-left"></i> Предыдущий
+                    </button>
+                    <button class="pixel-btn" id="next-test-btn" onclick="nextTestQuestion()" disabled>
+                        Следующий <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="pixel-btn success-btn" id="finish-test-btn" onclick="finishFinalTest()" style="display: none;">
+                        <i class="fas fa-check"></i> Завершить тест
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Контейнер для результатов -->
+            <div id="final-test-results" style="display: none;">
+                <!-- Результаты будут показаны здесь -->
+            </div>
+        </div>
+    `;
+}
+
+function updateTestNavigationButtons() {
+    const prevBtn = document.getElementById('prev-test-btn');
+    const nextBtn = document.getElementById('next-test-btn');
+    const finishBtn = document.getElementById('finish-test-btn');
+    
+    if (prevBtn) {
+        prevBtn.disabled = window.finalCurrentQuestion === 0;
+    }
+    
+    const hasAnswer = window.finalTestAnswers[window.finalCurrentQuestion] !== undefined;
+    const isLastQuestion = window.finalCurrentQuestion === window.finalTestData.questions.length - 1;
+    
+    if (nextBtn && finishBtn) {
+        if (isLastQuestion) {
+            nextBtn.style.display = 'none';
+            finishBtn.style.display = hasAnswer ? 'inline-block' : 'none';
+            finishBtn.disabled = !hasAnswer;
+        } else {
+            nextBtn.style.display = 'inline-block';
+            nextBtn.disabled = !hasAnswer;
+            finishBtn.style.display = 'none';
+        }
+    }
+}
+
+// Функция обновления прогресса пользователя
+function updateUserCourseProgress(percentage) {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) return;
+    
+    const courseId = getCurrentCourseId();
+    const userCourse = currentUser.courses.find(c => c.id === courseId);
+    
+    if (userCourse && percentage >= 70) {
+        userCourse.finalTestCompleted = true;
+        userCourse.finalTestScore = percentage;
+        userCourse.completed = true;
+        userCourse.progress = 100;
+        
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    }
+}
+
+function returnToCourse() {
+    const courseId = getCurrentCourseId();
+    showCourse(courseId);
+}
 
 function generateLessonContent(courseId, lessonId) {
     // Здесь должен быть контент урока
@@ -7064,12 +9004,1860 @@ JOIN mongo_data m ON s.id = m.user_id::INT;</code></pre>
             <li>Используйте Change Data Capture (CDC) для синхронизации</li>
             <li>Настройте TTL индексы в MongoDB</li>
             <li>Применяйте репликацию для горячих данных</li>
-        </ul>` 
-}
-    };
+        </ul>`,
+            7:`<h2>Кеширование с Redis и Memcached: Ускоряем работу приложений</h2>
+<p>Кеширование - ключевой элемент оптимизации производительности в гибридных системах баз данных.</p>
 
+<h3>Стратегии кеширования:</h3>
+<ul>
+<li><strong>Cache-Aside:</strong> Приложение управляет кешем</li>
+<li><strong>Write-Through:</strong> Запись одновременно в кеш и БД</li>
+<li><strong>Write-Behind:</strong> Отложенная запись в БД</li>
+<li><strong>Read-Through:</strong> Кеш сам загружает данные</li>
+</ul>
+
+<div class="redis-example">
+<h4>Настройка Redis для кеширования SQL-запросов:</h4>
+<pre><code>const redis = require('redis');
+const client = redis.createClient({
+  host: 'localhost',
+  port: 6379,
+  db: 0
+});
+
+// Кеширование результатов запроса
+async function getCachedQuery(query, params) {
+  const cacheKey = \`query:\${Buffer.from(query + JSON.stringify(params)).toString('base64')}\`;
+  
+  let result = await client.get(cacheKey);
+  if (result) {
+    return JSON.parse(result);
+  }
+  
+  // Выполняем запрос к БД
+  result = await executeQuery(query, params);
+  
+  // Сохраняем в кеш на 10 минут
+  await client.setex(cacheKey, 600, JSON.stringify(result));
+  return result;
+}</code></pre>
+</div>
+
+<h3>Паттерн Cache-Aside с PostgreSQL:</h3>
+<pre><code>class DatabaseCache {
+  constructor(redisClient, pgPool) {
+    this.redis = redisClient;
+    this.pg = pgPool;
+  }
+  
+  async getUser(userId) {
+    const cacheKey = \`user:\${userId}\`;
     
+    // Проверяем кеш
+    let user = await this.redis.hgetall(cacheKey);
+    if (Object.keys(user).length > 0) {
+      return user;
+    }
     
+    // Загружаем из БД
+    const result = await this.pg.query('SELECT * FROM users WHERE id = $1', [userId]);
+    if (result.rows.length > 0) {
+      user = result.rows[0];
+      // Сохраняем в кеш
+      await this.redis.hmset(cacheKey, user);
+      await this.redis.expire(cacheKey, 3600);
+    }
+    
+    return user;
+  }
+}</code></pre>
+
+<div class="comparison">
+<h4>Redis vs Memcached:</h4>
+<table>
+<tr><th>Критерий</th><th>Redis</th><th>Memcached</th></tr>
+<tr><td>Типы данных</td><td>Строки, хеши, списки, множества</td><td>Только строки</td></tr>
+<tr><td>Персистентность</td><td>Да (RDB/AOF)</td><td>Нет</td></tr>
+<tr><td>Репликация</td><td>Master-Slave</td><td>Нет встроенной</td></tr>
+<tr><td>Производительность</td><td>Высокая</td><td>Немного выше</td></tr>
+</table>
+</div>
+
+<div class="pro-tip">
+<h4>Оптимизация кеширования:</h4>
+<ul>
+<li>Используйте пайплайнинг для множественных операций</li>
+<li>Настраивайте TTL в зависимости от типа данных</li>
+<li>Мониторьте hit ratio кеша</li>
+<li>Реализуйте graceful degradation при недоступности кеша</li>
+</ul>
+</div>
+
+<h3>Инвалидация кеша:</h3>
+<pre><code>// Автоматическая инвалидация через триггеры PostgreSQL
+const invalidateCache = \`
+CREATE OR REPLACE FUNCTION invalidate_user_cache()
+RETURNS TRIGGER AS $$
+BEGIN
+  PERFORM http_post(
+    'http://cache-service/invalidate',
+    json_build_object('key', 'user:' || NEW.id)
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER user_cache_invalidation
+  AFTER UPDATE ON users
+  FOR EACH ROW
+  EXECUTE FUNCTION invalidate_user_cache();
+\`;</code></pre>`,
+            8: `<h2>Полнотекстовый поиск с Elasticsearch: Мощный поиск в гибридных системах</h2>
+<p>Elasticsearch позволяет реализовать быстрый и гибкий поиск по большим объемам текстовых данных.</p>
+
+<h3>Архитектура интеграции:</h3>
+<ul>
+<li>PostgreSQL: Основные данные и метаинформация</li>
+<li>Elasticsearch: Индексированный текстовый контент</li>
+<li>Logstash: ETL для синхронизации данных</li>
+<li>Kibana: Аналитика и мониторинг</li>
+</ul>
+
+<div class="elasticsearch-setup">
+<h4>Создание индекса для поиска:</h4>
+<pre><code>const { Client } = require('@elastic/elasticsearch');
+const client = new Client({ node: 'http://localhost:9200' });
+
+// Создание индекса с маппингом
+async function createSearchIndex() {
+  await client.indices.create({
+    index: 'documents',
+    body: {
+      mappings: {
+        properties: {
+          title: {
+            type: 'text',
+            analyzer: 'russian',
+            fields: {
+              keyword: { type: 'keyword' }
+            }
+          },
+          content: {
+            type: 'text',
+            analyzer: 'russian'
+          },
+          tags: { type: 'keyword' },
+          created_at: { type: 'date' },
+          author_id: { type: 'integer' }
+        }
+      },
+      settings: {
+        analysis: {
+          analyzer: {
+            russian: {
+              tokenizer: 'standard',
+              filter: ['lowercase', 'russian_morphology']
+            }
+          }
+        }
+      }
+    }
+  });
+}</code></pre>
+</div>
+
+<h3>Синхронизация данных из PostgreSQL:</h3>
+<pre><code>class ElasticsearchSync {
+  constructor(esClient, pgPool) {
+    this.es = esClient;
+    this.pg = pgPool;
+  }
+  
+  async syncDocument(documentId) {
+    // Получаем данные из PostgreSQL
+    const result = await this.pg.query(\`
+      SELECT d.*, u.name as author_name 
+      FROM documents d 
+      JOIN users u ON d.author_id = u.id 
+      WHERE d.id = $1
+    \`, [documentId]);
+    
+    if (result.rows.length === 0) return;
+    
+    const doc = result.rows[0];
+    
+    // Индексируем в Elasticsearch
+    await this.es.index({
+      index: 'documents',
+      id: documentId,
+      body: {
+        title: doc.title,
+        content: doc.content,
+        tags: doc.tags,
+        author_id: doc.author_id,
+        author_name: doc.author_name,
+        created_at: doc.created_at
+      }
+    });
+  }
+  
+  async search(query, filters = {}) {
+    const searchBody = {
+      query: {
+        bool: {
+          must: [
+            {
+              multi_match: {
+                query: query,
+                fields: ['title^2', 'content'],
+                type: 'best_fields',
+                fuzziness: 'AUTO'
+              }
+            }
+          ],
+          filter: []
+        }
+      },
+      highlight: {
+        fields: {
+          title: {},
+          content: { fragment_size: 150, number_of_fragments: 3 }
+        }
+      },
+      sort: [
+        { _score: { order: 'desc' } },
+        { created_at: { order: 'desc' } }
+      ]
+    };
+    
+    // Добавляем фильтры
+    if (filters.author_id) {
+      searchBody.query.bool.filter.push({
+        term: { author_id: filters.author_id }
+      });
+    }
+    
+    if (filters.tags) {
+      searchBody.query.bool.filter.push({
+        terms: { tags: filters.tags }
+      });
+    }
+    
+    const response = await this.es.search({
+      index: 'documents',
+      body: searchBody
+    });
+    
+    return response.body.hits;
+  }
+}</code></pre>
+
+<div class="advanced-search">
+<h4>Продвинутые возможности поиска:</h4>
+<pre><code>// Поиск с автодополнением
+async function suggestSearch(prefix) {
+  const response = await client.search({
+    index: 'documents',
+    body: {
+      suggest: {
+        title_suggest: {
+          prefix: prefix,
+          completion: {
+            field: 'title.suggest',
+            size: 5
+          }
+        }
+      }
+    }
+  });
+  
+  return response.body.suggest.title_suggest[0].options;
+}
+
+// Агрегации для фасетного поиска
+async function getFacets(query) {
+  const response = await client.search({
+    index: 'documents',
+    body: {
+      query: { match: { content: query } },
+      aggs: {
+        by_author: {
+          terms: { field: 'author_id', size: 10 }
+        },
+        by_tags: {
+          terms: { field: 'tags', size: 20 }
+        },
+        by_date: {
+          date_histogram: {
+            field: 'created_at',
+            calendar_interval: 'month'
+          }
+        }
+      }
+    }
+  });
+  
+  return response.body.aggregations;
+}</code></pre>
+</div>
+
+<div class="pro-tip">
+<h4>Оптимизация производительности:</h4>
+<ul>
+<li>Используйте bulk API для массовой индексации</li>
+<li>Настройте refresh_interval для снижения нагрузки</li>
+<li>Применяйте search templates для повторяющихся запросов</li>
+<li>Используйте routing для распределения по шардам</li>
+</ul>
+</div>
+
+<h3>Мониторинг и отладка:</h3>
+<pre><code>// Профилирование поисковых запросов
+async function profileSearch(query) {
+  const response = await client.search({
+    index: 'documents',
+    body: {
+      profile: true,
+      query: { match: { content: query } }
+    }
+  });
+  
+  console.log('Query profile:', response.body.profile);
+  return response.body.hits;
+}</code></pre>`,
+            9:`<h2>Миграция данных между SQL и NoSQL: Стратегии переноса</h2>
+<p>Миграция данных между различными типами баз данных требует продуманного подхода и учета особенностей каждой системы.</p>
+
+<h3>Основные стратегии миграции:</h3>
+<ul>
+<li><strong>Big Bang:</strong> Полная миграция за один раз</li>
+<li><strong>Strangler Fig:</strong> Постепенная замена компонентов</li>
+<li><strong>Database-per-Service:</strong> Микросервисный подход</li>
+<li><strong>Dual Write:</strong> Параллельная запись в обе БД</li>
+</ul>
+
+<h3>Инструменты миграции:</h3>
+<pre><code>// Пример миграции PostgreSQL -> MongoDB
+class DataMigrator {
+  constructor(pgConfig, mongoConfig) {
+    this.pgPool = new Pool(pgConfig);
+    this.mongoClient = new MongoClient(mongoConfig.url);
+    this.batchSize = 1000;
+  }
+  
+  async migrateTable(tableName, collectionName) {
+    let offset = 0;
+    let hasMore = true;
+    
+    const mongoDB = this.mongoClient.db('migrated_data');
+    
+    while (hasMore) {
+      const result = await this.pgPool.query(
+        'SELECT * FROM $1 LIMIT $2 OFFSET $3',
+        [tableName, this.batchSize, offset]
+      );
+      
+      if (result.rows.length === 0) {
+        hasMore = false;
+        break;
+      }
+      
+      // Трансформация данных
+      const documents = result.rows.map(row => ({
+        _id: row.id,
+        ...this.transformRow(row),
+        migrated_at: new Date()
+      }));
+      
+      await mongoDB.collection(collectionName).insertMany(documents);
+      offset += this.batchSize;
+      
+      console.log('Processed:', offset, 'records from', tableName);
+    }
+  }
+  
+  transformRow(row) {
+    // Логика трансформации данных
+    const transformed = { ...row };
+    
+    // Преобразование дат
+    if (row.created_at) {
+      transformed.created_at = new Date(row.created_at);
+    }
+    
+    // Нормализация JSON полей
+    if (row.metadata && typeof row.metadata === 'string') {
+      transformed.metadata = JSON.parse(row.metadata);
+    }
+    
+    return transformed;
+  }
+}</code></pre>
+
+<div class="migration-checklist">
+<h4>Чек-лист миграции:</h4>
+<ul>
+<li>Анализ схемы исходных данных</li>
+<li>Проектирование целевой структуры</li>
+<li>Создание mapping правил</li>
+<li>Тестирование на подмножестве данных</li>
+<li>Валидация результатов</li>
+<li>Rollback план</li>
+</ul>
+</div>
+
+<h3>Обработка конфликтов данных:</h3>
+<pre><code>// Стратегии разрешения конфликтов
+const conflictResolver = {
+  // Последняя запись побеждает
+  lastWriteWins: (existing, incoming) => {
+    return incoming.updated_at > existing.updated_at ? incoming : existing;
+  },
+  
+  // Слияние объектов
+  merge: (existing, incoming) => {
+    return { ...existing, ...incoming, conflicts: [] };
+  },
+  
+  // Ручное разрешение
+  manual: (existing, incoming) => {
+    return {
+      ...existing,
+      conflicts: [{ data: incoming, timestamp: new Date() }]
+    };
+  }
+};</code></pre>
+
+<h3>Мониторинг процесса миграции:</h3>
+<table>
+<tr><th>Метрика</th><th>Описание</th><th>Критическое значение</th></tr>
+<tr><td>Throughput</td><td>Записей в секунду</td><td>&lt; 100 rps</td></tr>
+<tr><td>Error Rate</td><td>Процент ошибочных записей</td><td>&gt; 1%</td></tr>
+<tr><td>Data Integrity</td><td>Целостность данных</td><td>100%</td></tr>
+</table>`,
+            10:`<h2>Репликация и синхронизация данных: Поддержание консистентности</h2>
+<p>Синхронизация данных между различными базами данных - критически важный аспект гибридных систем.</p>
+
+<h3>Типы репликации:</h3>
+<ul>
+<li><strong>Master-Slave:</strong> Односторонняя репликация</li>
+<li><strong>Master-Master:</strong> Двусторонняя репликация</li>
+<li><strong>Event-driven:</strong> Асинхронная через события</li>
+<li><strong>CDC (Change Data Capture):</strong> Отслеживание изменений</li>
+</ul>
+
+<h3>Реализация Change Data Capture:</h3>
+<pre><code>// CDC с использованием PostgreSQL логических репликаций
+class CDCHandler {
+  constructor(pgConfig, targets) {
+    this.pgClient = new Client(pgConfig);
+    this.targets = targets; // MongoDB, Redis, etc.
+    this.replicationSlot = 'hybrid_cdc_slot';
+  }
+  
+  async setupLogicalReplication() {
+    await this.pgClient.query(
+      'SELECT pg_create_logical_replication_slot($1, $2)',
+      [this.replicationSlot, 'pgoutput']
+    );
+  }
+  
+  async startCDC() {
+    const stream = this.pgClient.query(
+      'SELECT * FROM pg_logical_slot_get_changes($1, NULL, NULL)',
+      [this.replicationSlot]
+    );
+    
+    stream.on('row', async (row) => {
+      const change = this.parseWALData(row.data);
+      await this.propagateChange(change);
+    });
+  }
+  
+  parseWALData(walData) {
+    // Парсинг WAL записей
+    const parsed = JSON.parse(walData);
+    return {
+      operation: parsed.action, // INSERT, UPDATE, DELETE
+      table: parsed.table,
+      data: parsed.columns,
+      timestamp: new Date()
+    };
+  }
+  
+  async propagateChange(change) {
+    const promises = this.targets.map(async (target) => {
+      switch (target.type) {
+        case 'mongodb':
+          return this.syncToMongo(target, change);
+        case 'redis':
+          return this.syncToRedis(target, change);
+        case 'elasticsearch':
+          return this.syncToES(target, change);
+      }
+    });
+    
+    await Promise.allSettled(promises);
+  }
+  
+  async syncToMongo(target, change) {
+    const collection = target.db.collection(change.table);
+    
+    switch (change.operation) {
+      case 'INSERT':
+        await collection.insertOne(change.data);
+        break;
+      case 'UPDATE':
+        await collection.updateOne(
+          { _id: change.data.id },
+          { $set: change.data }
+        );
+        break;
+      case 'DELETE':
+        await collection.deleteOne({ _id: change.data.id });
+        break;
+    }
+  }
+}</code></pre>
+
+<div class="sync-patterns">
+<h4>Паттерны синхронизации:</h4>
+<ul>
+<li><strong>Saga Pattern:</strong> Распределенные транзакции</li>
+<li><strong>Outbox Pattern:</strong> Гарантированная доставка событий</li>
+<li><strong>CQRS:</strong> Разделение команд и запросов</li>
+</ul>
+</div>
+
+<h3>Реализация Outbox Pattern:</h3>
+<pre><code>// Outbox таблица для гарантированной доставки
+class OutboxHandler {
+  constructor(pgPool, eventBus) {
+    this.pgPool = pgPool;
+    this.eventBus = eventBus;
+  }
+  
+  async createOutboxTable() {
+    await this.pgPool.query(\`
+      CREATE TABLE IF NOT EXISTS outbox (
+        id SERIAL PRIMARY KEY,
+        event_type VARCHAR(100) NOT NULL,
+        payload JSONB NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        processed_at TIMESTAMP NULL
+      )
+    \`);
+  }
+  
+  async publishEvent(eventType, payload) {
+    const client = await this.pgPool.connect();
+    
+    try {
+      await client.query('BEGIN');
+      
+      // Основная бизнес-операция
+      await this.executeBusinessLogic(client, payload);
+      
+      // Сохранение события в outbox
+      await client.query(
+        'INSERT INTO outbox (event_type, payload) VALUES ($1, $2)',
+        [eventType, payload]
+      );
+      
+      await client.query('COMMIT');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+  
+  async processOutboxEvents() {
+    const events = await this.pgPool.query(\`
+      SELECT * FROM outbox 
+      WHERE processed_at IS NULL 
+      ORDER BY created_at 
+      LIMIT 100
+    \`);
+    
+    for (const event of events.rows) {
+      try {
+        await this.eventBus.publish(event.event_type, event.payload);
+        
+        await this.pgPool.query(
+          'UPDATE outbox SET processed_at = NOW() WHERE id = $1',
+          [event.id]
+        );
+      } catch (error) {
+        console.error('Failed to process event:', event.id, error);
+      }
+    }
+  }
+}</code></pre>
+
+<h3>Мониторинг синхронизации:</h3>
+<table>
+<tr><th>Показатель</th><th>PostgreSQL</th><th>MongoDB</th><th>Redis</th></tr>
+<tr><td>Lag</td><td>pg_stat_replication</td><td>rs.status()</td><td>INFO replication</td></tr>
+<tr><td>Conflicts</td><td>pg_stat_database_conflicts</td><td>db.serverStatus()</td><td>LASTSAVE</td></tr>
+</table>`,
+            11 :`<h2>Оптимизация производительности гибридных систем</h2>
+<p>Максимизация производительности требует понимания особенностей каждой базы данных и правильного распределения нагрузки.</p>
+
+<h3>Стратегии оптимизации:</h3>
+<ul>
+<li><strong>Партицирование данных:</strong> Горизонтальное и вертикальное</li>
+<li><strong>Кэширование:</strong> Многоуровневые стратегии</li>
+<li><strong>Индексация:</strong> Оптимальные индексы для каждой БД</li>
+<li><strong>Connection Pooling:</strong> Управление соединениями</li>
+</ul>
+
+<h3>Система мониторинга производительности:</h3>
+<pre><code>// Комплексный мониторинг производительности
+class PerformanceMonitor {
+  constructor(databases) {
+    this.databases = databases;
+    this.metrics = new Map();
+    this.thresholds = {
+      responseTime: 100, // ms
+      errorRate: 0.01,   // 1%
+      throughput: 1000   // ops/sec
+    };
+  }
+  
+  async collectMetrics() {
+    const allMetrics = {};
+    
+    for (const [name, db] of Object.entries(this.databases)) {
+      allMetrics[name] = await this.getDBMetrics(db);
+    }
+    
+    return allMetrics;
+  }
+  
+  async getDBMetrics(db) {
+    const startTime = Date.now();
+    
+    try {
+      // Универсальный healthcheck
+      const result = await this.executeHealthCheck(db);
+      const responseTime = Date.now() - startTime;
+      
+      return {
+        responseTime,
+        isHealthy: true,
+        connectionCount: await this.getConnectionCount(db),
+        activeQueries: await this.getActiveQueries(db),
+        cacheHitRate: await this.getCacheHitRate(db)
+      };
+    } catch (error) {
+      return {
+        responseTime: Date.now() - startTime,
+        isHealthy: false,
+        error: error.message
+      };
+    }
+  }
+  
+  async optimizeQueries() {
+    // Анализ медленных запросов
+    const slowQueries = await this.identifySlowQueries();
+    
+    for (const query of slowQueries) {
+      const suggestions = await this.generateOptimizationSuggestions(query);
+      console.log('Query optimization suggestions:', suggestions);
+    }
+  }
+  
+  async generateOptimizationSuggestions(query) {
+    const suggestions = [];
+    
+    // Анализ индексов
+    if (query.database === 'postgresql') {
+      const missingIndexes = await this.analyzeMissingIndexes(query);
+      suggestions.push(...missingIndexes);
+    }
+    
+    // Анализ кэширования
+    if (query.frequency > 100) {
+      suggestions.push({
+        type: 'caching',
+        recommendation: 'Consider caching this frequent query'
+      });
+    }
+    
+    return suggestions;
+  }
+}</code></pre>`,},
+        6: {
+            1: `<h2>Агрегация данных: Основа аналитических вычислений</h2>
+    <p>Агрегация данных - это процесс группировки и суммирования информации для получения аналитических выводов. Рассмотрим продвинутые техники агрегации.</p>
+
+    <h3>Базовые агрегатные функции:</h3>
+    <div class="code-example">
+        <pre><code>-- Основные агрегатные функции
+SELECT 
+    COUNT(*) as total_orders,
+    SUM(amount) as total_revenue,
+    AVG(amount) as avg_order_value,
+    MIN(amount) as min_order,
+    MAX(amount) as max_order,
+    STDDEV(amount) as order_variance
+FROM orders
+WHERE order_date >= '2024-01-01';</code></pre>
+    </div>
+
+    <h3>Группировка с множественными измерениями:</h3>
+    <div class="code-example">
+        <pre><code>-- Анализ продаж по регионам и категориям
+SELECT 
+    region,
+    category,
+    COUNT(*) as orders_count,
+    SUM(amount) as total_sales,
+    AVG(amount) as avg_order_value,
+    ROUND(SUM(amount) * 100.0 / 
+          SUM(SUM(amount)) OVER(), 2) as sales_percentage
+FROM sales s
+JOIN products p ON s.product_id = p.id
+JOIN customers c ON s.customer_id = c.id
+GROUP BY region, category
+ORDER BY total_sales DESC;</code></pre>
+    </div>
+
+    <h3>Условная агрегация:</h3>
+    <div class="code-example">
+        <pre><code>-- Анализ производительности с условиями
+SELECT 
+    product_category,
+    SUM(CASE WHEN order_status = 'completed' THEN amount ELSE 0 END) as completed_sales,
+    SUM(CASE WHEN order_status = 'cancelled' THEN amount ELSE 0 END) as cancelled_sales,
+    COUNT(CASE WHEN amount > 1000 THEN 1 END) as high_value_orders,
+    AVG(CASE WHEN customer_type = 'premium' THEN amount END) as avg_premium_order
+FROM order_analytics
+GROUP BY product_category;</code></pre>
+    </div>
+
+    <div class="practical-case">
+        <h4>Практический случай: Анализ RFM-сегментации</h4>
+        <pre><code>-- RFM анализ клиентов (Recency, Frequency, Monetary)
+WITH customer_rfm AS (
+    SELECT 
+        customer_id,
+        DATEDIFF(CURRENT_DATE, MAX(order_date)) as recency,
+        COUNT(*) as frequency,
+        SUM(amount) as monetary_value
+    FROM orders
+    WHERE order_date >= DATE_SUB(CURRENT_DATE, INTERVAL 365 DAY)
+    GROUP BY customer_id
+)
+SELECT 
+    CASE 
+        WHEN recency <= 30 THEN 'Active'
+        WHEN recency <= 90 THEN 'Lapsing' 
+        ELSE 'Churned'
+    END as recency_segment,
+    COUNT(*) as customers_count,
+    AVG(frequency) as avg_frequency,
+    AVG(monetary_value) as avg_monetary_value
+FROM customer_rfm
+GROUP BY recency_segment;</code></pre>
+    </div>`,
+
+            2: `<h2>Оконные функции: Продвинутая аналитика в SQL</h2>
+    <p>Оконные функции позволяют выполнять вычисления над набором строк, связанных с текущей строкой, не группируя результат.</p>
+
+    <h3>Основные типы оконных функций:</h3>
+    <ul>
+        <li><strong>Ранжирующие:</strong> ROW_NUMBER(), RANK(), DENSE_RANK()</li>
+        <li><strong>Агрегатные:</strong> SUM(), AVG(), COUNT() с OVER()</li>
+        <li><strong>Навигационные:</strong> LAG(), LEAD(), FIRST_VALUE(), LAST_VALUE()</li>
+    </ul>
+
+    <h3>Ранжирование и топ-листы:</h3>
+    <div class="code-example">
+        <pre><code>-- Топ продавцов по месяцам
+SELECT 
+    salesperson,
+    month,
+    sales_amount,
+    ROW_NUMBER() OVER (PARTITION BY month ORDER BY sales_amount DESC) as rank_row,
+    RANK() OVER (PARTITION BY month ORDER BY sales_amount DESC) as rank_with_ties,
+    DENSE_RANK() OVER (PARTITION BY month ORDER BY sales_amount DESC) as dense_rank
+FROM monthly_sales
+WHERE rank_row <= 3;</code></pre>
+    </div>
+
+    <h3>Накопительные суммы и скользящие средние:</h3>
+    <div class="code-example">
+        <pre><code>-- Анализ роста продаж
+SELECT 
+    order_date,
+    daily_sales,
+    SUM(daily_sales) OVER (
+        ORDER BY order_date 
+        ROWS UNBOUNDED PRECEDING
+    ) as cumulative_sales,
+    AVG(daily_sales) OVER (
+        ORDER BY order_date 
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ) as moving_avg_7_days,
+    LAG(daily_sales, 1) OVER (ORDER BY order_date) as previous_day_sales,
+    LEAD(daily_sales, 1) OVER (ORDER BY order_date) as next_day_sales
+FROM daily_sales_summary
+ORDER BY order_date;</code></pre>
+    </div>
+
+    <h3>Процентили и квантили:</h3>
+    <div class="code-example">
+        <pre><code>-- Анализ распределения доходов клиентов
+SELECT 
+    customer_id,
+    total_spent,
+    NTILE(4) OVER (ORDER BY total_spent) as quartile,
+    PERCENT_RANK() OVER (ORDER BY total_spent) as percentile_rank,
+    CUME_DIST() OVER (ORDER BY total_spent) as cumulative_distribution,
+    CASE 
+        WHEN NTILE(10) OVER (ORDER BY total_spent) = 10 THEN 'Top 10%'
+        WHEN NTILE(10) OVER (ORDER BY total_spent) >= 8 THEN 'Top 20%'
+        ELSE 'Regular'
+    END as customer_tier
+FROM customer_lifetime_value;</code></pre>
+    </div>
+
+    <div class="advanced-example">
+        <h4>Продвинутый пример: Анализ когорт</h4>
+        <pre><code>-- Когортный анализ удержания клиентов
+WITH first_purchase AS (
+    SELECT 
+        customer_id,
+        MIN(order_date) as cohort_month
+    FROM orders
+    GROUP BY customer_id
+),
+monthly_activity AS (
+    SELECT 
+        fp.customer_id,
+        fp.cohort_month,
+        o.order_date,
+        DATEDIFF(MONTH, fp.cohort_month, o.order_date) as period_number
+    FROM first_purchase fp
+    JOIN orders o ON fp.customer_id = o.customer_id
+)
+SELECT 
+    cohort_month,
+    COUNT(DISTINCT CASE WHEN period_number = 0 THEN customer_id END) as customers_month_0,
+    COUNT(DISTINCT CASE WHEN period_number = 1 THEN customer_id END) as customers_month_1,
+    COUNT(DISTINCT CASE WHEN period_number = 2 THEN customer_id END) as customers_month_2,
+    ROUND(
+        COUNT(DISTINCT CASE WHEN period_number = 1 THEN customer_id END) * 100.0 /
+        COUNT(DISTINCT CASE WHEN period_number = 0 THEN customer_id END), 2
+    ) as retention_month_1
+FROM monthly_activity
+GROUP BY cohort_month
+ORDER BY cohort_month;</code></pre>
+    </div>`,
+
+            3: `<h2>Pivot-таблицы: Динамическое преобразование данных</h2>
+    <p>Pivot-таблицы позволяют преобразовывать строки в столбцы для создания кросс-табуляций и сводных отчетов.</p>
+
+    <h3>Создание Pivot с CASE WHEN:</h3>
+    <div class="code-example">
+        <pre><code>-- Анализ продаж по месяцам и категориям
+SELECT 
+    product_category,
+    SUM(CASE WHEN MONTH(order_date) = 1 THEN amount ELSE 0 END) as jan_sales,
+    SUM(CASE WHEN MONTH(order_date) = 2 THEN amount ELSE 0 END) as feb_sales,
+    SUM(CASE WHEN MONTH(order_date) = 3 THEN amount ELSE 0 END) as mar_sales,
+    SUM(CASE WHEN MONTH(order_date) = 4 THEN amount ELSE 0 END) as apr_sales,
+    SUM(amount) as total_sales
+FROM sales
+WHERE YEAR(order_date) = 2024
+GROUP BY product_category
+ORDER BY total_sales DESC;</code></pre>
+    </div>
+
+    <h3>Динамический Pivot (MySQL 8.0+):</h3>
+    <div class="code-example">
+        <pre><code>-- Использование JSON для динамического pivot
+SELECT 
+    region,
+    JSON_OBJECTAGG(
+        month_name, 
+        monthly_sales
+    ) as sales_by_month
+FROM (
+    SELECT 
+        region,
+        MONTHNAME(order_date) as month_name,
+        SUM(amount) as monthly_sales
+    FROM regional_sales
+    GROUP BY region, month_name
+) pivot_data
+GROUP BY region;</code></pre>
+    </div>
+
+    <h3>Многомерный Pivot-анализ:</h3>
+    <div class="code-example">
+        <pre><code>-- Анализ продаж по регионам, категориям и каналам
+SELECT 
+    region,
+    -- Продажи по категориям
+    SUM(CASE WHEN category = 'Electronics' THEN amount ELSE 0 END) as electronics_sales,
+    SUM(CASE WHEN category = 'Clothing' THEN amount ELSE 0 END) as clothing_sales,
+    SUM(CASE WHEN category = 'Books' THEN amount ELSE 0 END) as books_sales,
+    -- Продажи по каналам
+    SUM(CASE WHEN channel = 'Online' THEN amount ELSE 0 END) as online_sales,
+    SUM(CASE WHEN channel = 'Store' THEN amount ELSE 0 END) as store_sales,
+    -- Метрики эффективности
+    COUNT(DISTINCT customer_id) as unique_customers,
+    AVG(amount) as avg_order_value
+FROM comprehensive_sales_view
+GROUP BY region
+ORDER BY SUM(amount) DESC;</code></pre>
+    </div>
+
+    <div class="advanced-pivot">
+        <h4>Продвинутый Pivot: Временные ряды с агрегацией</h4>
+        <pre><code>-- Еженедельный анализ продаж с трендами
+WITH weekly_sales AS (
+    SELECT 
+        YEARWEEK(order_date) as week_number,
+        WEEK(order_date) as week_of_year,
+        product_category,
+        SUM(amount) as weekly_amount
+    FROM sales
+    WHERE order_date >= DATE_SUB(CURRENT_DATE, INTERVAL 12 WEEK)
+    GROUP BY week_number, product_category
+)
+SELECT 
+    week_of_year,
+    SUM(CASE WHEN product_category = 'Electronics' THEN weekly_amount ELSE 0 END) as electronics,
+    SUM(CASE WHEN product_category = 'Clothing' THEN weekly_amount ELSE 0 END) as clothing,
+    SUM(CASE WHEN product_category = 'Home' THEN weekly_amount ELSE 0 END) as home,
+    SUM(weekly_amount) as total_weekly_sales,
+    -- Тренды
+    LAG(SUM(weekly_amount)) OVER (ORDER BY week_of_year) as prev_week_total,
+    ROUND(
+        (SUM(weekly_amount) - LAG(SUM(weekly_amount)) OVER (ORDER BY week_of_year)) * 100.0 /
+        LAG(SUM(weekly_amount)) OVER (ORDER BY week_of_year), 2
+    ) as week_over_week_growth
+FROM weekly_sales
+GROUP BY week_of_year
+ORDER BY week_of_year;</code></pre>
+    </div>
+
+    <div class="practical-tip">
+        <h4>Оптимизация Pivot-запросов:</h4>
+        <ul>
+            <li>Используйте индексы на столбцы группировки</li>
+            <li>Ограничивайте временные диапазоны</li>
+            <li>Рассмотрите материализованные представления для часто используемых pivot</li>
+        </ul>
+    </div>`,
+            4: `<h2>Геоаналитика: Пространственные данные в SQL</h2>
+<p>Геоаналитика открывает мощные возможности для анализа данных с географической привязкой. От поиска ближайших объектов до анализа плотности и построения тепловых карт.</p>
+
+<h3>Пространственные типы данных:</h3>
+<div class="code-example">
+    <pre><code>-- Создание таблицы с различными геотипами
+CREATE TABLE locations (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    -- Точка (широта, долгота)
+    point_location POINT,
+    -- Многоугольник (зона покрытия)
+    coverage_area POLYGON,
+    -- Линия (маршрут)
+    route_path LINESTRING,
+    -- Коллекция геометрий
+    complex_geometry GEOMETRYCOLLECTION
+);
+
+-- Добавление пространственного индекса
+CREATE SPATIAL INDEX idx_point ON locations(point_location);
+CREATE SPATIAL INDEX idx_area ON locations(coverage_area);</code></pre>
+</div>
+
+<h3>Расчет расстояний и близости:</h3>
+<div class="code-example">
+    <pre><code>-- Функция Haversine для точного расчета расстояний
+DELIMITER //
+CREATE FUNCTION HAVERSINE_DISTANCE(
+    lat1 DECIMAL(10,8), lon1 DECIMAL(11,8),
+    lat2 DECIMAL(10,8), lon2 DECIMAL(11,8)
+) RETURNS DECIMAL(10,3)
+READS SQL DATA
+DETERMINISTIC
+BEGIN
+    DECLARE distance DECIMAL(10,3);
+    SET distance = 6371 * ACOS(
+        COS(RADIANS(lat1)) * COS(RADIANS(lat2)) *
+        COS(RADIANS(lon2) - RADIANS(lon1)) +
+        SIN(RADIANS(lat1)) * SIN(RADIANS(lat2))
+    );
+    RETURN distance;
+END//
+DELIMITER ;
+
+-- Поиск ближайших ресторанов в радиусе 5 км
+SELECT 
+    r.name,
+    r.cuisine_type,
+    r.rating,
+    ROUND(HAVERSINE_DISTANCE(40.7589, -73.9851, r.latitude, r.longitude), 2) as distance_km
+FROM restaurants r
+WHERE HAVERSINE_DISTANCE(40.7589, -73.9851, r.latitude, r.longitude) <= 5
+ORDER BY distance_km
+LIMIT 10;</code></pre>
+</div>
+
+<h3>Анализ плотности и кластеризация:</h3>
+<div class="code-example">
+    <pre><code>-- Анализ плотности точек продаж в grid-сетке
+WITH grid_cells AS (
+    SELECT 
+        FLOOR(latitude * 100) / 100 as lat_grid,
+        FLOOR(longitude * 100) / 100 as lng_grid
+    FROM stores
+),
+density_analysis AS (
+    SELECT 
+        lat_grid,
+        lng_grid,
+        COUNT(*) as store_count,
+        ROUND(AVG(daily_revenue), 2) as avg_revenue,
+        CASE 
+            WHEN COUNT(*) >= 10 THEN 'High Density'
+            WHEN COUNT(*) >= 5 THEN 'Medium Density'
+            ELSE 'Low Density'
+        END as density_category
+    FROM grid_cells g
+    JOIN stores s ON 
+        FLOOR(s.latitude * 100) / 100 = g.lat_grid AND
+        FLOOR(s.longitude * 100) / 100 = g.lng_grid
+    GROUP BY lat_grid, lng_grid
+)
+SELECT 
+    CONCAT(lat_grid, ',', lng_grid) as grid_coordinate,
+    store_count,
+    avg_revenue,
+    density_category,
+    -- Рекомендация по размещению
+    CASE 
+        WHEN density_category = 'Low Density' AND avg_revenue > 1000 
+        THEN 'Potential expansion area'
+        WHEN density_category = 'High Density' AND avg_revenue < 500
+        THEN 'Market saturation risk'
+        ELSE 'Stable market'
+    END as market_recommendation
+FROM density_analysis
+ORDER BY store_count DESC, avg_revenue DESC;</code></pre>
+</div>
+
+<h3>Геозоны и анализ покрытия:</h3>
+<div class="code-example">
+    <pre><code>-- Создание буферных зон вокруг магазинов
+SELECT 
+    s.name,
+    s.store_type,
+    -- Создание буферной зоны радиусом 2 км
+    ST_Buffer(ST_GeomFromText(
+        CONCAT('POINT(', s.longitude, ' ', s.latitude, ')')
+    ), 0.018) as coverage_zone,  -- ~2км в градусах
+    
+    -- Площадь покрытия в км²
+    ROUND(
+        ST_Area(ST_Buffer(ST_GeomFromText(
+            CONCAT('POINT(', s.longitude, ' ', s.latitude, ')')
+        ), 0.018)) * 111.32 * 111.32, 2
+    ) as coverage_area_km2
+FROM stores s
+WHERE s.is_active = 1;
+
+-- Анализ пересечений зон покрытия
+WITH store_zones AS (
+    SELECT 
+        id,
+        name,
+        ST_Buffer(ST_GeomFromText(
+            CONCAT('POINT(', longitude, ' ', latitude, ')')
+        ), 0.018) as zone
+    FROM stores
+)
+SELECT 
+    s1.name as store1,
+    s2.name as store2,
+    CASE 
+        WHEN ST_Intersects(s1.zone, s2.zone) THEN 'OVERLAP'
+        ELSE 'NO_OVERLAP'
+    END as overlap_status,
+    -- Процент пересечения
+    ROUND(
+        ST_Area(ST_Intersection(s1.zone, s2.zone)) / 
+        ST_Area(s1.zone) * 100, 2
+    ) as overlap_percentage
+FROM store_zones s1
+CROSS JOIN store_zones s2
+WHERE s1.id < s2.id
+    AND ST_Intersects(s1.zone, s2.zone)
+ORDER BY overlap_percentage DESC;</code></pre>
+</div>
+
+<h3>Временно-пространственный анализ:</h3>
+<div class="code-example">
+    <pre><code>-- Анализ движения курьеров во времени
+WITH delivery_routes AS (
+    SELECT 
+        courier_id,
+        order_id,
+        pickup_time,
+        delivery_time,
+        pickup_lat, pickup_lng,
+        delivery_lat, delivery_lng,
+        -- Расчет скорости доставки
+        HAVERSINE_DISTANCE(pickup_lat, pickup_lng, delivery_lat, delivery_lng) /
+        (TIMESTAMPDIFF(MINUTE, pickup_time, delivery_time) / 60.0) as avg_speed_kmh,
+        
+        -- Определение времени дня
+        CASE 
+            WHEN HOUR(pickup_time) BETWEEN 6 AND 11 THEN 'Morning'
+            WHEN HOUR(pickup_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+            WHEN HOUR(pickup_time) BETWEEN 18 AND 22 THEN 'Evening'
+            ELSE 'Night'
+        END as time_period
+    FROM deliveries
+    WHERE delivery_status = 'completed'
+        AND delivery_time IS NOT NULL
+)
+SELECT 
+    time_period,
+    COUNT(*) as total_deliveries,
+    ROUND(AVG(avg_speed_kmh), 2) as avg_delivery_speed,
+    ROUND(AVG(HAVERSINE_DISTANCE(pickup_lat, pickup_lng, delivery_lat, delivery_lng)), 2) as avg_distance_km,
+    ROUND(AVG(TIMESTAMPDIFF(MINUTE, pickup_time, delivery_time)), 2) as avg_delivery_time_min,
+    
+    -- Эффективность по времени
+    CASE 
+        WHEN AVG(avg_speed_kmh) > 25 THEN 'High Efficiency'
+        WHEN AVG(avg_speed_kmh) > 15 THEN 'Medium Efficiency'
+        ELSE 'Low Efficiency'
+    END as efficiency_rating
+FROM delivery_routes
+GROUP BY time_period
+ORDER BY avg_delivery_speed DESC;</code></pre>
+</div>
+
+<h3>Продвинутая геоаналитика:</h3>
+<div class="code-example">
+    <pre><code>-- Анализ конкурентного окружения
+WITH competitor_analysis AS (
+    SELECT 
+        s.id,
+        s.name as our_store,
+        s.latitude, s.longitude,
+        s.monthly_revenue,
+        
+        -- Подсчет конкурентов в радиусе 1 км
+        (SELECT COUNT(*) 
+         FROM competitors c 
+         WHERE HAVERSINE_DISTANCE(s.latitude, s.longitude, c.latitude, c.longitude) <= 1
+        ) as competitors_1km,
+        
+        -- Ближайший конкурент
+        (SELECT MIN(HAVERSINE_DISTANCE(s.latitude, s.longitude, c.latitude, c.longitude))
+         FROM competitors c
+        ) as nearest_competitor_km,
+        
+        -- Средний рейтинг конкурентов поблизости
+        (SELECT ROUND(AVG(c.rating), 2)
+         FROM competitors c 
+         WHERE HAVERSINE_DISTANCE(s.latitude, s.longitude, c.latitude, c.longitude) <= 2
+        ) as avg_competitor_rating
+    FROM stores s
+)
+SELECT 
+    our_store,
+    monthly_revenue,
+    competitors_1km,
+    ROUND(nearest_competitor_km, 3) as nearest_competitor_km,
+    avg_competitor_rating,
+    
+    -- Конкурентное давление
+    CASE 
+        WHEN competitors_1km = 0 THEN 'Monopoly'
+        WHEN competitors_1km <= 2 THEN 'Low Competition'
+        WHEN competitors_1km <= 5 THEN 'Medium Competition'
+        ELSE 'High Competition'
+    END as competition_level,
+    
+    -- Рекомендации
+    CASE 
+        WHEN competitors_1km = 0 AND monthly_revenue < 50000 
+        THEN 'Market development opportunity'
+        WHEN competitors_1km > 5 AND monthly_revenue < 30000
+        THEN 'Consider relocation'
+        WHEN avg_competitor_rating > 4.5 AND competitors_1km > 3
+        THEN 'Focus on service quality'
+        ELSE 'Maintain current strategy'
+    END as strategic_recommendation
+FROM competitor_analysis
+ORDER BY monthly_revenue DESC;</code></pre>
+</div>
+
+<h3>Геокластеризация и сегментация:</h3>
+<div class="code-example">
+    <pre><code>-- K-means кластеризация клиентов по географии и покупкам
+WITH customer_metrics AS (
+    SELECT 
+        c.id,
+        c.latitude, c.longitude,
+        COUNT(o.id) as order_count,
+        SUM(o.total_amount) as total_spent,
+        AVG(o.total_amount) as avg_order_value,
+        DATEDIFF(CURDATE(), MAX(o.order_date)) as days_since_last_order
+    FROM customers c
+    LEFT JOIN orders o ON c.id = o.customer_id
+    WHERE c.latitude IS NOT NULL AND c.longitude IS NOT NULL
+    GROUP BY c.id, c.latitude, c.longitude
+),
+geo_clusters AS (
+    SELECT 
+        *,
+        -- Простая геокластеризация по координатам
+        CONCAT(
+            FLOOR(latitude * 20) / 20, '_',
+            FLOOR(longitude * 20) / 20
+        ) as geo_cluster,
+        
+        -- Сегментация по ценности
+        CASE 
+            WHEN total_spent > 1000 AND order_count > 10 THEN 'VIP'
+            WHEN total_spent > 500 AND order_count > 5 THEN 'Regular'
+            WHEN total_spent > 100 THEN 'Occasional'
+            ELSE 'New'
+        END as customer_segment
+    FROM customer_metrics
+)
+SELECT 
+    geo_cluster,
+    customer_segment,
+    COUNT(*) as customer_count,
+    ROUND(AVG(total_spent), 2) as avg_total_spent,
+    ROUND(AVG(avg_order_value), 2) as avg_order_value,
+    ROUND(AVG(days_since_last_order), 0) as avg_days_since_last_order,
+    
+    -- Центроид кластера
+    ROUND(AVG(latitude), 6) as cluster_center_lat,
+    ROUND(AVG(longitude), 6) as cluster_center_lng,
+    
+    -- Рекомендации по маркетингу
+    CASE 
+        WHEN customer_segment = 'VIP' THEN 'Premium service focus'
+        WHEN customer_segment = 'Regular' AND avg_days_since_last_order > 30 
+        THEN 'Retention campaign needed'
+        WHEN customer_segment = 'New' THEN 'Welcome campaign'
+        ELSE 'Standard marketing'
+    END as marketing_strategy
+FROM geo_clusters
+GROUP BY geo_cluster, customer_segment
+HAVING customer_count >= 5
+ORDER BY geo_cluster, customer_count DESC;</code></pre>
+</div>
+
+<div class="best-practices">
+    <h3>Лучшие практики геоаналитики:</h3>
+    <ul>
+        <li><strong>Индексация:</strong> Всегда создавайте пространственные индексы для геоколонок</li>
+        <li><strong>Точность координат:</strong> Используйте подходящую точность (обычно 6-8 знаков после запятой)</li>
+        <li><strong>Проекции:</strong> Учитывайте системы координат при работе с большими территориями</li>
+        <li><strong>Производительность:</strong> Для больших датасетов используйте предвычисленные грид-ячейки</li>
+        <li><strong>Валидация:</strong> Всегда проверяйте корректность координат перед анализом</li>
+    </ul>
+</div>`,
+            5: `<h2>Анализ временных рядов: От трендов к прогнозам</h2>
+    <p>Временные ряды — это основа современной аналитики. Понимание динамики данных во времени позволяет выявлять тренды, сезонность и аномалии, необходимые для принятия стратегических решений.</p>
+
+    <h3>Основные концепции временных рядов:</h3>
+    <ul>
+        <li><strong>Тренд:</strong> Долгосрочное направление изменения данных</li>
+        <li><strong>Сезонность:</strong> Регулярные колебания в определенные периоды</li>
+        <li><strong>Цикличность:</strong> Повторяющиеся паттерны без фиксированного периода</li>
+        <li><strong>Случайные колебания:</strong> Непредсказуемые изменения</li>
+    </ul>
+
+    <div class="code-block">
+        <h4>Создание базовой структуры временных рядов:</h4>
+        <pre><code>-- Создание таблицы с временными метками
+CREATE TABLE sales_timeseries (
+    date_time TIMESTAMP WITH TIME ZONE,
+    store_id INTEGER,
+    product_category VARCHAR(50),
+    sales_amount DECIMAL(10,2),
+    units_sold INTEGER,
+    weather_condition VARCHAR(20),
+    is_holiday BOOLEAN
+);
+
+-- Генерация временного ряда с различными интервалами
+WITH time_series AS (
+    SELECT 
+        generate_series(
+            '2023-01-01'::timestamp,
+            '2024-12-31'::timestamp,
+            '1 hour'::interval
+        ) as hour_timestamp
+),
+enhanced_series AS (
+    SELECT 
+        hour_timestamp,
+        EXTRACT(year FROM hour_timestamp) as year,
+        EXTRACT(month FROM hour_timestamp) as month,
+        EXTRACT(day FROM hour_timestamp) as day,
+        EXTRACT(dow FROM hour_timestamp) as day_of_week,
+        EXTRACT(hour FROM hour_timestamp) as hour,
+        CASE 
+            WHEN EXTRACT(dow FROM hour_timestamp) IN (0,6) THEN 'Weekend'
+            ELSE 'Weekday'
+        END as day_type
+    FROM time_series
+)
+SELECT * FROM enhanced_series LIMIT 100;</code></pre>
+    </div>
+
+    <h3>Агрегация по временным интервалам:</h3>
+    
+    <div class="code-block">
+        <h4>Многоуровневая временная агрегация:</h4>
+        <pre><code>-- Продажи по различным временным интервалам
+WITH hourly_sales AS (
+    SELECT 
+        DATE_TRUNC('hour', date_time) as hour,
+        SUM(sales_amount) as hourly_revenue,
+        SUM(units_sold) as hourly_units,
+        COUNT(*) as transactions_count
+    FROM sales_timeseries
+    WHERE date_time >= '2024-01-01'
+    GROUP BY DATE_TRUNC('hour', date_time)
+),
+daily_sales AS (
+    SELECT 
+        DATE_TRUNC('day', date_time) as day,
+        SUM(sales_amount) as daily_revenue,
+        AVG(sales_amount) as avg_transaction,
+        COUNT(DISTINCT store_id) as active_stores
+    FROM sales_timeseries
+    WHERE date_time >= '2024-01-01'
+    GROUP BY DATE_TRUNC('day', date_time)
+),
+weekly_sales AS (
+    SELECT 
+        DATE_TRUNC('week', date_time) as week,
+        SUM(sales_amount) as weekly_revenue,
+        COUNT(*) as weekly_transactions,
+        COUNT(DISTINCT product_category) as categories_sold
+    FROM sales_timeseries
+    WHERE date_time >= '2024-01-01'
+    GROUP BY DATE_TRUNC('week', date_time)
+)
+-- Объединение всех уровней агрегации
+SELECT 
+    'Hourly' as granularity,
+    COUNT(*) as periods_count,
+    AVG(hourly_revenue) as avg_revenue,
+    STDDEV(hourly_revenue) as revenue_volatility
+FROM hourly_sales
+UNION ALL
+SELECT 
+    'Daily' as granularity,
+    COUNT(*) as periods_count,
+    AVG(daily_revenue) as avg_revenue,
+    STDDEV(daily_revenue) as revenue_volatility
+FROM daily_sales
+UNION ALL
+SELECT 
+    'Weekly' as granularity,
+    COUNT(*) as periods_count,
+    AVG(weekly_revenue) as avg_revenue,
+    STDDEV(weekly_revenue) as revenue_volatility
+FROM weekly_sales;</code></pre>
+    </div>
+
+    <h3>Анализ трендов и изменений:</h3>
+
+    <div class="code-block">
+        <h4>Расчет скользящих средних и трендов:</h4>
+        <pre><code>-- Анализ трендов с различными окнами
+WITH daily_metrics AS (
+    SELECT 
+        DATE_TRUNC('day', date_time) as date,
+        SUM(sales_amount) as daily_sales,
+        COUNT(*) as daily_transactions
+    FROM sales_timeseries
+    GROUP BY DATE_TRUNC('day', date_time)
+),
+trend_analysis AS (
+    SELECT 
+        date,
+        daily_sales,
+        daily_transactions,
+        -- Скользящие средние
+        AVG(daily_sales) OVER (
+            ORDER BY date 
+            ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+        ) as sales_7day_ma,
+        AVG(daily_sales) OVER (
+            ORDER BY date 
+            ROWS BETWEEN 29 PRECEDING AND CURRENT ROW
+        ) as sales_30day_ma,
+        -- Экспоненциальное скользящее среднее (приближение)
+        AVG(daily_sales) OVER (
+            ORDER BY date 
+            ROWS BETWEEN 13 PRECEDING AND CURRENT ROW
+        ) as sales_14day_ema,
+        -- Изменения относительно предыдущего периода
+        LAG(daily_sales, 1) OVER (ORDER BY date) as prev_day_sales,
+        LAG(daily_sales, 7) OVER (ORDER BY date) as prev_week_sales,
+        LAG(daily_sales, 30) OVER (ORDER BY date) as prev_month_sales
+    FROM daily_metrics
+),
+growth_analysis AS (
+    SELECT 
+        date,
+        daily_sales,
+        sales_7day_ma,
+        sales_30day_ma,
+        -- Процентные изменения
+        CASE 
+            WHEN prev_day_sales > 0 THEN 
+                ((daily_sales - prev_day_sales) / prev_day_sales * 100)
+            ELSE NULL
+        END as day_over_day_growth,
+        CASE 
+            WHEN prev_week_sales > 0 THEN 
+                ((daily_sales - prev_week_sales) / prev_week_sales * 100)
+            ELSE NULL
+        END as week_over_week_growth,
+        CASE 
+            WHEN prev_month_sales > 0 THEN 
+                ((daily_sales - prev_month_sales) / prev_month_sales * 100)
+            ELSE NULL
+        END as month_over_month_growth,
+        -- Определение тренда
+        CASE 
+            WHEN sales_7day_ma > sales_30day_ma THEN 'Upward'
+            WHEN sales_7day_ma < sales_30day_ma THEN 'Downward'
+            ELSE 'Stable'
+        END as trend_direction
+    FROM trend_analysis
+)
+SELECT 
+    date,
+    daily_sales,
+    ROUND(sales_7day_ma, 2) as ma_7d,
+    ROUND(sales_30day_ma, 2) as ma_30d,
+    ROUND(day_over_day_growth, 2) as dod_growth_pct,
+    ROUND(week_over_week_growth, 2) as wow_growth_pct,
+    ROUND(month_over_month_growth, 2) as mom_growth_pct,
+    trend_direction
+FROM growth_analysis
+WHERE date >= CURRENT_DATE - INTERVAL '3 months'
+ORDER BY date DESC;</code></pre>
+    </div>
+
+    <h3>Сезонность и циклические паттерны:</h3>
+
+    <div class="code-block">
+        <h4>Выявление сезонных паттернов:</h4>
+        <pre><code>-- Анализ сезонности по различным временным измерениям
+WITH seasonal_analysis AS (
+    SELECT 
+        EXTRACT(month FROM date_time) as month,
+        EXTRACT(dow FROM date_time) as day_of_week,
+        EXTRACT(hour FROM date_time) as hour,
+        product_category,
+        SUM(sales_amount) as total_sales,
+        COUNT(*) as transaction_count,
+        AVG(sales_amount) as avg_transaction_value
+    FROM sales_timeseries
+    WHERE date_time >= CURRENT_DATE - INTERVAL '2 years'
+    GROUP BY 
+        EXTRACT(month FROM date_time),
+        EXTRACT(dow FROM date_time),
+        EXTRACT(hour FROM date_time),
+        product_category
+),
+monthly_patterns AS (
+    SELECT 
+        month,
+        CASE 
+            WHEN month IN (12, 1, 2) THEN 'Winter'
+            WHEN month IN (3, 4, 5) THEN 'Spring'
+            WHEN month IN (6, 7, 8) THEN 'Summer'
+            ELSE 'Fall'
+        END as season,
+        SUM(total_sales) as seasonal_sales,
+        AVG(avg_transaction_value) as avg_seasonal_transaction
+    FROM seasonal_analysis
+    GROUP BY month
+),
+hourly_patterns AS (
+    SELECT 
+        hour,
+        CASE 
+            WHEN hour BETWEEN 6 AND 11 THEN 'Morning'
+            WHEN hour BETWEEN 12 AND 17 THEN 'Afternoon'
+            WHEN hour BETWEEN 18 AND 22 THEN 'Evening'
+            ELSE 'Night'
+        END as time_period,
+        SUM(total_sales) as period_sales,
+        COUNT(*) as period_transactions
+    FROM seasonal_analysis
+    GROUP BY hour
+),
+weekly_patterns AS (
+    SELECT 
+        day_of_week,
+        CASE 
+            WHEN day_of_week = 1 THEN 'Monday'
+            WHEN day_of_week = 2 THEN 'Tuesday'
+            WHEN day_of_week = 3 THEN 'Wednesday'
+            WHEN day_of_week = 4 THEN 'Thursday'
+            WHEN day_of_week = 5 THEN 'Friday'
+            WHEN day_of_week = 6 THEN 'Saturday'
+            ELSE 'Sunday'
+        END as day_name,
+        SUM(total_sales) as day_sales,
+        RANK() OVER (ORDER BY SUM(total_sales) DESC) as sales_rank
+    FROM seasonal_analysis
+    GROUP BY day_of_week
+)
+-- Сводная таблица сезонности
+SELECT 
+    'Monthly' as pattern_type,
+    month::text as period,
+    seasonal_sales as sales,
+    ROUND((seasonal_sales / SUM(seasonal_sales) OVER() * 100), 2) as percentage_of_total
+FROM monthly_patterns
+UNION ALL
+SELECT 
+    'Hourly' as pattern_type,
+    time_period as period,
+    period_sales as sales,
+    ROUND((period_sales / SUM(period_sales) OVER() * 100), 2) as percentage_of_total
+FROM hourly_patterns
+UNION ALL
+SELECT 
+    'Weekly' as pattern_type,
+    day_name as period,
+    day_sales as sales,
+    ROUND((day_sales / SUM(day_sales) OVER() * 100), 2) as percentage_of_total
+FROM weekly_patterns
+ORDER BY pattern_type, sales DESC;</code></pre>
+    </div>
+
+    <h3>Обнаружение аномалий и выбросов:</h3>
+
+    <div class="code-block">
+        <h4>Статистическое выявление аномалий:</h4>
+        <pre><code>-- Обнаружение аномалий с использованием статистических методов
+WITH daily_stats AS (
+    SELECT 
+        DATE_TRUNC('day', date_time) as date,
+        SUM(sales_amount) as daily_sales,
+        COUNT(*) as daily_transactions
+    FROM sales_timeseries
+    GROUP BY DATE_TRUNC('day', date_time)
+),
+statistical_bounds AS (
+    SELECT 
+        date,
+        daily_sales,
+        daily_transactions,
+        AVG(daily_sales) OVER() as mean_sales,
+        STDDEV(daily_sales) OVER() as stddev_sales,
+        PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY daily_sales) OVER() as q1_sales,
+        PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY daily_sales) OVER() as q3_sales,
+        PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY daily_sales) OVER() as p95_sales,
+        PERCENTILE_CONT(0.05) WITHIN GROUP (ORDER BY daily_sales) OVER() as p5_sales
+    FROM daily_stats
+)`,
+            6: `<h2>CTE и рекурсивные запросы: Мощный инструмент для сложной аналитики</h2>
+    <p>Common Table Expressions (CTE) представляют собой временные именованные результирующие наборы, которые существуют только в пределах выполнения одного SQL-запроса. Это революционный подход к структурированию сложных аналитических запросов.</p>
+
+    <h3>Концептуальные основы CTE:</h3>
+    <p>CTE решает фундаментальную проблему читаемости и переиспользования кода в SQL. Вместо создания вложенных подзапросов или временных таблиц, CTE позволяет определить логические блоки данных на уровне запроса, создавая своего рода "виртуальные представления" для текущего контекста выполнения.</p>
+
+    <div class="concept-block">
+        <h4>Философия CTE:</h4>
+        <p>CTE воплощает принцип декларативного программирования в SQL - вы описываете ЧТО нужно получить, а не КАК это сделать. Это позволяет разбивать сложную логику на понятные, независимые компоненты.</p>
+    </div>
+
+    <h3>Базовый синтаксис и структура:</h3>
+    <div class="code-block">
+        <pre>
+WITH cte_name AS (
+    SELECT column1, column2, ...
+    FROM table_name
+    WHERE conditions
+),
+another_cte AS (
+    SELECT ...
+    FROM cte_name  -- Ссылка на предыдущий CTE
+    WHERE ...
+)
+SELECT * FROM another_cte;
+        </pre>
+    </div>
+
+    <h3>Рекурсивные CTE: Обработка иерархических данных</h3>
+    <p>Рекурсивные CTE представляют собой особый класс выражений, способных обрабатывать иерархические и древовидные структуры данных. Они состоят из двух ключевых компонентов: якорного элемента (anchor) и рекурсивного элемента.</p>
+
+    <div class="theory-block">
+        <h4>Математическая модель рекурсии в SQL:</h4>
+        <p>Рекурсивный CTE работает по принципу математической индукции:</p>
+        <ul>
+            <li><strong>Базовый случай:</strong> Начальный набор данных (якорь)</li>
+            <li><strong>Рекурсивный шаг:</strong> Правило генерации следующего уровня</li>
+            <li><strong>Условие остановки:</strong> Когда больше нет данных для обработки</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <pre>
+WITH RECURSIVE hierarchy AS (
+    -- Якорный элемент (базовый случай)
+    SELECT employee_id, name, manager_id, 1 as level
+    FROM employees 
+    WHERE manager_id IS NULL
+    
+    UNION ALL
+    
+    -- Рекурсивный элемент
+    SELECT e.employee_id, e.name, e.manager_id, h.level + 1
+    FROM employees e
+    INNER JOIN hierarchy h ON e.manager_id = h.employee_id
+)
+SELECT * FROM hierarchy ORDER BY level, name;
+        </pre>
+    </div>
+
+    <h3>Продвинутые паттерны использования:</h3>
+    
+    <h4>1. Аналитические окна с CTE</h4>
+    <p>CTE идеально подходят для создания многоуровневых аналитических конвейеров, где каждый уровень выполняет определенную трансформацию данных:</p>
+    
+    <div class="code-block">
+        <pre>
+WITH monthly_sales AS (
+    SELECT 
+        DATE_TRUNC('month', sale_date) as month,
+        SUM(amount) as total_sales
+    FROM sales GROUP BY 1
+),
+rolling_averages AS (
+    SELECT 
+        month,
+        total_sales,
+        AVG(total_sales) OVER (
+            ORDER BY month 
+            ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+        ) as rolling_3m_avg
+    FROM monthly_sales
+),
+performance_metrics AS (
+    SELECT 
+        *,
+        total_sales / rolling_3m_avg - 1 as performance_ratio
+    FROM rolling_averages
+)
+SELECT * FROM performance_metrics;
+        </pre>
+    </div>
+
+    <h4>2. Граф-аналитика с рекурсивными CTE</h4>
+    <p>Рекурсивные CTE открывают возможности для анализа сетевых структур, поиска путей и анализа связности в графах данных.</p>
+
+    <div class="theory-block">
+        <h4>Алгоритмические возможности:</h4>
+        <ul>
+            <li><strong>Обход в глубину (DFS):</strong> Исследование всех возможных путей</li>
+            <li><strong>Поиск кратчайшего пути:</strong> Алгоритм Дейкстры в SQL</li>
+            <li><strong>Анализ компонент связности:</strong> Поиск изолированных групп</li>
+            <li><strong>Циклы и петли:</strong> Обнаружение циклических зависимостей</li>
+        </ul>
+    </div>
+
+    <h3>Производительность и оптимизация:</h3>
+    <p>Эффективность CTE зависит от понимания их внутренней механики. В отличие от временных таблиц, CTE материализуются только при необходимости, но это может приводить к повторным вычислениям при множественных обращениях.</p>
+
+    <div class="performance-block">
+        <h4>Стратегии оптимизации:</h4>
+        <ul>
+            <li><strong>Материализация:</strong> Использование промежуточных таблиц для сложных CTE</li>
+            <li><strong>Индексация:</strong> Создание индексов на колонки, используемые в JOIN операциях</li>
+            <li><strong>Ограничение рекурсии:</strong> Использование LIMIT или условий остановки</li>
+            <li><strong>Анализ плана выполнения:</strong> Мониторинг cost-based оптимизации</li>
+        </ul>
+    </div>
+
+    <h3>CTE vs альтернативные подходы:</h3>
+    
+    <div class="comparison-table">
+        <h4>Сравнительный анализ:</h4>
+        <table>
+            <tr>
+                <th>Аспект</th>
+                <th>CTE</th>
+                <th>Подзапросы</th>
+                <th>Временные таблицы</th>
+            </tr>
+            <tr>
+                <td>Читаемость</td>
+                <td>Высокая</td>
+                <td>Низкая при вложенности</td>
+                <td>Средняя</td>
+            </tr>
+            <tr>
+                <td>Переиспользование</td>
+                <td>В рамках запроса</td>
+                <td>Невозможно</td>
+                <td>Между запросами</td>
+            </tr>
+            <tr>
+                <td>Производительность</td>
+                <td>Зависит от реализации</td>
+                <td>Может быть неоптимальна</td>
+                <td>Высокая при индексации</td>
+            </tr>
+            <tr>
+                <td>Рекурсия</td>
+                <td>Поддерживается</td>
+                <td>Невозможна</td>
+                <td>Через циклы</td>
+            </tr>
+        </table>
+    </div>
+
+    <h3>Продвинутые концепции:</h3>
+    
+    <h4>Множественные рекурсивные ветви:</h4>
+    <p>Сложные иерархии могут требовать обработки нескольких рекурсивных путей одновременно. Это позволяет моделировать сложные бизнес-процессы и организационные структуры.</p>
+
+    <h4>Условная рекурсия:</h4>
+    <p>Использование CASE-выражений и условной логики в рекурсивных CTE позволяет создавать адаптивные алгоритмы обхода, которые изменяют свое поведение в зависимости от данных.</p>
+
+    <div class="advanced-concept">
+        <h4>Теория графов в SQL:</h4>
+        <p>Рекурсивные CTE превращают SQL в мощный инструмент для анализа графов. Вы можете реализовать алгоритмы поиска в ширину, анализа центральности узлов, и даже некоторые варианты алгоритмов машинного обучения на графах.</p>
+    </div>
+
+    <h3>Ограничения и подводные камни:</h3>
+    <p>Понимание ограничений CTE критично для их эффективного использования. Глубокая рекурсия может привести к переполнению стека или бесконечным циклам. Различные СУБД имеют разные лимиты на глубину рекурсии и способы их настройки.</p>
+
+    <div class="warning-block">
+        <h4>Критические моменты:</h4>
+        <ul>
+            <li><strong>Бесконечная рекурсия:</strong> Всегда проверяйте условия остановки</li>
+            <li><strong>Производительность:</strong> CTE может быть менее эффективен для больших датасетов</li>
+            <li><strong>Совместимость:</strong> Не все СУБД поддерживают рекурсивные CTE одинаково</li>
+            <li><strong>Отладка:</strong> Сложность диагностики ошибок в глубоко вложенных структурах</li>
+        </ul>
+    </div>
+
+    <h3>Современные тенденции и будущее CTE:</h3>
+    <p>С развитием аналитических платформ и больших данных, CTE эволюционируют в сторону поддержки распределенных вычислений и интеграции с системами машинного обучения. Современные реализации включают оптимизации для колоночных хранилищ и параллельные алгоритмы обработки рекурсии.</p>`,
+            7: `<h2>Статистические функции и корреляции в SQL</h2>
+        <p>Современные СУБД предоставляют мощный арсенал статистических функций для глубокого анализа данных непосредственно на уровне базы данных.</p>
+
+        <h3>Фундаментальные статистические концепции в SQL:</h3>
+        
+        <div class="theory-block">
+            <h4>Описательная статистика</h4>
+            <p>Базовые меры центральной тенденции и разброса данных формируют основу для более сложных аналитических вычислений. Среднее арифметическое, медиана и мода представляют различные способы описания "типичного" значения в наборе данных, каждый из которых имеет свои преимущества в различных контекстах анализа.</p>
+            
+            <p>Дисперсия и стандартное отклонение измеряют изменчивость данных относительно среднего значения. Понимание этих метрик критически важно для оценки качества данных и выявления аномалий в распределениях.</p>
+        </div>
+
+        <h3>Продвинутые статистические функции:</h3>
+        
+        <div class="advanced-stats">
+            <h4>Функции распределения и квантили</h4>
+            <p>PERCENTILE_CONT и PERCENTILE_DISC позволяют вычислять процентили как для непрерывных, так и для дискретных распределений. Эти функции особенно важны для анализа производительности, SLA и выявления выбросов в больших наборах данных.</p>
+            
+            <p>Функция NTILE разделяет упорядоченный набор данных на равные группы, что критически важно для создания сегментации клиентов, анализа ABC-классификации и построения рейтинговых систем.</p>
+            
+            <h4>Коэффициенты асимметрии и эксцесса</h4>
+            <p>Хотя не все СУБД предоставляют встроенные функции для вычисления skewness и kurtosis, эти метрики можно вычислить через комбинацию стандартных статистических функций. Асимметрия показывает, насколько распределение отклоняется от нормального в сторону хвостов, а эксцесс характеризует "остроту" пика распределения.</p>
+        </div>
+
+        <h3>Корреляционный анализ в SQL:</h3>
+        
+        <div class="correlation-theory">
+            <h4>Типы корреляции</h4>
+            <p>Коэффициент корреляции Пирсона (CORR) измеряет линейную зависимость между двумя переменными в диапазоне от -1 до 1. Значения близкие к 1 указывают на сильную положительную корреляцию, близкие к -1 — на сильную отрицательную, а близкие к 0 — на отсутствие линейной связи.</p>
+            
+            <p>Функция COVAR_POP и COVAR_SAMP вычисляют ковариацию между переменными, которая показывает направление совместного изменения переменных, но в отличие от корреляции, не нормализована и зависит от масштаба данных.</p>
+            
+            <h4>Ранговые корреляции</h4>
+            <p>Для непараметрических данных или при нарушении предположений о нормальности распределения используются ранговые корреляции. Корреляция Спирмена основана на рангах значений и устойчива к выбросам, что делает её предпочтительной для анализа порядковых данных.</p>
+        </div>
+
+        <h3>Временные ряды и автокорреляция:</h3>
+        
+        <div class="time-series-stats">
+            <h4>Функции запаздывания (LAG/LEAD)</h4>
+            <p>Анализ временных рядов требует изучения взаимосвязей между текущими и предыдущими значениями. Автокорреляционная функция показывает, насколько текущие значения коррелируют с прошлыми значениями на различных временных лагах.</p>
+            
+            <p>Скользящие статистики (moving averages, rolling correlations) позволяют выявлять изменяющиеся во времени паттерны и тренды в данных. Экспоненциально взвешенные скользящие средние придают больший вес более свежим наблюдениям.</p>
+        </div>
+
+        <h3>Многомерный статистический анализ:</h3>
+        
+        <div class="multivariate-analysis">
+            <h4>Корреляционные матрицы</h4>
+            <p>При работе с множественными переменными необходимо строить полные корреляционные матрицы для выявления скрытых взаимосвязей. Высокие корреляции между предикторами могут указывать на проблему мультиколлинеарности в регрессионных моделях.</p>
+            
+            <h4>Частичные корреляции</h4>
+            <p>Частичная корреляция показывает взаимосвязь между двумя переменными при контроле влияния третьих переменных. Это критически важно для понимания истинных причинно-следственных связей в данных и избегания ложных корреляций.</p>
+        </div>
+
+        <h3>Статистические тесты в SQL:</h3>
+        
+        <div class="statistical-tests">
+            <h4>Проверка нормальности распределения</h4>
+            <p>Многие статистические методы требуют нормального распределения данных. В SQL можно реализовать приближённые тесты на нормальность, используя сравнение среднего и медианы, анализ квартилей, или вычисление статистик Шапиро-Уилка через пользовательские функции.</p>
+            
+            <h4>Доверительные интервалы</h4>
+            <p>Построение доверительных интервалов для статистических оценок позволяет оценить неопределённость результатов. Бутстрап-методы могут быть реализованы в SQL для получения робастных оценок доверительных интервалов без предположений о распределении.</p>
+        </div>
+
+        <h3>Продвинутые паттерны использования:</h3>
+        
+        <div class="advanced-patterns">
+            <h4>Составные статистические метрики</h4>
+            <p>Комбинирование базовых статистических функций позволяет создавать сложные аналитические метрики. Коэффициент вариации, индекс Джини, энтропия Шеннона — все эти метрики могут быть вычислены средствами SQL.</p>
+            
+            <h4>Сравнительный анализ распределений</h4>
+            <p>Статистика Колмогорова-Смирнова для сравнения двух распределений, тест Манна-Уитни для сравнения медиан — эти методы могут быть адаптированы для реализации в SQL при работе с большими объёмами данных.</p>
+        </div>
+
+        <h3>Оптимизация статистических вычислений:</h3>
+        
+        <div class="optimization-theory">
+            <h4>Инкрементальные вычисления</h4>
+            <p>Для больших наборов данных критически важна возможность инкрементального обновления статистических метрик. Алгоритмы онлайн-вычисления среднего, дисперсии и корреляции позволяют обновлять статистики при поступлении новых данных без полного пересчёта.</p>
+            
+            <h4>Параллельные вычисления</h4>
+            <p>Многие статистические функции могут быть распараллелены через разбиение данных на партиции. Понимание алгебраических свойств статистических операций позволяет эффективно комбинировать результаты вычислений на различных узлах кластера.</p>
+        </div>
+
+        <div class="practical-note">
+            <h4>Интеграция с аналитическими платформами</h4>
+            <p>Современные подходы включают тесную интеграцию SQL-статистик с внешними аналитическими системами (R, Python, Spark). Понимание границ применимости SQL-статистик и знание того, когда следует переходить к специализированным инструментам, является ключевым навыком современного аналитика данных.</p>
+        </div>`,
+},};
     return courseLessons[courseId]?.[lessonId] || '<p>Контент урока не найден</p>';
 }
 
@@ -8341,10 +12129,6 @@ function updateForumStats() {
         setTimeout(loadTopics, 100); // Небольшая задержка для корректного отображения
     });
 }
-
-
-
-
 
 function initMobileMenu() {
     const navContainer = document.querySelector('.nav-container');
